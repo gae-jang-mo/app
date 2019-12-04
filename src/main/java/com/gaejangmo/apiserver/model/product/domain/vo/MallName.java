@@ -18,6 +18,7 @@ public class MallName {
     }
 
     private String validate(final String value) {
+        // TODO 라이브러리 추가
         if (value.isEmpty()) {
             throw new EmptyValueException("판매자 이름이 없습니다");
         }

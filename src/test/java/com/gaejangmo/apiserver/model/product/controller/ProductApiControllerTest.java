@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.hateoas.server.reactive.WebFluxLinkBuilder.linkTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -22,6 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 class ProductApiControllerTest {
+    private static final String PRODUCT_API = linkTo(ProductApiController.class).toString();
+
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @Autowired
@@ -30,7 +33,7 @@ class ProductApiControllerTest {
     @Test
     @WithMockUser
     void 장비_조회() throws Exception {
-        mockMvc.perform(post("/api/v1/products")
+        mockMvc.perform(post(PRODUCT_API)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(MAPPER.writeValueAsString(ProductTestData.DTO)))

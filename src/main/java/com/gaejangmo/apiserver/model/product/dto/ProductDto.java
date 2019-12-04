@@ -11,6 +11,7 @@ import lombok.*;
 @Builder
 @EqualsAndHashCode
 public class ProductDto {
+    // TODO: 12/4/19 DTO에서도 검증을 하자
     private String title;
     private String link;
     private String image;

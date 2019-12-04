@@ -4,6 +4,7 @@ import com.gaejangmo.apiserver.model.product.domain.vo.*;
 import com.gaejangmo.apiserver.model.product.dto.ProductDto;
 
 public class ProductTestData {
+    // TODO: 12/4/19 builder로 통일 response, request 나누기
     public static final ProductDto DTO = new ProductDto();
     public static final Product ENTITY = Product.builder()
             .productName(ProductName.of("애플 맥북 프로 15형 2019년형 MV912KH/A"))

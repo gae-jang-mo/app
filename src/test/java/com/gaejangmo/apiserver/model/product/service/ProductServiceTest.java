@@ -38,8 +38,8 @@ class ProductServiceTest {
     void 상품_저장() {
         given(productRepository.save(ProductTestData.ENTITY)).willReturn(ProductTestData.ENTITY);
 
-        productService.save(ProductTestData.DTO);
+        ProductDto saved = productService.save(ProductTestData.DTO);
 
-        verify(productRepository, times(1)).save(ProductTestData.ENTITY);
+        assertThat(saved).isEqualTo(ProductTestData.DTO);
     }
 }

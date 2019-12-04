@@ -9,7 +9,7 @@ import javax.persistence.Embeddable;
 @EqualsAndHashCode
 public class Link {
 
-    // TODO 왜 안먹힘?
+    // TODO 이거 뺴고 regex로 검증하기
     @URL
     private String value;
 

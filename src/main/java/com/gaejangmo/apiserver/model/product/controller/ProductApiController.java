@@ -6,23 +6,27 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/api/v1/products")
 public class ProductApiController {
     private final ProductService productService;
 
-    @GetMapping("/api/v1/products")
+    @GetMapping
     public ResponseEntity<ProductDto> find(@RequestParam(name = "productName") String name) {
         ProductDto productDto = productService.findByProductName(name);
         return ResponseEntity.ok(productDto);
     }
 
-    @PostMapping("/api/v1/products")
+    @PostMapping
     public ResponseEntity<ProductDto> save(@RequestBody ProductDto productDto) {
         ProductDto savedProduct = productService.save(productDto);
         // TODO uri 생성 부분이 맞는지
-        return ResponseEntity.created(linkTo(ProductApiController.class).toUri()).body(savedProduct);
+        URI uri = linkTo(ProductApiController.class).toUri();
+        return ResponseEntity.created(uri).body(savedProduct);
     }
 }
