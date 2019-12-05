@@ -14,12 +14,12 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @AutoConfigureWebTestClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ProductAcceptanceTest {
-    // TODO: 12/5/19 product_api 안가져와짐
-    //private static final String PRODUCT_API = linkTo(ProductApiController.class).toString();
+    private static final String PRODUCT_API = linkTo(ProductApiController.class).toString();
 
     @Autowired
     private WebTestClient webTestClient;
@@ -27,7 +27,7 @@ public class ProductAcceptanceTest {
     @BeforeEach
     void setUp() {
         webTestClient.post()
-                .uri("/api/v1/products")
+                .uri(PRODUCT_API)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .acceptCharset(StandardCharsets.UTF_8)
@@ -41,7 +41,7 @@ public class ProductAcceptanceTest {
     void 장비조회() {
         ProductResponseDto productResponseDto = webTestClient.get()
                 .uri(uriBuilder ->
-                        uriBuilder.path("/api/v1/products")
+                        uriBuilder.path(PRODUCT_API)
                                 .queryParam("productName", "애플 맥북 프로 15형 2019년형 MV912KH/A")
                                 .build())
                 .exchange()
