@@ -1,6 +1,7 @@
 package com.gaejangmo.apiserver.model.product.domain.vo;
 
 import com.gaejangmo.apiserver.model.product.exception.EmptyValueException;
+import com.gaejangmo.utils.StringUtils;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.Embeddable;
@@ -18,8 +19,7 @@ public class MallName {
     }
 
     private String validate(final String value) {
-        // TODO 라이브러리 추가
-        if (value.isEmpty()) {
+        if (StringUtils.isBlank(value)) {
             throw new EmptyValueException("판매자 이름이 없습니다");
         }
         return value;

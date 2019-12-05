@@ -1,7 +1,7 @@
 package com.gaejangmo.apiserver.model.product.dto;
 
-import com.gaejangmo.apiserver.model.product.domain.NaverProductType;
-import com.gaejangmo.apiserver.model.product.domain.ProductType;
+import com.gaejangmo.apiserver.model.product.domain.vo.NaverProductType;
+import com.gaejangmo.apiserver.model.product.domain.vo.ProductType;
 import lombok.*;
 
 @NoArgsConstructor
@@ -10,11 +10,10 @@ import lombok.*;
 @Setter
 @Builder
 @EqualsAndHashCode
-public class ProductDto {
-    // TODO: 12/4/19 DTO에서도 검증을 하자
-    private String title;
-    private String link;
-    private String image;
+public class ProductResponseDto {
+    private String productName;
+    private String buyUrl;
+    private String imageUrl;
     private long lowestPrice;
     private long highestPrice;
     private String mallName;

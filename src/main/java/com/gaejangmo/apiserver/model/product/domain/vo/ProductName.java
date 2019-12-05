@@ -1,6 +1,7 @@
 package com.gaejangmo.apiserver.model.product.domain.vo;
 
 import com.gaejangmo.apiserver.model.product.exception.EmptyValueException;
+import com.gaejangmo.utils.StringUtils;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.Embeddable;
@@ -18,7 +19,7 @@ public class ProductName {
     }
 
     private String validate(final String value) {
-        if (value.isEmpty()) {
+        if (StringUtils.isBlank(value)) {
             throw new EmptyValueException("상품 이름이 없습니다");
         }
         return value;

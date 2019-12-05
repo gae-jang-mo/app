@@ -1,12 +1,13 @@
 package com.gaejangmo.apiserver.model.product.controller;
 
-import com.gaejangmo.apiserver.model.product.dto.ProductDto;
+import com.gaejangmo.apiserver.model.product.dto.ProductRequestDto;
+import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
 import com.gaejangmo.apiserver.model.product.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
+import javax.validation.Valid;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
@@ -17,16 +18,15 @@ public class ProductApiController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<ProductDto> find(@RequestParam(name = "productName") String name) {
-        ProductDto productDto = productService.findByProductName(name);
-        return ResponseEntity.ok(productDto);
+    public ResponseEntity<ProductResponseDto> find(@RequestParam(name = "productName") String name) {
+        ProductResponseDto productResponseDto = productService.findByProductName(name);
+        return ResponseEntity.ok(productResponseDto);
     }
 
     @PostMapping
-    public ResponseEntity<ProductDto> save(@RequestBody ProductDto productDto) {
-        ProductDto savedProduct = productService.save(productDto);
-        // TODO uri 생성 부분이 맞는지
-        URI uri = linkTo(ProductApiController.class).toUri();
-        return ResponseEntity.created(uri).body(savedProduct);
+    public ResponseEntity<ProductResponseDto> save(@RequestBody @Valid ProductRequestDto productRequestDto) {
+        // TODO DTO 예외처리
+        ProductResponseDto savedProduct = productService.save(productRequestDto);
+        return ResponseEntity.created(linkTo(ProductApiController.class).toUri()).body(savedProduct);
     }
 }

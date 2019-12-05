@@ -3,7 +3,7 @@ package com.gaejangmo.apiserver.model.product.service;
 import com.gaejangmo.apiserver.model.product.domain.ProductRepository;
 import com.gaejangmo.apiserver.model.product.domain.ProductTestData;
 import com.gaejangmo.apiserver.model.product.domain.vo.ProductName;
-import com.gaejangmo.apiserver.model.product.dto.ProductDto;
+import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,8 +12,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 class ProductServiceTest {
@@ -29,17 +27,17 @@ class ProductServiceTest {
     void 상품_조회() {
         given(productRepository.findByProductName(ProductName.of(TARGET))).willReturn(ProductTestData.ENTITY);
 
-        ProductDto result = productService.findByProductName(TARGET);
+        ProductResponseDto result = productService.findByProductName(TARGET);
 
-        assertThat(result).isEqualTo(ProductTestData.DTO);
+        assertThat(result).isEqualTo(ProductTestData.RESPONSE_DTO);
     }
 
     @Test
     void 상품_저장() {
         given(productRepository.save(ProductTestData.ENTITY)).willReturn(ProductTestData.ENTITY);
 
-        ProductDto saved = productService.save(ProductTestData.DTO);
+        ProductResponseDto saved = productService.save(ProductTestData.REQUEST_DTO);
 
-        assertThat(saved).isEqualTo(ProductTestData.DTO);
+        assertThat(saved).isEqualTo(ProductTestData.RESPONSE_DTO);
     }
 }

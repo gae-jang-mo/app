@@ -1,11 +1,10 @@
 package com.gaejangmo.apiserver.model.product.service;
 
-import com.gaejangmo.apiserver.model.product.domain.NaverProductType;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.product.domain.ProductRepository;
-import com.gaejangmo.apiserver.model.product.domain.ProductType;
 import com.gaejangmo.apiserver.model.product.domain.vo.*;
-import com.gaejangmo.apiserver.model.product.dto.ProductDto;
+import com.gaejangmo.apiserver.model.product.dto.ProductRequestDto;
+import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,21 +13,21 @@ import org.springframework.stereotype.Service;
 public class ProductService {
     private final ProductRepository productRepository;
 
-    public ProductDto findByProductName(String name) {
+    public ProductResponseDto findByProductName(String name) {
         Product product = productRepository.findByProductName(ProductName.of(name));
         return toDto(product);
     }
 
-    public ProductDto save(final ProductDto productDto) {
-        Product product = productRepository.save(toEntity(productDto));
+    public ProductResponseDto save(final ProductRequestDto dto) {
+        Product product = productRepository.save(toEntity(dto));
         return toDto(product);
     }
 
-    private ProductDto toDto(final Product product) {
-        return ProductDto.builder()
-                .title(product.getProductName())
-                .link(product.getBuyUrl())
-                .image(product.getImageUrl())
+    private ProductResponseDto toDto(final Product product) {
+        return ProductResponseDto.builder()
+                .productName(product.getProductName())
+                .buyUrl(product.getBuyUrl())
+                .imageUrl(product.getImageUrl())
                 .lowestPrice(product.getLowestPrice())
                 .highestPrice(product.getHighestPrice())
                 .mallName(product.getMallName())
@@ -38,15 +37,15 @@ public class ProductService {
                 .build();
     }
 
-    private Product toEntity(final ProductDto productDto) {
+    private Product toEntity(final ProductRequestDto dto) {
         return Product.builder()
-                .productName(ProductName.of(productDto.getTitle()))
-                .buyUrl(Link.of(productDto.getLink()))
-                .imageUrl(Link.of(productDto.getImage()))
-                .lowestPrice(Price.of(productDto.getLowestPrice()))
-                .highestPrice(Price.of(productDto.getHighestPrice()))
-                .mallName(MallName.of(productDto.getMallName()))
-                .productId(ProductId.of(productDto.getProductId()))
+                .productName(ProductName.of(dto.getTitle()))
+                .buyUrl(Link.of(dto.getLink()))
+                .imageUrl(Link.of(dto.getImage()))
+                .lowestPrice(Price.of(dto.getLPrice()))
+                .highestPrice(Price.of(dto.getHPrice()))
+                .mallName(MallName.of(dto.getMallName()))
+                .productId(ProductId.of(dto.getProductId()))
                 .naverProductType(NaverProductType.find(1))
                 .productType(ProductType.find(1))
                 .build();

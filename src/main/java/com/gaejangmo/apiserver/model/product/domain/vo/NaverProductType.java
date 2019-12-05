@@ -1,4 +1,4 @@
-package com.gaejangmo.apiserver.model.product.domain;
+package com.gaejangmo.apiserver.model.product.domain.vo;
 
 
 import com.gaejangmo.apiserver.model.product.exception.NaverProductTypeNotFoundException;
