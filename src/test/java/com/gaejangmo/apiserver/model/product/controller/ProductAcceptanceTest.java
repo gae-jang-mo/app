@@ -1,7 +1,7 @@
 package com.gaejangmo.apiserver.model.product.controller;
 
 import com.gaejangmo.apiserver.model.product.domain.ProductTestData;
-import com.gaejangmo.apiserver.model.product.dto.ProductDto;
+import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +14,12 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.hateoas.server.reactive.WebFluxLinkBuilder.linkTo;
 
 @AutoConfigureWebTestClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ProductAcceptanceTest {
-    private static final String PRODUCT_API = linkTo(ProductApiController.class).toString();
+    // TODO: 12/5/19 product_api 안가져와짐
+    //private static final String PRODUCT_API = linkTo(ProductApiController.class).toString();
 
     @Autowired
     private WebTestClient webTestClient;
@@ -31,7 +31,7 @@ public class ProductAcceptanceTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .acceptCharset(StandardCharsets.UTF_8)
-                .body(Mono.just(ProductTestData.DTO), ProductDto.class)
+                .body(Mono.just(ProductTestData.REQUEST_DTO), ProductResponseDto.class)
                 .exchange()
                 .expectStatus()
                 .isCreated();
@@ -39,17 +39,17 @@ public class ProductAcceptanceTest {
 
     @Test
     void 장비조회() {
-        ProductDto productDto = webTestClient.get()
+        ProductResponseDto productResponseDto = webTestClient.get()
                 .uri(uriBuilder ->
-                        uriBuilder.path(PRODUCT_API)
+                        uriBuilder.path("/api/v1/products")
                                 .queryParam("productName", "애플 맥북 프로 15형 2019년형 MV912KH/A")
                                 .build())
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(ProductDto.class)
+                .expectBody(ProductResponseDto.class)
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(productDto).isEqualTo(ProductTestData.DTO);
+        assertThat(productResponseDto).isEqualTo(ProductTestData.RESPONSE_DTO);
     }
 }
