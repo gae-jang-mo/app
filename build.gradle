@@ -21,6 +21,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven { url 'https://dl.bintray.com/jaypark3749/maven/'}
 }
 
 ext {
@@ -34,6 +35,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.projectlombok:lombok'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+    implementation 'com.gaejangmo:gae-jang-mo-utils:0.0.1'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
