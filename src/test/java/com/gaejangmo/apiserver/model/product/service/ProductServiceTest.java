@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(SpringExtension.class)
@@ -34,7 +35,7 @@ class ProductServiceTest {
 
     @Test
     void 상품_저장() {
-        given(productRepository.save(ProductTestData.ENTITY)).willReturn(ProductTestData.ENTITY);
+        given(productRepository.save(any())).willReturn(ProductTestData.ENTITY);
 
         ProductResponseDto saved = productService.save(ProductTestData.REQUEST_DTO);
 
