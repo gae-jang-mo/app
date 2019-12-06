@@ -22,5 +22,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.httpBasic();
         http.csrf().disable();
+        http.oauth2Login().defaultSuccessUrl("/");
     }
 }
