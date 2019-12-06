@@ -1,7 +1,7 @@
 package com.gaejangmo.apiserver.model.product.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gaejangmo.apiserver.model.product.domain.ProductTestData;
+import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
 import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

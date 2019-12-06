@@ -27,6 +27,8 @@ public class ProductApiController {
     public ResponseEntity<ProductResponseDto> save(@RequestBody @Valid ProductRequestDto productRequestDto) {
         // TODO DTO 예외처리
         ProductResponseDto savedProduct = productService.save(productRequestDto);
-        return ResponseEntity.created(linkTo(ProductApiController.class).toUri()).body(savedProduct);
+        return ResponseEntity.created(linkTo(ProductApiController.class)
+                .slash(savedProduct.getId()).toUri())
+                .body(savedProduct);
     }
 }

@@ -25,6 +25,7 @@ public class ProductService {
 
     private ProductResponseDto toDto(final Product product) {
         return ProductResponseDto.builder()
+                .id(product.getId())
                 .productName(product.getProductName())
                 .buyUrl(product.getBuyUrl())
                 .imageUrl(product.getImageUrl())

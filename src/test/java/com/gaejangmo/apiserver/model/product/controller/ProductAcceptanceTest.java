@@ -1,7 +1,7 @@
 package com.gaejangmo.apiserver.model.product.controller;
 
-import com.gaejangmo.apiserver.model.product.domain.ProductTestData;
 import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
+import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +33,7 @@ public class ProductAcceptanceTest {
                 .acceptCharset(StandardCharsets.UTF_8)
                 .body(Mono.just(ProductTestData.REQUEST_DTO), ProductResponseDto.class)
                 .exchange()
-                .expectStatus()
-                .isCreated();
+                .expectStatus().isCreated();
     }
 
     @Test

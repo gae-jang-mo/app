@@ -3,6 +3,7 @@ package com.gaejangmo.apiserver.model.product.domain.vo;
 import com.gaejangmo.apiserver.model.product.exception.EmptyValueException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,8 +18,9 @@ class ProductNameTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "   "})
-    void 비어있는_상품_이름_예외발생(String input) {
+    @NullAndEmptySource
+    @ValueSource(strings = {"   ", "\n"})
+    void BLANK_EMPTY_NULL_상품_이름_예외발생(String input) {
         assertThrows(EmptyValueException.class, () -> ProductName.of(input));
     }
 }

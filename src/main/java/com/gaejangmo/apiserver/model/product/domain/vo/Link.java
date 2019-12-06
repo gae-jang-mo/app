@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 @Embeddable
 @EqualsAndHashCode
 public class Link {
-    private static final Pattern URL_REGEX = Pattern.compile("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
+    private static final Pattern URL_REGEX = Pattern.compile("^(?:(?:http(?:s)?|ftp)://)(?:\\S+(?::(?:\\S)*)?@)?(?:(?:[a-z0-9\u00a1-\uffff](?:-)*)*(?:[a-z0-9\u00a1-\uffff])+)(?:\\.(?:[a-z0-9\u00a1-\uffff](?:-)*)*(?:[a-z0-9\u00a1-\uffff])+)*(?:\\.(?:[a-z0-9\u00a1-\uffff]){2,})(?::(?:\\d){2,5})?(?:/(?:\\S)*)?$");
 
     private String value;
 
@@ -23,10 +23,10 @@ public class Link {
 
     private String validate(final String value) {
         Matcher matcher = URL_REGEX.matcher(value);
-        if (!matcher.matches()) {
-            throw new UrlFormatException("유효한 url이 아닙니다");
+        if (matcher.matches()) {
+            return value;
         }
-        return value;
+        throw new UrlFormatException("유효한 url이 아닙니다");
     }
 
     public static Link of(final String value) {

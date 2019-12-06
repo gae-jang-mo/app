@@ -1,7 +1,7 @@
 package com.gaejangmo.apiserver.model.product.service;
 
 import com.gaejangmo.apiserver.model.product.domain.ProductRepository;
-import com.gaejangmo.apiserver.model.product.domain.ProductTestData;
+import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
 import com.gaejangmo.apiserver.model.product.domain.vo.ProductName;
 import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith(SpringExtension.class)
 class ProductServiceTest {
-    private static final String TARGET = "애플 맥북 프로 15형 2019년형 MV912KH/A";
+    private static final String PRODUCT_NAME = "애플 맥북 프로 15형 2019년형 MV912KH/A";
 
     @InjectMocks
     private ProductService productService;
@@ -25,9 +25,9 @@ class ProductServiceTest {
 
     @Test
     void 상품_조회() {
-        given(productRepository.findByProductName(ProductName.of(TARGET))).willReturn(ProductTestData.ENTITY);
+        given(productRepository.findByProductName(ProductName.of(PRODUCT_NAME))).willReturn(ProductTestData.ENTITY);
 
-        ProductResponseDto result = productService.findByProductName(TARGET);
+        ProductResponseDto result = productService.findByProductName(PRODUCT_NAME);
 
         assertThat(result).isEqualTo(ProductTestData.RESPONSE_DTO);
     }
