@@ -15,19 +15,19 @@ import java.util.concurrent.ConcurrentHashMap;
 public class LoggingAspect {
     private final Map<Class<?>, Logger> loggers = new ConcurrentHashMap<>();
 
-    @Around("@within(com.gaejangmo.apiserver.commons.logging.EnableLog)")
+    @Around("@within(com.gaejangmo.apiserver.commons.logging.EnableLog) || @annotation(com.gaejangmo.apiserver.commons.logging.EnableLog)")
     public Object methodLogging(final ProceedingJoinPoint pjp) throws Throwable {
         Logger log = getLog(pjp.getSignature().getDeclaringType());
 
-        log.debug("request by {}, args: {} ", pjp.getSignature().getName(), pjp.getArgs());
+        log.debug("request by {}, args: {} ", pjp.getSignature().getDeclaringType(), pjp.getArgs());
         Object requestResult = pjp.proceed();
         log.debug("response {}", requestResult);
 
         return requestResult;
     }
 
-    @Around("execution(* com.gaejangmo.apiserver.model..*Advice.*(..)) && args(exception)")
-    public Object ControllerAdviceLogging(final ProceedingJoinPoint pjp, Exception exception) throws Throwable {
+    @Around("@within(org.springframework.web.bind.annotation.RestControllerAdvice) && args (exception, ..)")
+    public Object restControllerAdviceLogging(final ProceedingJoinPoint pjp, Exception exception) throws Throwable {
         Logger log = getLog(pjp.getSignature().getDeclaringType());
 
         Object result = pjp.proceed();
