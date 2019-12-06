@@ -24,10 +24,6 @@ public class Price {
         return new Price(value + other.value);
     }
 
-    Price setPrice(final long value) {
-        return new Price(value);
-    }
-
     public long value() {
         return value;
     }
