@@ -23,7 +23,7 @@ public class Motto {
         if (value.length() <= MAX_LENGTH) {
             return value;
         }
-        throw new InvalidMottoException("유효한 url이 아닙니다");
+        throw new InvalidMottoException(String.format("입력값의 길이가 %d자 이하여야 합니다.", MAX_LENGTH));
     }
 
     public static Motto of(final String value) {
