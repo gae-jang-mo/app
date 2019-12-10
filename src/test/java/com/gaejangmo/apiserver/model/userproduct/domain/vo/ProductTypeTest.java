@@ -20,4 +20,18 @@ class ProductTypeTest {
         assertThat(actual).isEqualTo(productType);
     }
 
+    @ParameterizedTest
+    @EnumSource(ProductType.class)
+    void ofNameTest(final ProductType productType) {
+        // given
+        String name = productType.getName();
+
+        // when
+        ProductType actual = ProductType.ofName(name);
+
+        // then
+        assertThat(actual).isEqualTo(productType);
+    }
+
+
 }
