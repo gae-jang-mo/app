@@ -6,6 +6,7 @@ import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDt
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,12 +25,10 @@ public class UserProductApiController {
     }
 
     @PostMapping
-    public ResponseEntity<UserProductResponseDto> create(final UserProductCreateDto userProductCreateDto) {
-        // TODO: 2019/12/10 유저 정보 가져와서 본인 확인
-
+    public ResponseEntity<UserProductResponseDto> create(@RequestBody final UserProductCreateDto userProductCreateDto) {
+        // TODO: 2019/12/10 유저 정보 가져와서 id 넘기기
         UserProductResponseDto responseDto = userProductService.save(userProductCreateDto, 1L);
         URI uri = linkTo(UserProductApiController.class).slash(responseDto.getId()).toUri();
-
         return ResponseEntity.created(uri).body(responseDto);
     }
 }

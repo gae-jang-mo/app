@@ -1,23 +1,20 @@
 package com.gaejangmo.apiserver.model.userproduct.service.dto;
 
-import com.gaejangmo.apiserver.model.product.domain.vo.ProductType;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
-import org.springframework.web.multipart.MultipartFile;
+import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
+import lombok.*;
 
 @Getter
 @ToString
+@NoArgsConstructor
+@EqualsAndHashCode
 public class UserProductCreateDto {
     private String comment;
-    private MultipartFile thumbnail;
     private ProductType productType;
-    private long productId;
+    private Long productId;
 
     @Builder
-    public UserProductCreateDto(final String comment, final MultipartFile thumbnail, final ProductType productType, final long productId) {
+    public UserProductCreateDto(final String comment, final ProductType productType, final Long productId) {
         this.comment = comment;
-        this.thumbnail = thumbnail;
         this.productType = productType;
         this.productId = productId;
     }

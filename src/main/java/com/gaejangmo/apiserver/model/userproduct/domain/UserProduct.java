@@ -4,6 +4,7 @@ import com.gaejangmo.apiserver.model.common.BaseEntity;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.userproduct.domain.converter.ProductTypeAttributeConverter;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,15 +32,17 @@ public class UserProduct extends BaseEntity {
     @Convert(converter = ProductTypeAttributeConverter.class)
     private ProductType productType;
 
-    // TODO: 2019/12/10 @OnDelete ?
     @ManyToOne
     @JoinColumn(name = "product_id", foreignKey = @ForeignKey(name = "fk_product_to_user_product"), updatable = false)
     private Product product;
 
-    // TODO: 2019/12/10 이미지 파일 관계 매핑
-
     // TODO: 2019/12/10 User 관계 매핑
 
-
+    @Builder
+    public UserProduct(final String comment, final ProductType productType, final Product product) {
+        this.comment = comment;
+        this.productType = productType;
+        this.product = product;
+    }
 }
 
