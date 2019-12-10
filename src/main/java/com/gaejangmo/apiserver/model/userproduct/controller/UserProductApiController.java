@@ -35,4 +35,12 @@ public class UserProductApiController {
         List<UserProductResponseDto> responseDtos = userProductService.findByUserId(userId);
         return ResponseEntity.ok(responseDtos);
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity delete(@PathVariable final Long id) {
+        // TODO: 2019/12/10 유저 정보 가져와서 id 넘기기
+        Long userId = 1L;
+        userProductService.delete(id, userId);
+        return ResponseEntity.noContent().build();
+    }
 }

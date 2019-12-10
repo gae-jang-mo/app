@@ -21,8 +21,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -97,7 +96,7 @@ class UserProductApiControllerTest {
         when(userProductService.findByUserId(1L)).thenReturn(expected);
 
         // when
-        final ResultActions resultActions = mockMvc.perform(get(USER_PRODUCT_URI + "/1")
+        ResultActions resultActions = mockMvc.perform(get(USER_PRODUCT_URI + "/1")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print());
 
@@ -106,5 +105,18 @@ class UserProductApiControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].comment").value(userProductResponseDto.getComment()))
                 .andExpect(jsonPath("$[0].id").value(userProductResponseDto.getId()));
+    }
+
+    @Test
+    @WithMockUser
+    void 장비_삭제() throws Exception {
+        // given
+        when(userProductService.delete(1L, 1L)).thenReturn(true);
+        // when
+        ResultActions resultActions = mockMvc.perform(delete(USER_PRODUCT_URI + "/1"))
+                .andDo(print());
+
+        // then
+        resultActions.andExpect(status().isNoContent());
     }
 }

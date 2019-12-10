@@ -3,6 +3,7 @@ package com.gaejangmo.apiserver.model.userproduct.domain;
 import com.gaejangmo.apiserver.model.common.BaseEntity;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.userproduct.domain.converter.ProductTypeAttributeConverter;
+import com.gaejangmo.apiserver.model.userproduct.domain.exception.AlreadyDeleteException;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -43,6 +44,18 @@ public class UserProduct extends BaseEntity {
         this.comment = comment;
         this.productType = productType;
         this.product = product;
+    }
+
+    public boolean matchUser(final Long userId) {
+        // TODO: 2019/12/11  user의 id랑 비교 user에 matchId() 넣기
+        return true;
+    }
+
+    public boolean delete() {
+        if (deleted) {
+            throw new AlreadyDeleteException(this.id);
+        }
+        return deleted = true;
     }
 }
 

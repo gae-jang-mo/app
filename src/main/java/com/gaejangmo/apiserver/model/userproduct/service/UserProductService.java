@@ -6,12 +6,16 @@ import com.gaejangmo.apiserver.model.userproduct.domain.UserProduct;
 import com.gaejangmo.apiserver.model.userproduct.domain.UserProductRepository;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
+import com.gaejangmo.apiserver.model.userproduct.service.exception.NotUserProductOwnerException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 // TODO: 2019/12/10 서비스 테스트 추가하기
 @Service
+@Transactional
 public class UserProductService {
     // TODO: 2019/12/10 이너서비스 안해도 될까?
     private final ProductService productService;
@@ -31,6 +35,7 @@ public class UserProductService {
         return toDto(saved);
     }
 
+    @Transactional(readOnly = true)
     public List<UserProductResponseDto> findByUserId(final Long userId) {
         // TODO: 2019/12/11 User로 구현
         return null;
@@ -53,5 +58,13 @@ public class UserProductService {
                 .productType(userProductCreateDto.getProductType())
                 .comment(userProductCreateDto.getComment())
                 .build();
+    }
+
+    public boolean delete(final Long id, final Long userId) {
+        UserProduct userProduct = userProductRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        if (userProduct.matchUser(userId)) {
+            return userProduct.delete();
+        }
+        throw new NotUserProductOwnerException();
     }
 }
