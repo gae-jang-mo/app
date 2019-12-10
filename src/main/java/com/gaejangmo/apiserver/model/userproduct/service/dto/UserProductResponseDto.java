@@ -1,22 +1,22 @@
 package com.gaejangmo.apiserver.model.userproduct.service.dto;
 
+import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Getter
+@Builder
 @ToString
 public class UserProductResponseDto {
     private long id;
-    private int category;
+    private long productId;
+    private ProductType productType;
+    private String comment;
+    private LocalDateTime createdAt;
+    // TODO: 2019/12/10 이미지 필드
 
-    @Builder
-    private UserProductResponseDto(final long id, final int category) {
-        this.id = id;
-        this.category = category;
-    }
 
-    // TODO: 2019/12/05 Product 정보
-
-    // TODO: 2019/12/05 이미지 url
 }

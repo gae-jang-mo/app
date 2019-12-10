@@ -1,6 +1,7 @@
 package com.gaejangmo.apiserver.model.userproduct.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gaejangmo.apiserver.model.product.domain.vo.ProductType;
 import com.gaejangmo.apiserver.model.userproduct.service.UserProductService;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
@@ -16,6 +17,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -39,8 +41,8 @@ class UserProductApiControllerTest {
     @BeforeEach
     void setUp() {
         userProductCreateDto = UserProductCreateDto.builder()
-                .product_id(1L)
-                .category(1)
+                .productId(1L)
+                .productType(ProductType.KEY_BOARD)
                 .thumbnail(null)
                 .comment("인생 마우스")
                 .build();
@@ -52,7 +54,8 @@ class UserProductApiControllerTest {
         // given
         long id = 1L;
         UserProductResponseDto userProductResponseDto = UserProductResponseDto.builder().id(id).build();
-        when(userProductService.save(userProductCreateDto)).thenReturn(userProductResponseDto);
+        // TODO: 2019/12/10 추후 anyLong 대신 UserDetail 정보에서  id 가져와서 넣어주기 (Mock 사용)
+        when(userProductService.save(userProductCreateDto, anyLong())).thenReturn(userProductResponseDto);
 
         // when
         ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI)
@@ -80,4 +83,6 @@ class UserProductApiControllerTest {
         // then
         resultActions.andExpect(status().isUnauthorized());
     }
+
+
 }

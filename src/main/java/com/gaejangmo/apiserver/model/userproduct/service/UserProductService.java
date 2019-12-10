@@ -13,9 +13,8 @@ public class UserProductService {
         this.userProductRepository = userProductRepository;
     }
 
-    public UserProductResponseDto save(final UserProductCreateDto userProductCreateDto) {
+    public UserProductResponseDto save(final UserProductCreateDto userProductCreateDto, long userId) {
         // save image
-
         // toEntity
 
         // repository save

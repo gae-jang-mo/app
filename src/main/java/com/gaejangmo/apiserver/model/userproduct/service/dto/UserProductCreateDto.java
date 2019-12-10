@@ -1,5 +1,6 @@
 package com.gaejangmo.apiserver.model.userproduct.service.dto;
 
+import com.gaejangmo.apiserver.model.product.domain.vo.ProductType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -10,14 +11,14 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserProductCreateDto {
     private String comment;
     private MultipartFile thumbnail;
-    private int category;
-    private long product_id;
+    private ProductType productType;
+    private long productId;
 
     @Builder
-    private UserProductCreateDto(final String comment, final MultipartFile thumbnail, final int category, final long product_id) {
+    public UserProductCreateDto(final String comment, final MultipartFile thumbnail, final ProductType productType, final long productId) {
         this.comment = comment;
         this.thumbnail = thumbnail;
-        this.category = category;
-        this.product_id = product_id;
+        this.productType = productType;
+        this.productId = productId;
     }
 }
