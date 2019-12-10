@@ -8,6 +8,8 @@ import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDt
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 // TODO: 2019/12/10 서비스 테스트 추가하기
 @Service
 public class UserProductService {
@@ -27,6 +29,11 @@ public class UserProductService {
         UserProduct saved = userProductRepository.save(userProduct);
 
         return toDto(saved);
+    }
+
+    public List<UserProductResponseDto> findByUserId(final Long userId) {
+        // TODO: 2019/12/11 User로 구현
+        return null;
     }
 
     private UserProductResponseDto toDto(final UserProduct userProduct) {

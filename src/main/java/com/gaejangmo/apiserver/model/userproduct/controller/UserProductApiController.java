@@ -5,12 +5,10 @@ import com.gaejangmo.apiserver.model.userproduct.service.UserProductService;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
@@ -30,5 +28,11 @@ public class UserProductApiController {
         UserProductResponseDto responseDto = userProductService.save(userProductCreateDto, 1L);
         URI uri = linkTo(UserProductApiController.class).slash(responseDto.getId()).toUri();
         return ResponseEntity.created(uri).body(responseDto);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<UserProductResponseDto>> list(@PathVariable final Long userId) {
+        List<UserProductResponseDto> responseDtos = userProductService.findByUserId(userId);
+        return ResponseEntity.ok(responseDtos);
     }
 }
