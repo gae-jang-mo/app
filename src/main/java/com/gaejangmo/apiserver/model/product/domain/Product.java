@@ -1,6 +1,7 @@
 package com.gaejangmo.apiserver.model.product.domain;
 
-import com.gaejangmo.apiserver.model.common.BaseEntity;
+import com.gaejangmo.apiserver.model.common.domain.BaseEntity;
+import com.gaejangmo.apiserver.model.common.domain.vo.Link;
 import com.gaejangmo.apiserver.model.product.domain.vo.*;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

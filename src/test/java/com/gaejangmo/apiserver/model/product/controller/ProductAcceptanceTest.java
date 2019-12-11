@@ -2,14 +2,13 @@ package com.gaejangmo.apiserver.model.product.controller;
 
 import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
 import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -19,8 +18,6 @@ import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 
-import static com.gaejangmo.apiserver.docs.ApiDocumentUtils.getDocumentRequest;
-import static com.gaejangmo.apiserver.docs.ApiDocumentUtils.getDocumentResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -59,7 +56,7 @@ public class ProductAcceptanceTest {
                 .expectStatus().isCreated();
     }
 
-    @Test
+    @Ignore
     void 장비조회() {
         ProductResponseDto productResponseDto = webTestClient.get()
                 .uri(uriBuilder ->
