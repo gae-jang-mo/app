@@ -25,4 +25,20 @@ class MottoTest {
     void 최대_길이인_경우_테스트() {
         assertDoesNotThrow(() -> Motto.of("0123456789"));
     }
+
+    @Test
+    void equals_테스트() {
+        String value = "좌우명";
+        Motto motto = Motto.of(value);
+
+        assertThat(motto.equals(Motto.of(value))).isTrue();
+    }
+
+    @Test
+    void hashCode_테스트() {
+        String value = "좌우명";
+        Motto motto = Motto.of(value);
+
+        assertThat(motto.hashCode()).isEqualTo(Motto.of(value).hashCode());
+    }
 }
