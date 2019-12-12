@@ -1,5 +1,8 @@
 package com.gaejangmo.apiserver.model.product.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.product.domain.ProductRepository;
@@ -7,7 +10,6 @@ import com.gaejangmo.apiserver.model.product.domain.vo.*;
 import com.gaejangmo.apiserver.model.product.dto.ProductRequestDto;
 import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -17,7 +19,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,12 +39,23 @@ public class ProductService {
     }
 
     public List<ProductResponseDto> invokeByProductName(final String productName) {
-        return restTemplate.exchange(
+        String body = restTemplate.exchange(
                 getUrl("http://localhost:8081/api/v1/search", productName),
                 HttpMethod.GET,
                 createHttpEntity(),
-                new ParameterizedTypeReference<List<ProductResponseDto>>() {
-                }).getBody();
+                String.class)
+                .getBody();
+
+        return extractJsonString(body);
+    }
+
+    private List<ProductResponseDto> extractJsonString(final String body) {
+        try {
+            return new ObjectMapper().readValue(Objects.requireNonNull(body), new TypeReference<List<ProductResponseDto>>() {
+            });
+        } catch (JsonProcessingException e) {
+            return Collections.emptyList();
+        }
     }
 
     private String getUrl(String url, String productName) {
