@@ -3,8 +3,9 @@ package com.gaejangmo.apiserver.model.product.testdata;
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.product.domain.vo.*;
+import com.gaejangmo.apiserver.model.product.dto.ManagedProductResponseDto;
 import com.gaejangmo.apiserver.model.product.dto.ProductRequestDto;
-import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
+import com.gaejangmo.apiserver.model.product.dto.NaverProductResponseDto;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class ProductTestData {
@@ -52,8 +53,7 @@ public class ProductTestData {
             .naverProductType("wrong params")
             .productType(ProductType.find(1).toString())
             .build();
-    public static final ProductResponseDto RESPONSE_DTO = ProductResponseDto.builder()
-            .id(1)
+    public static final NaverProductResponseDto NAVER_PRODUCT_RESPONSE_DTO = NaverProductResponseDto.builder()
             .productName("애플 맥북 프로 15형 2019년형 MV912KH/A")
             .buyUrl("https://shopping-phinf.pstatic.net/main_2057150/20571500240.20190819112004.jpg")
             .imageUrl("https://shopping-phinf.pstatic.net/main_1980579/19805790169.20190617105809.jpg")
@@ -64,6 +64,20 @@ public class ProductTestData {
             .naverProductType(NaverProductType.find(1))
             .productType(ProductType.find(1))
             .build();
+
+    public static final ManagedProductResponseDto MANAGED_PRODUCT_RESPONSE_DTO = ManagedProductResponseDto.builder()
+            .id(1L)
+            .productName("애플 맥북 프로 15형 2019년형 MV912KH/A")
+            .buyUrl("https://shopping-phinf.pstatic.net/main_2057150/20571500240.20190819112004.jpg")
+            .imageUrl("https://shopping-phinf.pstatic.net/main_1980579/19805790169.20190617105809.jpg")
+            .lowestPrice(2980720)
+            .highestPrice(4835230)
+            .mallName("네이버")
+            .productId(19805790169L)
+            .naverProductType(NaverProductType.find(1))
+            .productType(ProductType.find(1))
+            .build();
+
     public static final Product ENTITY = Product.builder()
             .productName(ProductName.of("애플 맥북 프로 15형 2019년형 MV912KH/A"))
             .buyUrl(Link.of("https://shopping-phinf.pstatic.net/main_2057150/20571500240.20190819112004.jpg"))

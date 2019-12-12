@@ -20,20 +20,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
+    // TODO security 로그인 테스트 추가해야 함
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                //.antMatchers("/**").permitAll()
-                .antMatchers("/", "/api/login/state", "/h2-console/**", "/oauth2/redirect").permitAll()
+                .antMatchers("/**").permitAll()
+                //.antMatchers("/", "/api/login/state", "/h2-console/**", "/oauth2/redirect").permitAll()
                 .anyRequest().authenticated();
 
         http.httpBasic();
         http.csrf().disable();
         http.headers().frameOptions().disable();
 
-        http.oauth2Login()
-                .defaultSuccessUrl("/")
-                .userInfoEndpoint()
-                .userService(customOAuth2UserService);
+//        http.oauth2Login()
+//                .defaultSuccessUrl("/")
+//                .userInfoEndpoint()
+//                .userService(customOAuth2UserService);
     }
 }

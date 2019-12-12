@@ -1,6 +1,6 @@
 package com.gaejangmo.apiserver.model.product.controller;
 
-import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
+import com.gaejangmo.apiserver.model.product.dto.NaverProductResponseDto;
 import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
 import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,24 +31,24 @@ public class ProductAcceptanceTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .acceptCharset(StandardCharsets.UTF_8)
-                .body(Mono.just(ProductTestData.REQUEST_DTO), ProductResponseDto.class)
+                .body(Mono.just(ProductTestData.REQUEST_DTO), NaverProductResponseDto.class)
                 .exchange()
                 .expectStatus().isCreated();
     }
 
     @Ignore
     void 장비조회() {
-        ProductResponseDto productResponseDto = webTestClient.get()
+        NaverProductResponseDto naverProductResponseDto = webTestClient.get()
                 .uri(uriBuilder ->
                         uriBuilder.path(PRODUCT_API)
                                 .queryParam("productName", "애플 맥북 프로 15형 2019년형 MV912KH/A")
                                 .build())
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(ProductResponseDto.class)
+                .expectBody(NaverProductResponseDto.class)
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(productResponseDto).isEqualTo(ProductTestData.RESPONSE_DTO);
+        assertThat(naverProductResponseDto).isEqualTo(ProductTestData.NAVER_PRODUCT_RESPONSE_DTO);
     }
 }

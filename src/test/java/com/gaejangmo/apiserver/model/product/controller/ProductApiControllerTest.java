@@ -1,7 +1,9 @@
 package com.gaejangmo.apiserver.model.product.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
+import com.gaejangmo.apiserver.model.product.dto.ManagedProductResponseDto;
+import com.gaejangmo.apiserver.model.product.dto.NaverProductResponseDto;
 import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -67,7 +71,7 @@ class ProductApiControllerTest {
 
     @Test
     @WithMockUser
-    void 장비_조회() throws Exception {
+    void DB에_존재하는_장비_조회() throws Exception {
         mockMvc.perform(post(PRODUCT_API)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -77,6 +81,7 @@ class ProductApiControllerTest {
 
         ResultActions resultActions = mockMvc.perform(get(PRODUCT_API)
                 .param("productName", "애플 맥북 프로 15형 2019년형 MV912KH/A")
+                .param("external", "false")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
@@ -85,8 +90,30 @@ class ProductApiControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsByteArray();
 
-        ProductResponseDto productResponseDto = MAPPER.readValue(contentAsByteArray, ProductResponseDto.class);
+        List<ManagedProductResponseDto> naverProductResponseDtos = MAPPER.readValue(contentAsByteArray, new TypeReference<List<ManagedProductResponseDto>>() {
+        });
 
-        assertThat(productResponseDto).isEqualTo(ProductTestData.RESPONSE_DTO);
+        assertThat(naverProductResponseDtos.size()).isEqualTo(1);
+    }
+
+    @Test
+    void 장비_조회_외부_api_호출() throws Exception {
+        // DB에 없는 장비를 조회한다.
+        ResultActions resultActions = mockMvc.perform(get(PRODUCT_API)
+                .param("productName", "애플 맥북 프로 15형 2019년형 MV912KH/A")
+                .param("external", "true")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        byte[] contentAsByteArray = resultActions.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsByteArray();
+
+        List<NaverProductResponseDto> naverProductResponseDtos =
+                MAPPER.readValue(contentAsByteArray, new TypeReference<List<NaverProductResponseDto>>() {
+                });
+
+        assertThat(naverProductResponseDtos).isNotNull();
     }
 }
