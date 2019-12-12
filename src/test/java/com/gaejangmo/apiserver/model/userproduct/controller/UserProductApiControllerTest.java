@@ -119,4 +119,42 @@ class UserProductApiControllerTest {
         // then
         resultActions.andExpect(status().isNoContent());
     }
+
+    @Test
+    @WithMockUser
+    void 장비_comment_수정() throws Exception {
+        // given
+        String comment = "updatedComment";
+        UserProductResponseDto userProductResponseDto = UserProductResponseDto.builder().comment(comment).build();
+        when(userProductService.updateComment(1L, 1L, comment)).thenReturn(userProductResponseDto);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(put(USER_PRODUCT_URI + "/1/comment")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(comment))
+                .andDo(print());
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("comment").value(comment));
+    }
+
+    @Test
+    @WithAnonymousUser
+    void 비로그인_장비_Comment_수정_시도_Unauthorized() throws Exception {
+        // given
+        String comment = "updatedComment";
+
+        // when
+        ResultActions resultActions = mockMvc.perform(put(USER_PRODUCT_URI + "/1/comment")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(comment))
+                .andDo(print());
+
+        // then
+        resultActions.andExpect(status().isUnauthorized());
+    }
+
 }

@@ -4,6 +4,7 @@ import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.product.service.ProductService;
 import com.gaejangmo.apiserver.model.userproduct.domain.UserProduct;
 import com.gaejangmo.apiserver.model.userproduct.domain.UserProductRepository;
+import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.exception.NotUserProductOwnerException;
@@ -36,9 +37,31 @@ public class UserProductService {
     }
 
     @Transactional(readOnly = true)
+    public UserProduct findById(final Long id) {
+        return userProductRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
     public List<UserProductResponseDto> findByUserId(final Long userId) {
-        // TODO: 2019/12/11 User로 구현
+        // TODO: 2019/12/11 User로 구현 + 메소드명 수정
         return null;
+    }
+
+    public UserProductResponseDto updateComment(final Long id, final Long userId, final String comment) {
+        UserProduct userProduct = findById(id);
+        if (userProduct.matchUser(userId)) {
+            UserProduct changedProduct = userProduct.changeComment(Comment.of(comment));
+            return toDto(changedProduct);
+        }
+        throw new NotUserProductOwnerException();
+    }
+
+    public boolean delete(final Long id, final Long userId) {
+        UserProduct userProduct = userProductRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        if (userProduct.matchUser(userId)) {
+            return userProduct.delete();
+        }
+        throw new NotUserProductOwnerException();
     }
 
     private UserProductResponseDto toDto(final UserProduct userProduct) {
@@ -56,15 +79,7 @@ public class UserProductService {
         return UserProduct.builder()
                 .product(product)
                 .productType(userProductCreateDto.getProductType())
-                .comment(userProductCreateDto.getComment())
+                .comment(Comment.of(userProductCreateDto.getComment()))
                 .build();
-    }
-
-    public boolean delete(final Long id, final Long userId) {
-        UserProduct userProduct = userProductRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        if (userProduct.matchUser(userId)) {
-            return userProduct.delete();
-        }
-        throw new NotUserProductOwnerException();
     }
 }

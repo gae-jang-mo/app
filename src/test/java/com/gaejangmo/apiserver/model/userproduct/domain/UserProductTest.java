@@ -1,6 +1,7 @@
 package com.gaejangmo.apiserver.model.userproduct.domain;
 
 import com.gaejangmo.apiserver.model.userproduct.domain.exception.AlreadyDeleteException;
+import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,14 +15,14 @@ class UserProductTest {
     @BeforeEach
     void setUp() {
         userProduct = UserProduct.builder()
-                .comment("comment")
+                .comment(Comment.of("comment"))
                 .productType(ProductType.ETC)
                 .build();
     }
 
     // TODO: 2019/12/11 유저 추가후 테스트 구현
     @Test
-    void matchUser() {
+    void 작성자인지_확인() {
         // given
 
         // when
@@ -31,7 +32,19 @@ class UserProductTest {
     }
 
     @Test
-    void delete() {
+    void Comment_수정() {
+        // given
+        String value = "updatedComment";
+
+        // when
+        UserProduct changed = userProduct.changeComment(Comment.of(value));
+
+        // then
+        assertThat(changed.getComment()).isEqualTo(value);
+    }
+
+    @Test
+    void 삭제() {
         boolean actual = assertDoesNotThrow(() -> userProduct.delete());
 
         assertTrue(actual);

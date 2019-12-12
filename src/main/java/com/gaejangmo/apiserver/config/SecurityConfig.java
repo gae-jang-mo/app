@@ -1,6 +1,7 @@
 package com.gaejangmo.apiserver.config;
 
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,8 +19,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/api/**/users/products").hasRole("USER")
-                .antMatchers("/api/**/users/products/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/**/users/products/**").permitAll()
+                .antMatchers("/api/**/users/products/**").hasRole("USER")
                 .anyRequest().authenticated();
 
         http.httpBasic();

@@ -4,6 +4,7 @@ import com.gaejangmo.apiserver.model.common.BaseEntity;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.userproduct.domain.converter.ProductTypeAttributeConverter;
 import com.gaejangmo.apiserver.model.userproduct.domain.exception.AlreadyDeleteException;
+import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -24,8 +25,10 @@ public class UserProduct extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String comment;
+    @AttributeOverride(
+            name = "value",
+            column = @Column(name = "comment", nullable = false))
+    private Comment comment;
 
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean deleted;
@@ -40,7 +43,7 @@ public class UserProduct extends BaseEntity {
     // TODO: 2019/12/10 User 관계 매핑
 
     @Builder
-    public UserProduct(final String comment, final ProductType productType, final Product product) {
+    public UserProduct(final Comment comment, final ProductType productType, final Product product) {
         this.comment = comment;
         this.productType = productType;
         this.product = product;
@@ -51,11 +54,20 @@ public class UserProduct extends BaseEntity {
         return true;
     }
 
+    public UserProduct changeComment(final Comment comment) {
+        this.comment = comment;
+        return this;
+    }
+
     public boolean delete() {
         if (deleted) {
             throw new AlreadyDeleteException(this.id);
         }
         return deleted = true;
+    }
+
+    public String getComment() {
+        return comment.value();
     }
 }
 

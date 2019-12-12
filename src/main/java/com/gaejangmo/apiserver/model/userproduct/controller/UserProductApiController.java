@@ -36,6 +36,14 @@ public class UserProductApiController {
         return ResponseEntity.ok(responseDtos);
     }
 
+    @PutMapping("/{id}/comment")
+    public ResponseEntity<UserProductResponseDto> updateComment(@PathVariable final Long id,
+                                                                @RequestBody final String comment) {
+        // TODO: 2019/12/12 User 정보 가져오기
+        UserProductResponseDto responseDto = userProductService.updateComment(id, 1L, comment);
+        return ResponseEntity.ok(responseDto);
+    }
+
     @DeleteMapping("{id}")
     public ResponseEntity delete(@PathVariable final Long id) {
         // TODO: 2019/12/10 유저 정보 가져와서 id 넘기기
