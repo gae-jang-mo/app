@@ -30,9 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.headers().frameOptions().disable();
 
-        http.oauth2Login()
-                .defaultSuccessUrl("/")
-                .userInfoEndpoint()
-                .userService(customOAuth2UserService);
+//        http.oauth2Login()
+//                .defaultSuccessUrl("/")
+//                .userInfoEndpoint()
+//                .userService(customOAuth2UserService);
     }
 }
