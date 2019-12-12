@@ -35,7 +35,7 @@ public class OAuth2Service {
     }
 
     private User saveOrUpdate(final OAuthAttributesDto attributes) {
-        User user = userRepository.findByEmail(Email.of(attributes.getEmail()))
+        User user = userRepository.findByUsername(attributes.getUsername())
                 .map(userEntity -> userEntity.update(attributes.getUsername(), attributes.getImageUrl()))
                 .orElseGet(() -> toEntity(attributes));
 
@@ -43,9 +43,9 @@ public class OAuth2Service {
     }
 
     private User toEntity(final OAuthAttributesDto attributes) {
+        // TODO: 2019-12-12 email 관리 설정 필요
         return User.builder()
                 .username(attributes.getUsername())
-                .email(Email.of(attributes.getEmail()))
                 .imageUrl(Link.of(attributes.getImageUrl()))
                 .role(Role.USER)
                 .grade(Grade.GENERAL)

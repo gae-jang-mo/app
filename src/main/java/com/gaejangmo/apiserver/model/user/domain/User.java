@@ -38,7 +38,7 @@ public class User extends BaseEntity {
 
     @AttributeOverride(
             name = "value",
-            column = @Column(name = "email", nullable = false))
+            column = @Column(name = "email"))
     private Email email;
 
     @AttributeOverride(
