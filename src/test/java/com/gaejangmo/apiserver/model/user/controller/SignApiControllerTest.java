@@ -1,12 +1,16 @@
 package com.gaejangmo.apiserver.model.user.controller;
 
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -35,5 +39,20 @@ class SignApiControllerTest {
                 .andReturn().getResponse().getContentAsString();
 
         assertThat(Boolean.valueOf(result)).isFalse();
+    }
+
+    @Test
+    @WithMockUser
+    void 로그인_성공_상태_확인() throws Exception {
+        ResultActions resultActions = mockMvc.perform(get(SIGN_API + "/login/state")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        String result = resultActions.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsString();
+
+        assertThat(Boolean.valueOf(result)).isTrue();
     }
 }

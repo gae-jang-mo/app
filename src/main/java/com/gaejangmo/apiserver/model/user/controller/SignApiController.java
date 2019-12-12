@@ -1,11 +1,11 @@
 package com.gaejangmo.apiserver.model.user.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.Objects;
 
 @RestController
@@ -13,11 +13,11 @@ import java.util.Objects;
 public class SignApiController {
 
     @GetMapping("/login/state")
-    public ResponseEntity<Boolean> checkLogin(final OAuth2AuthenticationToken authentication) {
-        if (Objects.isNull(authentication)) {
+    public ResponseEntity<Boolean> checkLogin(final Principal principal) {
+        if (Objects.isNull(principal)) {
             return ResponseEntity.ok().body(Boolean.FALSE);
         }
 
-        return ResponseEntity.ok().body(authentication.isAuthenticated());
+        return ResponseEntity.ok().body(Boolean.TRUE);
     }
 }
