@@ -11,7 +11,7 @@ import lombok.*;
 @Builder
 @EqualsAndHashCode
 public class ProductResponseDto {
-    private long id;
+    private long id = -1;
     private String productName;
     private String buyUrl;
     private String imageUrl;

@@ -1,7 +1,6 @@
 package com.gaejangmo.apiserver.model.product.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
 import com.gaejangmo.apiserver.model.product.domain.Product;
@@ -19,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -51,9 +51,8 @@ public class ProductService {
 
     private List<ProductResponseDto> extractJsonString(final String body) {
         try {
-            return new ObjectMapper().readValue(Objects.requireNonNull(body), new TypeReference<List<ProductResponseDto>>() {
-            });
-        } catch (JsonProcessingException e) {
+            return Arrays.asList(new ObjectMapper().readValue(Objects.requireNonNull(body), ProductResponseDto[].class));
+        } catch (JsonProcessingException ex) {
             return Collections.emptyList();
         }
     }
