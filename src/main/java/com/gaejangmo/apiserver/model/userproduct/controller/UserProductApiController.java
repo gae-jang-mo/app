@@ -14,7 +14,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 
 @RestController
-@RequestMapping("/api/v1/userproducts")
+@RequestMapping("/api/v1/users/products")
 public class UserProductApiController {
     private final UserProductService userProductService;
 
@@ -43,4 +43,6 @@ public class UserProductApiController {
         userProductService.delete(id, userId);
         return ResponseEntity.noContent().build();
     }
+
+
 }
