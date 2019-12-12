@@ -14,9 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.function.UnaryOperator;
+import java.util.function.Function;
 
-// TODO: 2019/12/10 서비스 테스트 추가하기
 @Service
 @Transactional
 public class UserProductService {
@@ -50,26 +49,21 @@ public class UserProductService {
     }
 
     public UserProductResponseDto updateComment(final Long id, final Long userId, final String comment) {
-        return updateTemplate(id, userId, (userProduct) -> userProduct.changeComment(Comment.of(comment)));
+        return updateTemplate(id, userId, (userProduct) -> toDto(userProduct.changeComment(Comment.of(comment))));
     }
 
     public UserProductResponseDto updateProductType(final Long id, final Long userId, final ProductType productType) {
-        return updateTemplate(id, userId, (userProduct) -> userProduct.changeProductType(productType));
-    }
-
-    private UserProductResponseDto updateTemplate(final Long id, final Long userId, final UnaryOperator<UserProduct> function) {
-        UserProduct userProduct = findById(id);
-        if (userProduct.matchUser(userId)) {
-            UserProduct changedProduct = function.apply(userProduct);
-            return toDto(changedProduct);
-        }
-        throw new NotUserProductOwnerException();
+        return updateTemplate(id, userId, (userProduct) -> toDto(userProduct.changeProductType(productType)));
     }
 
     public boolean delete(final Long id, final Long userId) {
-        UserProduct userProduct = userProductRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return updateTemplate(id, userId, UserProduct::delete);
+    }
+
+    private <T> T updateTemplate(final Long id, final Long userId, final Function<UserProduct, T> function) {
+        UserProduct userProduct = findById(id);
         if (userProduct.matchUser(userId)) {
-            return userProduct.delete();
+            return function.apply(userProduct);
         }
         throw new NotUserProductOwnerException();
     }
