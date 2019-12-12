@@ -1,19 +1,19 @@
 package com.gaejangmo.apiserver.model.user.domain.vo;
 
 import com.gaejangmo.apiserver.model.user.exception.InvalidMottoException;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 
 @Embeddable
 @EqualsAndHashCode
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Motto {
     private static final int MAX_LENGTH = 10;
 
     private String value;
-
-    private Motto() {
-    }
 
     private Motto(final String value) {
         this.value = validate(value);
