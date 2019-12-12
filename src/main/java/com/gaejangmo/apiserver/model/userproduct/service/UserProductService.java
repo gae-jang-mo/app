@@ -5,6 +5,7 @@ import com.gaejangmo.apiserver.model.product.service.ProductService;
 import com.gaejangmo.apiserver.model.userproduct.domain.UserProduct;
 import com.gaejangmo.apiserver.model.userproduct.domain.UserProductRepository;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
+import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.exception.NotUserProductOwnerException;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 // TODO: 2019/12/10 서비스 테스트 추가하기
 @Service
@@ -48,9 +50,17 @@ public class UserProductService {
     }
 
     public UserProductResponseDto updateComment(final Long id, final Long userId, final String comment) {
+        return updateTemplate(id, userId, (userProduct) -> userProduct.changeComment(Comment.of(comment)));
+    }
+
+    public UserProductResponseDto updateProductType(final Long id, final Long userId, final ProductType productType) {
+        return updateTemplate(id, userId, (userProduct) -> userProduct.changeProductType(productType));
+    }
+
+    private UserProductResponseDto updateTemplate(final Long id, final Long userId, final UnaryOperator<UserProduct> function) {
         UserProduct userProduct = findById(id);
         if (userProduct.matchUser(userId)) {
-            UserProduct changedProduct = userProduct.changeComment(Comment.of(comment));
+            UserProduct changedProduct = function.apply(userProduct);
             return toDto(changedProduct);
         }
         throw new NotUserProductOwnerException();
@@ -69,7 +79,7 @@ public class UserProductService {
                 .id(userProduct.getId())
                 .comment(userProduct.getComment())
                 .createdAt(userProduct.getCreatedAt())
-                .productType(userProduct.getProductType())
+                .productType(userProduct.getProductType().getName())
                 .imageUrl(userProduct.getProduct().getImageUrl())
                 .productId(userProduct.getProduct().getId())
                 .build();

@@ -44,6 +44,18 @@ class UserProductTest {
     }
 
     @Test
+    void ProductType_수정() {
+        // given
+        ProductType keyBoard = ProductType.KEY_BOARD;
+
+        // when
+        UserProduct changed = userProduct.changeProductType(keyBoard);
+
+        // then
+        assertThat(changed.getProductType()).isEqualTo(keyBoard);
+    }
+
+    @Test
     void 삭제() {
         boolean actual = assertDoesNotThrow(() -> userProduct.delete());
 

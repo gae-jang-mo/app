@@ -1,6 +1,7 @@
 package com.gaejangmo.apiserver.model.userproduct.controller;
 
 
+import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import com.gaejangmo.apiserver.model.userproduct.service.UserProductService;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
@@ -44,6 +45,15 @@ public class UserProductApiController {
         return ResponseEntity.ok(responseDto);
     }
 
+    @PutMapping("/{id}/product-type")
+    public ResponseEntity<UserProductResponseDto> updateProductType(@PathVariable final Long id,
+                                                                    @RequestBody final String productType) {
+        // TODO: 2019/12/12 User 정보 가져오기
+
+        UserProductResponseDto responseDto = userProductService.updateProductType(id, 1L, ProductType.ofName(productType));
+        return ResponseEntity.ok(responseDto);
+    }
+
     @DeleteMapping("{id}")
     public ResponseEntity delete(@PathVariable final Long id) {
         // TODO: 2019/12/10 유저 정보 가져와서 id 넘기기
@@ -51,6 +61,4 @@ public class UserProductApiController {
         userProductService.delete(id, userId);
         return ResponseEntity.noContent().build();
     }
-
-
 }

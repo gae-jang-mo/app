@@ -157,4 +157,40 @@ class UserProductApiControllerTest {
         resultActions.andExpect(status().isUnauthorized());
     }
 
+    @Test
+    @WithMockUser
+    void 장비_ProductType_수정() throws Exception {
+        // given
+        ProductType productType = ProductType.MAIN_DEVICE;
+        UserProductResponseDto userProductResponseDto = UserProductResponseDto.builder().productType(productType.getName()).build();
+        when(userProductService.updateProductType(1L, 1L, productType)).thenReturn(userProductResponseDto);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(put(USER_PRODUCT_URI + "/1/product-type")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(productType.getName()))
+                .andDo(print());
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("productType").value(productType.getName()));
+    }
+
+    @Test
+    @WithAnonymousUser
+    void 비로그인_장비_ProductType_수정_시도_Unauthorized() throws Exception {
+        // given
+        ProductType productType = ProductType.MAIN_DEVICE;
+        UserProductResponseDto userProductResponseDto = UserProductResponseDto.builder().productType(productType.getName()).build();
+        when(userProductService.updateProductType(1L, 1L, productType)).thenReturn(userProductResponseDto);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(put(USER_PRODUCT_URI + "/1/product-type")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(productType.getName()))
+                .andDo(print());
+
+        // then
+        resultActions.andExpect(status().isUnauthorized());
+    }
 }

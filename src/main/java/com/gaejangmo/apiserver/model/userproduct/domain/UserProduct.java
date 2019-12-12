@@ -59,6 +59,11 @@ public class UserProduct extends BaseEntity {
         return this;
     }
 
+    public UserProduct changeProductType(final ProductType productType) {
+        this.productType = productType;
+        return this;
+    }
+
     public boolean delete() {
         if (deleted) {
             throw new AlreadyDeleteException(this.id);
