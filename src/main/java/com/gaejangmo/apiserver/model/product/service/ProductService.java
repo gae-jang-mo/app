@@ -1,7 +1,5 @@
 package com.gaejangmo.apiserver.model.product.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.product.domain.ProductRepository;
@@ -9,17 +7,12 @@ import com.gaejangmo.apiserver.model.product.domain.vo.*;
 import com.gaejangmo.apiserver.model.product.dto.ProductRequestDto;
 import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -39,22 +32,9 @@ public class ProductService {
     }
 
     public List<ProductResponseDto> invokeByProductName(final String productName) {
-        String body = restTemplate.exchange(
-                getUrl("http://localhost:8081/api/v1/search", productName),
-                HttpMethod.GET,
-                createHttpEntity(),
-                String.class)
-                .getBody();
-
-        return extractJsonString(body);
-    }
-
-    private List<ProductResponseDto> extractJsonString(final String body) {
-        try {
-            return Arrays.asList(new ObjectMapper().readValue(Objects.requireNonNull(body), ProductResponseDto[].class));
-        } catch (JsonProcessingException ex) {
-            return Collections.emptyList();
-        }
+        return Arrays.asList(Objects.requireNonNull(
+                restTemplate.getForObject(getUrl("http://localhost:8081/api/v1/search", productName),
+                        ProductResponseDto[].class)));
     }
 
     private String getUrl(String url, String productName) {
@@ -62,12 +42,6 @@ public class ProductService {
                 .queryParam("productName", productName)
                 .build(false)                       // 한글이 깨져서 encoded 를 false
                 .toString();
-    }
-
-    private static HttpEntity<String> createHttpEntity() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        return new HttpEntity<>(headers);
     }
 
     public ProductResponseDto save(final ProductRequestDto dto) {
