@@ -68,6 +68,10 @@ public class User extends BaseEntity {
         this.introduce = introduce;
     }
 
+    public boolean matchId(final Long id) {
+        return this.id.equals(id);
+    }
+
     public String getGrade() {
         return grade.getTitle();
     }
