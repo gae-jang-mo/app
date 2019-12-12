@@ -2,8 +2,7 @@ package com.gaejangmo.apiserver.model.product.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gaejangmo.apiserver.model.product.dto.ManagedProductResponseDto;
-import com.gaejangmo.apiserver.model.product.dto.NaverProductResponseDto;
+import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
 import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,10 +89,10 @@ class ProductApiControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsByteArray();
 
-        List<ManagedProductResponseDto> naverProductResponseDtos = MAPPER.readValue(contentAsByteArray, new TypeReference<List<ManagedProductResponseDto>>() {
+        List<ProductResponseDto> managedProductResponseDtos = MAPPER.readValue(contentAsByteArray, new TypeReference<List<ProductResponseDto>>() {
         });
 
-        assertThat(naverProductResponseDtos.size()).isEqualTo(1);
+        assertThat(managedProductResponseDtos.size()).isEqualTo(1);
     }
 
     @Test
@@ -110,8 +109,8 @@ class ProductApiControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsByteArray();
 
-        List<NaverProductResponseDto> naverProductResponseDtos =
-                MAPPER.readValue(contentAsByteArray, new TypeReference<List<NaverProductResponseDto>>() {
+        List<ProductResponseDto> naverProductResponseDtos =
+                MAPPER.readValue(contentAsByteArray, new TypeReference<List<ProductResponseDto>>() {
                 });
 
         assertThat(naverProductResponseDtos).isNotNull();

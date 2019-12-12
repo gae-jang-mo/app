@@ -3,9 +3,8 @@ package com.gaejangmo.apiserver.model.product.testdata;
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.product.domain.vo.*;
-import com.gaejangmo.apiserver.model.product.dto.ManagedProductResponseDto;
 import com.gaejangmo.apiserver.model.product.dto.ProductRequestDto;
-import com.gaejangmo.apiserver.model.product.dto.NaverProductResponseDto;
+import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class ProductTestData {
@@ -53,7 +52,7 @@ public class ProductTestData {
             .naverProductType("wrong params")
             .productType(ProductType.find(1).toString())
             .build();
-    public static final NaverProductResponseDto NAVER_PRODUCT_RESPONSE_DTO = NaverProductResponseDto.builder()
+    public static final ProductResponseDto NAVER_PRODUCT_RESPONSE_DTO = ProductResponseDto.builder()
             .productName("애플 맥북 프로 15형 2019년형 MV912KH/A")
             .buyUrl("https://shopping-phinf.pstatic.net/main_2057150/20571500240.20190819112004.jpg")
             .imageUrl("https://shopping-phinf.pstatic.net/main_1980579/19805790169.20190617105809.jpg")
@@ -65,7 +64,7 @@ public class ProductTestData {
             .productType(ProductType.find(1))
             .build();
 
-    public static final ManagedProductResponseDto MANAGED_PRODUCT_RESPONSE_DTO = ManagedProductResponseDto.builder()
+    public static final ProductResponseDto MANAGED_PRODUCT_RESPONSE_DTO = ProductResponseDto.builder()
             .id(1L)
             .productName("애플 맥북 프로 15형 2019년형 MV912KH/A")
             .buyUrl("https://shopping-phinf.pstatic.net/main_2057150/20571500240.20190819112004.jpg")
@@ -89,6 +88,7 @@ public class ProductTestData {
             .naverProductType(NaverProductType.find(1))
             .productType(ProductType.find(1))
             .build();
+
     static {
         ReflectionTestUtils.setField(ProductTestData.ENTITY, "id", 1L);
     }

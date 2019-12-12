@@ -1,7 +1,7 @@
 package com.gaejangmo.apiserver.model.product.service;
 
 import com.gaejangmo.apiserver.model.product.domain.ProductRepository;
-import com.gaejangmo.apiserver.model.product.dto.ManagedProductResponseDto;
+import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
 import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +37,7 @@ class ProductServiceTest {
     void 상품_저장() {
         given(productRepository.save(any())).willReturn(ProductTestData.ENTITY);
 
-        ManagedProductResponseDto saved = productService.save(ProductTestData.REQUEST_DTO);
+        ProductResponseDto saved = productService.save(ProductTestData.REQUEST_DTO);
 
         assertThat(saved).isEqualTo(ProductTestData.MANAGED_PRODUCT_RESPONSE_DTO);
     }

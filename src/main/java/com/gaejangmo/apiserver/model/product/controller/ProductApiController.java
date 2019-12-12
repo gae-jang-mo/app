@@ -1,6 +1,5 @@
 package com.gaejangmo.apiserver.model.product.controller;
 
-import com.gaejangmo.apiserver.model.product.dto.ManagedProductResponseDto;
 import com.gaejangmo.apiserver.model.product.dto.ProductRequestDto;
 import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
 import com.gaejangmo.apiserver.model.product.service.ProductService;
@@ -35,9 +34,9 @@ public class ProductApiController {
     }
 
     @PostMapping
-    public ResponseEntity<ManagedProductResponseDto> save(@RequestBody @Valid ProductRequestDto productRequestDto) {
+    public ResponseEntity<ProductResponseDto> save(@RequestBody @Valid ProductRequestDto productRequestDto) {
         // TODO DTO 예외처리
-        ManagedProductResponseDto savedProduct = productService.save(productRequestDto);
+        ProductResponseDto savedProduct = productService.save(productRequestDto);
         return ResponseEntity.created(linkTo(ProductApiController.class)
                 .slash(savedProduct.getId()).toUri())
                 .body(savedProduct);

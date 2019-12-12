@@ -5,10 +5,8 @@ import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.product.domain.ProductRepository;
 import com.gaejangmo.apiserver.model.product.domain.vo.*;
 import com.gaejangmo.apiserver.model.product.dto.ProductRequestDto;
-import com.gaejangmo.apiserver.model.product.dto.NaverProductResponseDto;
-import com.gaejangmo.apiserver.model.product.dto.ManagedProductResponseDto;
 import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,16 +17,14 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     public List<ProductResponseDto> findByProductName(final String productName) {
         List<Product> products = productRepository.findByProductName(ProductName.of(productName));
@@ -39,14 +35,12 @@ public class ProductService {
     }
 
     public List<ProductResponseDto> invokeByProductName(final String productName) {
-        List<NaverProductResponseDto> body = restTemplate.exchange(
+        return restTemplate.exchange(
                 getUrl("http://localhost:8081/api/v1/search", productName),
                 HttpMethod.GET,
                 createHttpEntity(),
-                new ParameterizedTypeReference<List<NaverProductResponseDto>>() {
+                new ParameterizedTypeReference<List<ProductResponseDto>>() {
                 }).getBody();
-
-        return new ArrayList<>(Objects.requireNonNull(body));
     }
 
     private String getUrl(String url, String productName) {
@@ -58,18 +52,17 @@ public class ProductService {
 
     private static HttpEntity<String> createHttpEntity() {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
-
+        headers.setContentType(MediaType.APPLICATION_JSON);
         return new HttpEntity<>(headers);
     }
 
-    public ManagedProductResponseDto save(final ProductRequestDto dto) {
+    public ProductResponseDto save(final ProductRequestDto dto) {
         Product product = productRepository.save(toEntity(dto));
         return toDto(product);
     }
 
-    private ManagedProductResponseDto toDto(final Product product) {
-        return ManagedProductResponseDto.builder()
+    private ProductResponseDto toDto(final Product product) {
+        return ProductResponseDto.builder()
                 .productId(product.getId())
                 .productName(product.getProductName())
                 .buyUrl(product.getBuyUrl())

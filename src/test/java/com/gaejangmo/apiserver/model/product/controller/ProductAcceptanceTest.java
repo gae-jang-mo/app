@@ -1,6 +1,6 @@
 package com.gaejangmo.apiserver.model.product.controller;
 
-import com.gaejangmo.apiserver.model.product.dto.NaverProductResponseDto;
+import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
 import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
 import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,21 +31,21 @@ public class ProductAcceptanceTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .acceptCharset(StandardCharsets.UTF_8)
-                .body(Mono.just(ProductTestData.REQUEST_DTO), NaverProductResponseDto.class)
+                .body(Mono.just(ProductTestData.REQUEST_DTO), ProductResponseDto.class)
                 .exchange()
                 .expectStatus().isCreated();
     }
 
     @Ignore
     void 장비조회() {
-        NaverProductResponseDto naverProductResponseDto = webTestClient.get()
+        ProductResponseDto naverProductResponseDto = webTestClient.get()
                 .uri(uriBuilder ->
                         uriBuilder.path(PRODUCT_API)
                                 .queryParam("productName", "애플 맥북 프로 15형 2019년형 MV912KH/A")
                                 .build())
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(NaverProductResponseDto.class)
+                .expectBody(ProductResponseDto.class)
                 .returnResult()
                 .getResponseBody();
 
