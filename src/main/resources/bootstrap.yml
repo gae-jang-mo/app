@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+# 기본적으로 local로 실행하고 배포시에는 해당 서버에 해당하는 profiles를 넣어서 배포한다.
+# spring cloud는 기본적으로 application-name에 해당하는 설정을 찾기 때문에 이름을 지정한다.
+spring:
+  application:
+    name: app
+  profiles:
+    active: local
+---
+# local 개발 환경에서는 IntelliJ의 Edit Configuration 에서 환경변수들을 넣어 놓기 때문에 spring cloud 를 쓰지 않는다.
+spring:
+  profiles: local
+  cloud:
+    config:
+      enabled: false
+---
+# spring.cloud.uri 의 디폴트 값은 localhost의 8888 포트이기 때문에 써주지 않았다.
+spring:
+  profiles: dev

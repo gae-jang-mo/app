@@ -1,5 +1,6 @@
 package com.gaejangmo.apiserver.model.product.domain;
 
+import com.gaejangmo.apiserver.model.common.domain.vo.Link;
 import com.gaejangmo.apiserver.model.product.domain.vo.*;
 import org.junit.jupiter.api.Test;
 

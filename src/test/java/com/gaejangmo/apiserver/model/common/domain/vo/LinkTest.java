@@ -1,4 +1,4 @@
-package com.gaejangmo.apiserver.model.product.domain.vo;
+package com.gaejangmo.apiserver.model.common.domain.vo;
 
 import com.gaejangmo.apiserver.model.product.exception.UrlFormatException;
 import org.junit.jupiter.api.Test;
