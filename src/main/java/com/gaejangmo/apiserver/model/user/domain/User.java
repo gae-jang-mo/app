@@ -2,6 +2,8 @@ package com.gaejangmo.apiserver.model.user.domain;
 
 import com.gaejangmo.apiserver.model.common.domain.BaseEntity;
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
+import com.gaejangmo.apiserver.model.user.domain.converter.GradeAttributeConverter;
+import com.gaejangmo.apiserver.model.user.domain.converter.RoleAttributeConverter;
 import com.gaejangmo.apiserver.model.user.domain.vo.Email;
 import com.gaejangmo.apiserver.model.user.domain.vo.Grade;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
@@ -26,11 +28,11 @@ public class User extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String username;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = RoleAttributeConverter.class)
     @Column(nullable = false)
     private Role role;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = GradeAttributeConverter.class)
     @Column(nullable = false)
     private Grade grade;
 
