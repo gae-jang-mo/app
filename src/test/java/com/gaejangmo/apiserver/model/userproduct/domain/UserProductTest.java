@@ -1,34 +1,65 @@
 package com.gaejangmo.apiserver.model.userproduct.domain;
 
+import com.gaejangmo.apiserver.model.product.domain.Product;
+import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
+import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.userproduct.domain.exception.AlreadyDeleteException;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class UserProductTest {
     private UserProduct userProduct;
+    private User mockUser;
+    private Product mockProduct;
 
     @BeforeEach
     void setUp() {
+        mockUser = mock(User.class);
+        mockProduct = mock(Product.class);
+
         userProduct = UserProduct.builder()
+                .user(mockUser)
+                .product(mockProduct)
                 .comment(Comment.of("comment"))
                 .productType(ProductType.ETC)
                 .build();
+
+        ReflectionTestUtils.setField(ProductTestData.ENTITY, "id", 1L);
     }
 
-    // TODO: 2019/12/11 유저 추가후 테스트 구현
     @Test
-    void 작성자인지_확인() {
+    void 작성자면_true() {
         // given
+        long userId = 1L;
+        when(mockUser.matchId(userId)).thenReturn(true);
 
         // when
+        boolean actual = userProduct.matchUser(userId);
 
         // then
+        assertThat(actual).isTrue();
+        verify(mockUser).matchId(userId);
+    }
 
+    @Test
+    void 작성자_아니면_false() {
+        // given
+        long userId = 1L;
+        when(mockUser.matchId(userId)).thenReturn(false);
+
+        // when
+        boolean actual = userProduct.matchUser(userId);
+
+        // then
+        assertThat(actual).isFalse();
+        verify(mockUser).matchId(userId);
     }
 
     @Test

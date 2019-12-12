@@ -3,6 +3,7 @@ package com.gaejangmo.apiserver.model.userproduct.domain;
 
 import com.gaejangmo.apiserver.model.common.domain.BaseEntity;
 import com.gaejangmo.apiserver.model.product.domain.Product;
+import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.userproduct.domain.converter.ProductTypeAttributeConverter;
 import com.gaejangmo.apiserver.model.userproduct.domain.exception.AlreadyDeleteException;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
@@ -41,18 +42,20 @@ public class UserProduct extends BaseEntity {
     @JoinColumn(name = "product_id", foreignKey = @ForeignKey(name = "fk_product_to_user_product"), updatable = false)
     private Product product;
 
-    // TODO: 2019/12/10 User 관계 매핑
+    @ManyToOne
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_user_to_user_product"), updatable = false)
+    private User user;
 
     @Builder
-    public UserProduct(final Comment comment, final ProductType productType, final Product product) {
+    public UserProduct(final Comment comment, final ProductType productType, final Product product, final User user) {
         this.comment = comment;
         this.productType = productType;
         this.product = product;
+        this.user = user;
     }
 
     public boolean matchUser(final Long userId) {
-        // TODO: 2019/12/11  user의 id랑 비교 user에 matchId() 넣기
-        return true;
+        return user.matchId(userId);
     }
 
     public UserProduct changeComment(final Comment comment) {
