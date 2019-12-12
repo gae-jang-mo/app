@@ -1,14 +1,15 @@
 package com.gaejangmo.apiserver.model.product.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
 import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
+import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -22,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("dev")
 class ProductApiControllerTest {
     private static final String PRODUCT_API = linkTo(ProductApiController.class).toString();
 

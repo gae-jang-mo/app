@@ -1,4 +1,4 @@
-package com.gaejangmo.apiserver.model.common;
+package com.gaejangmo.apiserver.model.common.domain;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

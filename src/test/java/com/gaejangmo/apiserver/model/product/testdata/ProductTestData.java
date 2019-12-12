@@ -1,5 +1,6 @@
 package com.gaejangmo.apiserver.model.product.testdata;
 
+import com.gaejangmo.apiserver.model.common.domain.vo.Link;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.product.domain.vo.*;
 import com.gaejangmo.apiserver.model.product.dto.ProductRequestDto;

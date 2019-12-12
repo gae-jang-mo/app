@@ -1,6 +1,7 @@
 package com.gaejangmo.apiserver.model.userproduct.domain;
 
-import com.gaejangmo.apiserver.model.common.BaseEntity;
+
+import com.gaejangmo.apiserver.model.common.domain.BaseEntity;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.userproduct.domain.converter.ProductTypeAttributeConverter;
 import com.gaejangmo.apiserver.model.userproduct.domain.exception.AlreadyDeleteException;
