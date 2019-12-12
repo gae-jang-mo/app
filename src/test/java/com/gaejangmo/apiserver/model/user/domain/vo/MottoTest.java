@@ -11,9 +11,7 @@ class MottoTest {
 
     @Test
     void 생성_테스트() {
-        Motto motto = Motto.of("좌우명");
-
-        assertThat(motto).isEqualTo(Motto.of("좌우명"));
+        assertDoesNotThrow(() -> Motto.of("좌우명"));
     }
 
     @Test
@@ -27,18 +25,10 @@ class MottoTest {
     }
 
     @Test
-    void equals_테스트() {
+    void equals_hashCode_테스트() {
         String value = "좌우명";
         Motto motto = Motto.of(value);
 
         assertThat(motto.equals(Motto.of(value))).isTrue();
-    }
-
-    @Test
-    void hashCode_테스트() {
-        String value = "좌우명";
-        Motto motto = Motto.of(value);
-
-        assertThat(motto.hashCode()).isEqualTo(Motto.of(value).hashCode());
     }
 }
