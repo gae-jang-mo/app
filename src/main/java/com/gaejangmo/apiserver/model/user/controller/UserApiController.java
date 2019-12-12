@@ -22,7 +22,7 @@ public class UserApiController {
     @GetMapping("/logined")
     public ResponseEntity<UserResponseDto> find(HttpSession session) {
         User user = (User) session.getAttribute("user");
-        UserResponseDto response = userService.findUserResponseDtoByUsername(user.getUsername());
+        UserResponseDto response = userService.findUserResponseDtoByOauthId(user.getOauthId());
         return ResponseEntity.ok().body(response);
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 public class UserTestData {
     public static final User ENTITY = User.builder()
+            .oauthId(1234L)
             .username("username")
             .email(Email.of("email@email.com"))
             .motto(Motto.of("motto"))
@@ -19,6 +20,7 @@ public class UserTestData {
 
     public static final UserResponseDto RESPONSE_DTO = UserResponseDto.builder()
             .id(1L)
+            .oauthId(1234L)
             .username("username")
             .email("email@email.com")
             .motto("motto")

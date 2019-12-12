@@ -12,7 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(SpringExtension.class)
@@ -26,9 +26,9 @@ class UserServiceTest {
 
     @Test
     void 유저_조회() {
-        given(userRepository.findByUsername(anyString())).willReturn(Optional.of(UserTestData.ENTITY));
+        given(userRepository.findByOauthId(anyLong())).willReturn(Optional.of(UserTestData.ENTITY));
 
-        UserResponseDto result = userService.findUserResponseDtoByUsername("username");
+        UserResponseDto result = userService.findUserResponseDtoByOauthId(1234L);
 
         assertThat(result).isEqualTo(UserTestData.RESPONSE_DTO);
     }

@@ -15,8 +15,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserResponseDto findUserResponseDtoByUsername(final String username) {
-        User user = userRepository.findByUsername(username)
+    public UserResponseDto findUserResponseDtoByOauthId(final Long oauthId) {
+        User user = userRepository.findByOauthId(oauthId)
                 .orElseThrow(() -> new EntityNotFoundException("해당하는 유저가 없습니다."));
         return toDto(user);
     }
@@ -24,6 +24,7 @@ public class UserService {
     private UserResponseDto toDto(final User user) {
         return UserResponseDto.builder()
                 .id(user.getId())
+                .oauthId(user.getOauthId())
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .imageUrl(user.getImageUrl())
