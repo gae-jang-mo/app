@@ -11,17 +11,17 @@ import javax.persistence.Embeddable;
 @EqualsAndHashCode
 @Embeddable
 public class Comment {
-    static final String IF_NULL_TO_VALID_VALUE = "";
+    static final String EMPTY_VALUE = "";
 
     private final String value;
 
     public Comment(final String value) {
-        this.value = ifNullToValidValue(value);
+        this.value = validate(value);
     }
 
-    private String ifNullToValidValue(final String value) {
+    private String validate(final String value) {
         if (StringUtils.isNull(value)) {
-            return IF_NULL_TO_VALID_VALUE;
+            return EMPTY_VALUE;
         }
         return value;
     }

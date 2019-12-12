@@ -14,6 +14,6 @@ class CommentTest {
     @Test
     void null_입력시_공백으로_변환() {
         Comment comment = Comment.of(null);
-        assertThat(comment.value()).isEqualTo(Comment.IF_NULL_TO_VALID_VALUE);
+        assertThat(comment.value()).isEqualTo(Comment.EMPTY_VALUE);
     }
 }

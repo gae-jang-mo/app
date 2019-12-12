@@ -16,10 +16,10 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
-@Entity
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
+@Entity
 @Where(clause = "deleted = 0")
 public class UserProduct extends BaseEntity {
 

@@ -8,7 +8,6 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 
 @Getter
-@Builder
 @ToString
 @EqualsAndHashCode
 public class UserProductResponseDto {
@@ -20,4 +19,13 @@ public class UserProductResponseDto {
     private String imageUrl;
 
 
+    @Builder
+    public UserProductResponseDto(final Long id, final Long productId, final String productType, final String comment, final LocalDateTime createdAt, final String imageUrl) {
+        this.id = id;
+        this.productId = productId;
+        this.productType = productType;
+        this.comment = comment;
+        this.createdAt = createdAt;
+        this.imageUrl = imageUrl;
+    }
 }
