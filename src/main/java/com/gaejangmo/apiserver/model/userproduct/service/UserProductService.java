@@ -2,6 +2,8 @@ package com.gaejangmo.apiserver.model.userproduct.service;
 
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.product.service.ProductService;
+import com.gaejangmo.apiserver.model.user.domain.User;
+import com.gaejangmo.apiserver.model.user.service.UserService;
 import com.gaejangmo.apiserver.model.userproduct.domain.UserProduct;
 import com.gaejangmo.apiserver.model.userproduct.domain.UserProductRepository;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
@@ -15,23 +17,25 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class UserProductService {
-    // TODO: 2019/12/10 이너서비스 안해도 될까?
     private final ProductService productService;
+    private final UserService userService;
     private final UserProductRepository userProductRepository;
 
-    public UserProductService(final UserProductRepository userProductRepository, final ProductService productService) {
-        this.userProductRepository = userProductRepository;
+    public UserProductService(final ProductService productService, final UserService userService, final UserProductRepository userProductRepository) {
         this.productService = productService;
+        this.userService = userService;
+        this.userProductRepository = userProductRepository;
     }
 
     public UserProductResponseDto save(final UserProductCreateDto userProductCreateDto, final Long userId) {
-        // todo userId로 user 조회
+        User user = userService.findById(userId);
         Product product = productService.findById(userProductCreateDto.getProductId());
-        UserProduct userProduct = toEntity(userProductCreateDto, product);
+        UserProduct userProduct = toEntity(userProductCreateDto, product, user);
         UserProduct saved = userProductRepository.save(userProduct);
 
         return toDto(saved);
@@ -44,8 +48,10 @@ public class UserProductService {
 
     @Transactional(readOnly = true)
     public List<UserProductResponseDto> findByUserId(final Long userId) {
-        // TODO: 2019/12/11 User로 구현 + 메소드명 수정
-        return null;
+        User user = userService.findById(userId);
+        return userProductRepository.findByUser(user).stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 
     public UserProductResponseDto updateComment(final Long id, final Long userId, final String comment) {
@@ -79,8 +85,9 @@ public class UserProductService {
                 .build();
     }
 
-    private UserProduct toEntity(final UserProductCreateDto userProductCreateDto, final Product product) {
+    private UserProduct toEntity(final UserProductCreateDto userProductCreateDto, final Product product, final User user) {
         return UserProduct.builder()
+                .user(user)
                 .product(product)
                 .productType(userProductCreateDto.getProductType())
                 .comment(Comment.of(userProductCreateDto.getComment()))
