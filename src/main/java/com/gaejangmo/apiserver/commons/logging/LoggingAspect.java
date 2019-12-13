@@ -26,7 +26,7 @@ public class LoggingAspect {
         return requestResult;
     }
 
-    @Around("@within(org.springframework.web.bind.annotation.RestControllerAdvice) && args (exception, ..)")
+    @Around("@annotation(org.springframework.web.bind.annotation.ExceptionHandler) && args (exception, ..)")
     public Object restControllerAdviceLogging(final ProceedingJoinPoint pjp, Exception exception) throws Throwable {
         Logger log = getLog(pjp.getSignature().getDeclaringType());
 
