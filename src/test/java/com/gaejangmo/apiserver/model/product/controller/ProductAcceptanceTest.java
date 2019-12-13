@@ -73,6 +73,6 @@ public class ProductAcceptanceTest {
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(productResponseDto).isEqualTo(ProductTestData.RESPONSE_DTO);
+        assertThat(productResponseDto).isEqualTo(ProductTestData.NAVER_PRODUCT_RESPONSE_DTO);
     }
 }

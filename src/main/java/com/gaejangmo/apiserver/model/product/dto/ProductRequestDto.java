@@ -26,10 +26,10 @@ public class ProductRequestDto {
     private String image;
 
     @Min(0)
-    private long lPrice;
+    private long lowestPrice;
 
     @Min(0)
-    private long hPrice;
+    private long highestPrice;
 
     @NotBlank
     private String mallName;
