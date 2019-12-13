@@ -1,6 +1,7 @@
 package com.gaejangmo.apiserver.model.userproduct.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gaejangmo.apiserver.model.common.resolver.SessionUser;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import com.gaejangmo.apiserver.model.userproduct.service.UserProductService;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,13 +34,14 @@ class UserProductApiControllerTest {
     private static final long USER_ID = 1L;
     private static final long PRODUCT_ID = 10L;
 
-    @Autowired
-    private MockMvc mockMvc;
     @MockBean
     private UserProductService userProductService;
     @Autowired
+    private MockMvc mockMvc;
+    @Autowired
     private ObjectMapper objectMapper;
 
+    public MockHttpSession session;
     private UserProductCreateDto userProductCreateDto;
     private UserProductResponseDto userProductResponseDto;
 
@@ -54,6 +57,11 @@ class UserProductApiControllerTest {
                 .id(1L)
                 .comment("userProductResponseDto comment")
                 .build();
+
+        SessionUser sessionUser = new SessionUser(USER_ID, "email@gmail.com", "userName");
+        session = new MockHttpSession();
+        session.setAttribute(SessionUser.USER_SESSION_KEY, sessionUser);
+
     }
 
     @Test
@@ -63,6 +71,7 @@ class UserProductApiControllerTest {
 
         // when
         ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI)
+                .session(session)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userProductCreateDto)))
@@ -113,8 +122,10 @@ class UserProductApiControllerTest {
     void 장비_삭제() throws Exception {
         // given
         when(userProductService.delete(1L, USER_ID)).thenReturn(true);
+
         // when
-        ResultActions resultActions = mockMvc.perform(delete(USER_PRODUCT_URI + "/1"))
+        ResultActions resultActions = mockMvc.perform(delete(USER_PRODUCT_URI + "/1")
+                .session(session))
                 .andDo(print());
 
         // then
@@ -131,6 +142,7 @@ class UserProductApiControllerTest {
 
         // when
         ResultActions resultActions = mockMvc.perform(put(USER_PRODUCT_URI + "/1/comment")
+                .session(session)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(comment))
@@ -168,6 +180,7 @@ class UserProductApiControllerTest {
 
         // when
         ResultActions resultActions = mockMvc.perform(put(USER_PRODUCT_URI + "/1/product-type")
+                .session(session)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(productType.getName()))
                 .andDo(print());
