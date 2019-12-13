@@ -5,12 +5,17 @@ spring:
 spring:
   profiles:
     include: oauth
-#  datasource:
-#    data: classpath:data-h2.sql # 시작할때 실행시킬 script
+  #  datasource:
+  #    data: classpath:data-h2.sql # 시작할때 실행시킬 script
   jpa:
     show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+      open-in-view: false
     hibernate:
       ddl-auto: create-drop
+
   h2:
     console:
       enabled: true

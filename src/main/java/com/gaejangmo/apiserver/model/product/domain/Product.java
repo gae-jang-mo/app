@@ -1,6 +1,6 @@
 package com.gaejangmo.apiserver.model.product.domain;
 
-import com.gaejangmo.apiserver.model.common.domain.BaseEntity;
+import com.gaejangmo.apiserver.model.common.domain.BaseTimeEntity;
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
 import com.gaejangmo.apiserver.model.product.domain.vo.*;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
-public class Product extends BaseEntity {
+public class Product extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

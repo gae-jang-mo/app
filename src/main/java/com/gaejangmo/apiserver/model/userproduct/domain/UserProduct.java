@@ -1,7 +1,7 @@
 package com.gaejangmo.apiserver.model.userproduct.domain;
 
 
-import com.gaejangmo.apiserver.model.common.domain.BaseEntity;
+import com.gaejangmo.apiserver.model.common.domain.BaseTimeEntity;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.userproduct.domain.converter.ProductTypeAttributeConverter;
@@ -21,7 +21,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(of = "id", callSuper = false)
 @Entity
 @Where(clause = "deleted = 0")
-public class UserProduct extends BaseEntity {
+public class UserProduct extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
