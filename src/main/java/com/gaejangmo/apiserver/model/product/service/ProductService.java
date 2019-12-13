@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
+    private static final String SEARCH_SERVER_END_POINT = "http://localhost:8081/api/v1/products";
+
     private final ProductRepository productRepository;
     private final RestTemplate restTemplate;
 
@@ -37,12 +39,11 @@ public class ProductService {
 
     public List<NaverProductResponseDto> findFromExternal(final String productName) {
         return Arrays.asList(Objects.requireNonNull(
-                restTemplate.getForObject(getUrl("http://localhost:8081/api/v1/products", productName),
-                        NaverProductResponseDto[].class)));
+                restTemplate.getForObject(createUrl(productName), NaverProductResponseDto[].class)));
     }
 
-    private String getUrl(String url, String productName) {
-        return UriComponentsBuilder.fromHttpUrl(url)
+    private String createUrl(String productName) {
+        return UriComponentsBuilder.fromHttpUrl(SEARCH_SERVER_END_POINT)
                 .queryParam("productName", productName)
                 .build(false)                       // 한글이 깨져서 encoded 를 false
                 .toString();
