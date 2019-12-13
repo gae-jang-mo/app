@@ -9,7 +9,7 @@ import java.security.Principal;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class SignApiController {
 
     @GetMapping("/login/state")
