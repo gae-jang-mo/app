@@ -14,6 +14,12 @@ import org.springframework.stereotype.Service;
 public class ProductService {
     private final ProductRepository productRepository;
 
+    // todo 분리 의논 + exception
+    public Product findById(final long id) {
+        return productRepository.findById(id).orElseThrow(RuntimeException::new);
+    }
+
+
     public ProductResponseDto findByProductName(String name) {
         Product product = productRepository.findByProductName(ProductName.of(name));
         return toDto(product);

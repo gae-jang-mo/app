@@ -4,15 +4,21 @@ import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.domain.UserRepository;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 
 @Service
+@Transactional
 public class UserService {
     private final UserRepository userRepository;
 
     public UserService(final UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public User findById(final Long id) {
+        return userRepository.findById(id).get();
     }
 
     public UserResponseDto findUserResponseDtoByOauthId(final Long oauthId) {

@@ -2,6 +2,7 @@ package com.gaejangmo.apiserver.config.oauth.service;
 
 import com.gaejangmo.apiserver.config.oauth.dto.OAuthAttributesDto;
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
+import com.gaejangmo.apiserver.model.common.resolver.SessionUser;
 import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.domain.UserRepository;
 import com.gaejangmo.apiserver.model.user.domain.vo.Email;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.Map;
+
+import static com.gaejangmo.apiserver.model.common.resolver.SessionUser.USER_SESSION_KEY;
 
 @Component
 public class OAuth2Service {
@@ -30,8 +33,7 @@ public class OAuth2Service {
         OAuthAttributesDto attributesDto = OAuthAttributesDto.of(registrationId, userNameAttributeName, attributes);
 
         User user = saveOrUpdate(attributesDto);
-
-        session.setAttribute("user", user);
+        session.setAttribute(USER_SESSION_KEY, toSessionUser(user));
 
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(user.getRoleType())),
@@ -46,6 +48,14 @@ public class OAuth2Service {
                 .orElseGet(() -> toEntity(attributes));
 
         return userRepository.save(user);
+    }
+
+    private SessionUser toSessionUser(final User user) {
+        return SessionUser.builder()
+                .email(user.getEmail())
+                .userName(user.getUsername())
+                .id(user.getId())
+                .build();
     }
 
     private User toEntity(final OAuthAttributesDto attributes) {
