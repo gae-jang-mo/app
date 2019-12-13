@@ -28,6 +28,7 @@ public class Email {
     }
 
     private String validate(final String value) {
+        // 깃허브에서 email이 없을 때 "null"이라는 문자열이 리턴된다
         if (NULL.equals(value)) {
             return EMPTY;
         }
