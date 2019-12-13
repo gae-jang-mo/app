@@ -1,6 +1,8 @@
 package com.gaejangmo.apiserver.model.userproduct.controller;
 
 
+import com.gaejangmo.apiserver.model.common.resolver.LoginUser;
+import com.gaejangmo.apiserver.model.common.resolver.SessionUser;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import com.gaejangmo.apiserver.model.userproduct.service.UserProductService;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
@@ -24,9 +26,10 @@ public class UserProductApiController {
     }
 
     @PostMapping
-    public ResponseEntity<UserProductResponseDto> create(@RequestBody final UserProductCreateDto userProductCreateDto) {
-        // TODO: 2019/12/10 유저 정보 가져와서 id 넘기기
-        UserProductResponseDto responseDto = userProductService.save(userProductCreateDto, 1L);
+    public ResponseEntity<UserProductResponseDto> create(@RequestBody final UserProductCreateDto userProductCreateDto,
+                                                         @LoginUser final SessionUser sessionUser) {
+        Long userId = sessionUser.getId();
+        UserProductResponseDto responseDto = userProductService.save(userProductCreateDto, userId);
         URI uri = linkTo(UserProductApiController.class).slash(responseDto.getId()).toUri();
         return ResponseEntity.created(uri).body(responseDto);
     }
@@ -39,26 +42,28 @@ public class UserProductApiController {
 
     @PutMapping("/{id}/comment")
     public ResponseEntity<UserProductResponseDto> updateComment(@PathVariable final Long id,
-                                                                @RequestBody final String comment) {
-        // TODO: 2019/12/12 User 정보 가져오기
-        UserProductResponseDto responseDto = userProductService.updateComment(id, 1L, comment);
+                                                                @RequestBody final String comment,
+                                                                @LoginUser final SessionUser sessionUser) {
+        Long userId = sessionUser.getId();
+        UserProductResponseDto responseDto = userProductService.updateComment(id, userId, comment);
         return ResponseEntity.ok(responseDto);
     }
 
     @PutMapping("/{id}/product-type")
     public ResponseEntity<UserProductResponseDto> updateProductType(@PathVariable final Long id,
-                                                                    @RequestBody final String productType) {
-        // TODO: 2019/12/12 User 정보 가져오기
-
-        UserProductResponseDto responseDto = userProductService.updateProductType(id, 1L, ProductType.ofName(productType));
+                                                                    @RequestBody final String productType,
+                                                                    @LoginUser SessionUser sessionUser) {
+        Long userId = sessionUser.getId();
+        UserProductResponseDto responseDto = userProductService.updateProductType(id, userId, ProductType.ofName(productType));
         return ResponseEntity.ok(responseDto);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity delete(@PathVariable final Long id) {
-        // TODO: 2019/12/10 유저 정보 가져와서 id 넘기기
-        Long userId = 1L;
+    public ResponseEntity delete(@PathVariable final Long id,
+                                 @LoginUser SessionUser sessionUser) {
+        Long userId = sessionUser.getId();
         userProductService.delete(id, userId);
         return ResponseEntity.noContent().build();
     }
+
 }

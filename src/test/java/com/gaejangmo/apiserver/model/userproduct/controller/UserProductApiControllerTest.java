@@ -29,6 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class UserProductApiControllerTest {
     private static final String USER_PRODUCT_URI = linkTo(UserProductApiController.class).toString();
+    private static final long USER_ID = 1L;
+    private static final long PRODUCT_ID = 10L;
 
     @Autowired
     private MockMvc mockMvc;
@@ -43,7 +45,7 @@ class UserProductApiControllerTest {
     @BeforeEach
     void setUp() {
         userProductCreateDto = UserProductCreateDto.builder()
-                .productId(1L)
+                .productId(PRODUCT_ID)
                 .productType(ProductType.KEY_BOARD)
                 .comment("인생 마우스")
                 .build();
@@ -57,8 +59,7 @@ class UserProductApiControllerTest {
     @Test
     @WithMockUser
     void 장비_등록() throws Exception {
-        // TODO: 2019/12/10 추후 userId 1L 대신 UserDetail 정보에서  id 가져와서 넣어주기 (Mock 사용)
-        when(userProductService.save(userProductCreateDto, 1L)).thenReturn(userProductResponseDto);
+        when(userProductService.save(userProductCreateDto, USER_ID)).thenReturn(userProductResponseDto);
 
         // when
         ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI)
@@ -93,7 +94,7 @@ class UserProductApiControllerTest {
     void 리스트_조회() throws Exception {
         // given
         List<UserProductResponseDto> expected = List.of(userProductResponseDto);
-        when(userProductService.findByUserId(1L)).thenReturn(expected);
+        when(userProductService.findByUserId(USER_ID)).thenReturn(expected);
 
         // when
         ResultActions resultActions = mockMvc.perform(get(USER_PRODUCT_URI + "/1")
@@ -111,7 +112,7 @@ class UserProductApiControllerTest {
     @WithMockUser
     void 장비_삭제() throws Exception {
         // given
-        when(userProductService.delete(1L, 1L)).thenReturn(true);
+        when(userProductService.delete(1L, USER_ID)).thenReturn(true);
         // when
         ResultActions resultActions = mockMvc.perform(delete(USER_PRODUCT_URI + "/1"))
                 .andDo(print());
@@ -126,7 +127,7 @@ class UserProductApiControllerTest {
         // given
         String comment = "updatedComment";
         UserProductResponseDto userProductResponseDto = UserProductResponseDto.builder().comment(comment).build();
-        when(userProductService.updateComment(1L, 1L, comment)).thenReturn(userProductResponseDto);
+        when(userProductService.updateComment(1L, USER_ID, comment)).thenReturn(userProductResponseDto);
 
         // when
         ResultActions resultActions = mockMvc.perform(put(USER_PRODUCT_URI + "/1/comment")
@@ -163,7 +164,7 @@ class UserProductApiControllerTest {
         // given
         ProductType productType = ProductType.MAIN_DEVICE;
         UserProductResponseDto userProductResponseDto = UserProductResponseDto.builder().productType(productType.getName()).build();
-        when(userProductService.updateProductType(1L, 1L, productType)).thenReturn(userProductResponseDto);
+        when(userProductService.updateProductType(1L, USER_ID, productType)).thenReturn(userProductResponseDto);
 
         // when
         ResultActions resultActions = mockMvc.perform(put(USER_PRODUCT_URI + "/1/product-type")
@@ -182,7 +183,7 @@ class UserProductApiControllerTest {
         // given
         ProductType productType = ProductType.MAIN_DEVICE;
         UserProductResponseDto userProductResponseDto = UserProductResponseDto.builder().productType(productType.getName()).build();
-        when(userProductService.updateProductType(1L, 1L, productType)).thenReturn(userProductResponseDto);
+        when(userProductService.updateProductType(1L, USER_ID, productType)).thenReturn(userProductResponseDto);
 
         // when
         ResultActions resultActions = mockMvc.perform(put(USER_PRODUCT_URI + "/1/product-type")
