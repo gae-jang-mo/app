@@ -29,6 +29,10 @@ public class ProductService {
         this.restTemplate = restTemplate;
     }
 
+    public Product findById(final long id) {
+        return productRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    }
+
     public List<ManagedProductResponseDto> findFromInternal(final String productName) {
         List<Product> products = productRepository.findByProductName(ProductName.of(productName));
         if (products.isEmpty()) {
