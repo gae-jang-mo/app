@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
 
         http.oauth2Login()
-                .defaultSuccessUrl("/")
+                .defaultSuccessUrl("http://localhost:3000/")
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService);
     }

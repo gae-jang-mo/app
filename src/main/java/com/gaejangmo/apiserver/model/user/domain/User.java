@@ -26,6 +26,9 @@ public class User extends BaseEntity {
     private Long id;
 
     @Column(unique = true, nullable = false)
+    private Long oauthId;
+
+    @Column(unique = true, nullable = false)
     private String username;
 
     @Convert(converter = RoleAttributeConverter.class)
@@ -56,9 +59,8 @@ public class User extends BaseEntity {
     private String introduce;
 
     @Builder
-    public User(final String username, final Role role, final Grade grade,
-                final Email email, final Motto motto, final Link imageUrl,
-                final String introduce) {
+    public User(final Long oauthId, final String username, final Role role, final Grade grade, final Email email, final Motto motto, final Link imageUrl, final String introduce) {
+        this.oauthId = oauthId;
         this.username = username;
         this.role = role;
         this.grade = grade;

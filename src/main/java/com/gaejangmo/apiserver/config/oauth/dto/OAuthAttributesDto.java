@@ -9,15 +9,17 @@ import java.util.Map;
 @Getter
 public class OAuthAttributesDto {
     private final Map<String, Object> attributes;
+    private final Long oauthId;
     private final String nameAttributeKey;
     private final String username;
     private final String email;
     private final String imageUrl;
 
     @Builder
-    public OAuthAttributesDto(final Map<String, Object> attributes, final String nameAttributeKey, final String username,
+    public OAuthAttributesDto(final Map<String, Object> attributes, final Long oauthId, final String nameAttributeKey, final String username,
                               final String email, final String imageUrl) {
         this.attributes = attributes;
+        this.oauthId = oauthId;
         this.nameAttributeKey = nameAttributeKey;
         this.username = username;
         this.email = email;
@@ -29,6 +31,7 @@ public class OAuthAttributesDto {
         ProviderAttributes providerAttributes = ProviderAttributes.of(registrationId);
 
         return OAuthAttributesDto.builder()
+                .oauthId(Long.valueOf((Integer) attributes.get(providerAttributes.getOauthId())))
                 .username(String.valueOf(attributes.get(providerAttributes.getUsername())))
                 .email(String.valueOf(attributes.get(providerAttributes.getEmail())))
                 .imageUrl(String.valueOf(attributes.get(providerAttributes.getImageUrl())))
