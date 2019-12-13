@@ -1,7 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.2.1.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-    id 'org.asciidoctor.convert' version '1.5.8'
+    id 'org.asciidoctor.convert' version '1.5.10'
     id 'java'
 }
 
@@ -21,33 +21,11 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven { url 'https://dl.bintray.com/jaypark3749/maven/' }
 }
 
 ext {
     set('snippetsDir', file("build/generated-snippets"))
-}
-
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.projectlombok:lombok'
-
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-
-    runtimeOnly 'net.rakugakibox.spring.boot:logback-access-spring-boot-starter:2.7.1'
-    runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'mysql:mysql-connector-java'
-
-    annotationProcessor 'org.projectlombok:lombok'
-
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-    testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 test {
@@ -58,4 +36,44 @@ test {
 asciidoctor {
     inputs.dir snippetsDir
     dependsOn test
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from ("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+    implementation 'org.springframework.security:spring-security-oauth2-client'
+    implementation 'org.springframework.cloud:spring-cloud-starter-config:2.2.0.RELEASE'
+    implementation 'org.projectlombok:lombok'
+    implementation 'com.gaejangmo:gae-jang-mo-utils:0.0.1'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    runtimeOnly 'net.rakugakibox.spring.boot:logback-access-spring-boot-starter:2.7.1'
+    runtimeOnly 'com.h2database:h2'
+    compile 'com.h2database:h2'
+
+    runtimeOnly 'mysql:mysql-connector-java'
+
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-webtestclient'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webflux' // webtestclient 를 위한 추가
+
+    asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 }
