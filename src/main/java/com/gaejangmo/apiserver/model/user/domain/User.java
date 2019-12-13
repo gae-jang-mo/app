@@ -2,6 +2,8 @@ package com.gaejangmo.apiserver.model.user.domain;
 
 import com.gaejangmo.apiserver.model.common.domain.BaseEntity;
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
+import com.gaejangmo.apiserver.model.user.domain.converter.GradeAttributeConverter;
+import com.gaejangmo.apiserver.model.user.domain.converter.RoleAttributeConverter;
 import com.gaejangmo.apiserver.model.user.domain.vo.Email;
 import com.gaejangmo.apiserver.model.user.domain.vo.Grade;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
@@ -24,19 +26,22 @@ public class User extends BaseEntity {
     private Long id;
 
     @Column(unique = true, nullable = false)
+    private Long oauthId;
+
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = RoleAttributeConverter.class)
     @Column(nullable = false)
     private Role role;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = GradeAttributeConverter.class)
     @Column(nullable = false)
     private Grade grade;
 
     @AttributeOverride(
             name = "value",
-            column = @Column(name = "email", nullable = false))
+            column = @Column(name = "email"))
     private Email email;
 
     @AttributeOverride(
@@ -54,9 +59,8 @@ public class User extends BaseEntity {
     private String introduce;
 
     @Builder
-    public User(final String username, final Role role, final Grade grade,
-                final Email email, final Motto motto, final Link imageUrl,
-                final String introduce) {
+    public User(final Long oauthId, final String username, final Role role, final Grade grade, final Email email, final Motto motto, final Link imageUrl, final String introduce) {
+        this.oauthId = oauthId;
         this.username = username;
         this.role = role;
         this.grade = grade;
@@ -64,6 +68,10 @@ public class User extends BaseEntity {
         this.motto = motto;
         this.imageUrl = imageUrl;
         this.introduce = introduce;
+    }
+
+    public boolean matchId(final Long id) {
+        return this.id.equals(id);
     }
 
     public String getGrade() {
