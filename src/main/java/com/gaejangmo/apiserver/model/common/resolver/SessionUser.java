@@ -1,12 +1,16 @@
 package com.gaejangmo.apiserver.model.common.resolver;
 
-import com.gaejangmo.apiserver.model.user.domain.vo.Role;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import java.io.Serializable;
 
 @Getter
 @ToString
 @NoArgsConstructor
-public class SessionUser {
+public class SessionUser implements Serializable {
     public static final String USER_SESSION_KEY = "loginUser";
 
     private Long id;

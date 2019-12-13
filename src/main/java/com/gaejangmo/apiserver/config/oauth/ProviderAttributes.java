@@ -7,15 +7,17 @@ import java.util.stream.Stream;
 
 @Getter
 public enum ProviderAttributes {
-    GITHUB("github", "login", "email", "avatar_url");
+    GITHUB("github", "id", "login", "email", "avatar_url");
 
     private final String registrationId;
+    private final String oauthId;
     private final String username;
     private final String email;
     private final String imageUrl;
 
-    ProviderAttributes(final String registrationId, final String username, final String email, final String imageUrl) {
+    ProviderAttributes(final String registrationId, final String oauthId, final String username, final String email, final String imageUrl) {
         this.registrationId = registrationId;
+        this.oauthId = oauthId;
         this.username = username;
         this.email = email;
         this.imageUrl = imageUrl;

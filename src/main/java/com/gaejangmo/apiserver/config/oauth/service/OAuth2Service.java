@@ -42,6 +42,14 @@ public class OAuth2Service {
         );
     }
 
+    private User saveOrUpdate(final OAuthAttributesDto attributes) {
+        User user = userRepository.findByOauthId(attributes.getOauthId())
+                .map(userEntity -> userEntity.update(attributes.getUsername(), attributes.getImageUrl()))
+                .orElseGet(() -> toEntity(attributes));
+
+        return userRepository.save(user);
+    }
+
     private SessionUser toSessionUser(final User user) {
         return SessionUser.builder()
                 .email(user.getEmail())
@@ -50,16 +58,9 @@ public class OAuth2Service {
                 .build();
     }
 
-    private User saveOrUpdate(final OAuthAttributesDto attributes) {
-        User user = userRepository.findByUsername(attributes.getUsername())
-                .map(userEntity -> userEntity.update(attributes.getUsername(), attributes.getImageUrl()))
-                .orElseGet(() -> toEntity(attributes));
-
-        return userRepository.save(user);
-    }
-
     private User toEntity(final OAuthAttributesDto attributes) {
         return User.builder()
+                .oauthId(attributes.getOauthId())
                 .username(attributes.getUsername())
                 .imageUrl(Link.of(attributes.getImageUrl()))
                 .role(Role.USER)
