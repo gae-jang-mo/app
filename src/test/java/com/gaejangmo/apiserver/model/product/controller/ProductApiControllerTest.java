@@ -78,9 +78,8 @@ class ProductApiControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        ResultActions resultActions = mockMvc.perform(get(PRODUCT_API)
+        ResultActions resultActions = mockMvc.perform(get(PRODUCT_API + "/internal")
                 .param("productName", "애플 맥북 프로 15형 2019년형 MV912KH/A")
-                .param("external", "false")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
@@ -98,9 +97,8 @@ class ProductApiControllerTest {
     @Test
     void 장비_조회_외부_api_호출() throws Exception {
         // DB에 없는 장비를 조회한다.
-        ResultActions resultActions = mockMvc.perform(get(PRODUCT_API)
+        ResultActions resultActions = mockMvc.perform(get(PRODUCT_API + "/external")
                 .param("productName", "애플 맥북 프로 15형 2019년형 MV912KH/A")
-                .param("external", "true")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());

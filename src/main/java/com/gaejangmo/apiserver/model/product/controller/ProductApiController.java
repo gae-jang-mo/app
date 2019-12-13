@@ -1,7 +1,8 @@
 package com.gaejangmo.apiserver.model.product.controller;
 
+import com.gaejangmo.apiserver.model.product.dto.ManagedProductResponseDto;
+import com.gaejangmo.apiserver.model.product.dto.NaverProductResponseDto;
 import com.gaejangmo.apiserver.model.product.dto.ProductRequestDto;
-import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
 import com.gaejangmo.apiserver.model.product.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,25 +19,22 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 public class ProductApiController {
     private final ProductService productService;
 
-    @GetMapping
-    public ResponseEntity<List<ProductResponseDto>> find(@RequestParam(name = "productName") String productName, @RequestParam(name = "external") boolean external) {
-        List<ProductResponseDto> productResponses =
-                external ? invokeSearchApi(productName) : findProductResponses(productName);
-        return ResponseEntity.ok(productResponses);
+    @GetMapping("/internal")
+    public ResponseEntity<List<ManagedProductResponseDto>> findFromInternalResource(@RequestParam String productName) {
+        List<ManagedProductResponseDto> products = productService.findFromInternal(productName);
+        return ResponseEntity.ok(products);
     }
 
-    private List<ProductResponseDto> findProductResponses(final String productName) {
-        return productService.findByProductName(productName);
-    }
-
-    private List<ProductResponseDto> invokeSearchApi(final String productName) {
-        return productService.invokeByProductName(productName);
+    @GetMapping("/external")
+    public ResponseEntity<List<NaverProductResponseDto>> findFromExternalResource(@RequestParam String productName) {
+        List<NaverProductResponseDto> products = productService.findFromExternal(productName);
+        return ResponseEntity.ok(products);
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponseDto> save(@RequestBody @Valid ProductRequestDto productRequestDto) {
+    public ResponseEntity<ManagedProductResponseDto> save(@RequestBody @Valid ProductRequestDto productRequestDto) {
         // TODO DTO 예외처리
-        ProductResponseDto savedProduct = productService.save(productRequestDto);
+        ManagedProductResponseDto savedProduct = productService.save(productRequestDto);
         return ResponseEntity.created(linkTo(ProductApiController.class)
                 .slash(savedProduct.getId()).toUri())
                 .body(savedProduct);

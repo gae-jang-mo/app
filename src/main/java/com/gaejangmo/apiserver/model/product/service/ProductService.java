@@ -4,9 +4,9 @@ import com.gaejangmo.apiserver.model.common.domain.vo.Link;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.product.domain.ProductRepository;
 import com.gaejangmo.apiserver.model.product.domain.vo.*;
+import com.gaejangmo.apiserver.model.product.dto.ManagedProductResponseDto;
+import com.gaejangmo.apiserver.model.product.dto.NaverProductResponseDto;
 import com.gaejangmo.apiserver.model.product.dto.ProductRequestDto;
-import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -18,12 +18,16 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
     private final RestTemplate restTemplate;
 
-    public List<ProductResponseDto> findByProductName(final String productName) {
+    public ProductService(final ProductRepository productRepository, final RestTemplate restTemplate) {
+        this.productRepository = productRepository;
+        this.restTemplate = restTemplate;
+    }
+
+    public List<ManagedProductResponseDto> findFromInternal(final String productName) {
         List<Product> products = productRepository.findByProductName(ProductName.of(productName));
         if (products.isEmpty()) {
             throw new EntityNotFoundException("DB에 없는 장비입니다");
@@ -31,10 +35,10 @@ public class ProductService {
         return products.stream().map(this::toDto).collect(Collectors.toList());
     }
 
-    public List<ProductResponseDto> invokeByProductName(final String productName) {
+    public List<NaverProductResponseDto> findFromExternal(final String productName) {
         return Arrays.asList(Objects.requireNonNull(
-                restTemplate.getForObject(getUrl("http://localhost:8081/api/v1/search", productName),
-                        ProductResponseDto[].class)));
+                restTemplate.getForObject(getUrl("http://localhost:8081/api/v1/products", productName),
+                        NaverProductResponseDto[].class)));
     }
 
     private String getUrl(String url, String productName) {
@@ -44,14 +48,14 @@ public class ProductService {
                 .toString();
     }
 
-    public ProductResponseDto save(final ProductRequestDto dto) {
+    public ManagedProductResponseDto save(final ProductRequestDto dto) {
         Product product = productRepository.save(toEntity(dto));
         return toDto(product);
     }
 
-    private ProductResponseDto toDto(final Product product) {
-        return ProductResponseDto.builder()
-                .productId(product.getId())
+    private ManagedProductResponseDto toDto(final Product product) {
+        return ManagedProductResponseDto.builder()
+                .id(product.getId())
                 .productName(product.getProductName())
                 .buyUrl(product.getBuyUrl())
                 .imageUrl(product.getImageUrl())
@@ -69,8 +73,8 @@ public class ProductService {
                 .productName(ProductName.of(dto.getTitle()))
                 .buyUrl(Link.of(dto.getLink()))
                 .imageUrl(Link.of(dto.getImage()))
-                .lowestPrice(Price.of(dto.getLPrice()))
-                .highestPrice(Price.of(dto.getHPrice()))
+                .lowestPrice(Price.of(dto.getLowestPrice()))
+                .highestPrice(Price.of(dto.getHighestPrice()))
                 .mallName(MallName.of(dto.getMallName()))
                 .productId(ProductId.of(dto.getProductId()))
                 .naverProductType(NaverProductType.find(1))

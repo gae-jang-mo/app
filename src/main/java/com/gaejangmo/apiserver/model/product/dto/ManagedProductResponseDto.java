@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 @Builder
 @EqualsAndHashCode
-public class ProductResponseDto {
+public class ManagedProductResponseDto {
     private long id;
     private String productName;
     private String buyUrl;
