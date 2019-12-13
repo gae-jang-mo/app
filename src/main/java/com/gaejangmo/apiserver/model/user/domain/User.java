@@ -1,6 +1,6 @@
 package com.gaejangmo.apiserver.model.user.domain;
 
-import com.gaejangmo.apiserver.model.common.domain.BaseEntity;
+import com.gaejangmo.apiserver.model.common.domain.BaseTimeEntity;
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
 import com.gaejangmo.apiserver.model.user.domain.converter.GradeAttributeConverter;
 import com.gaejangmo.apiserver.model.user.domain.converter.RoleAttributeConverter;
@@ -19,7 +19,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
-public class User extends BaseEntity {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
