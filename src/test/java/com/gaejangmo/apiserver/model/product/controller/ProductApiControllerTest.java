@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
 import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -94,7 +95,7 @@ class ProductApiControllerTest {
         assertThat(managedProductResponseDtos.size()).isEqualTo(1);
     }
 
-    @Test
+    @Ignore
     void 장비_조회_외부_api_호출() throws Exception {
         // DB에 없는 장비를 조회한다.
         ResultActions resultActions = mockMvc.perform(get(PRODUCT_API + "/external")
