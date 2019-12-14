@@ -19,3 +19,6 @@ spring:
 # spring.cloud.uri 의 디폴트 값은 localhost의 8888 포트이기 때문에 써주지 않았다.
 spring:
   profiles: dev
+---
+spring:
+  profiles: test
