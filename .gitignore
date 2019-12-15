@@ -33,3 +33,6 @@ out/
 
 ### oauth secret ###
 application-oauth.yml
+
+### aws secret ###
+application-aws.yml
