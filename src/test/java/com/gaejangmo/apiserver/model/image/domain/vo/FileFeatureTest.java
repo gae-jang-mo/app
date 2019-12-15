@@ -26,6 +26,7 @@ class FileFeatureTest {
         return Stream.of(
                 Arguments.of("url", "originalNmae", -1),
                 Arguments.of("url", "originalNmae", 0),
+                Arguments.of("url", "originalNmae", 52_428_801),
                 Arguments.of("", "originalNmae", 1),
                 Arguments.of("url", "", 1)
         );

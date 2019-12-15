@@ -55,8 +55,8 @@ public class FileFeature {
     }
 
     private void validateSize(final long size) {
-        if (size <= 0) {
-            throw new IllegalArgumentException("파일의 size가 0보다 같거나 작을 수 없습니다.");
+        if (size <= 0 || size > 52_428_800) {
+            throw new IllegalArgumentException("파일의 size는 0~50 MB 사이만 가능합니다.");
         }
     }
 
