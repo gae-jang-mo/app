@@ -16,6 +16,8 @@ import javax.persistence.Embeddable;
 @EqualsAndHashCode
 @Embeddable
 public class FileFeature {
+    static final int MAX_SIZE = 5_242_880;
+    static final int MIN_SIZE = 1;
 
     @Column(nullable = false)
     private String url;
@@ -55,8 +57,8 @@ public class FileFeature {
     }
 
     private void validateSize(final long size) {
-        if (size <= 0 || size > 52_428_800) {
-            throw new IllegalArgumentException("파일의 size는 0~50 MB 사이만 가능합니다.");
+        if (size < MIN_SIZE || size > MAX_SIZE) {
+            throw new IllegalArgumentException("파일의 size는 0~5 MB 사이만 가능합니다.");
         }
     }
 

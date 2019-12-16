@@ -25,8 +25,8 @@ class FileFeatureTest {
     static Stream<Arguments> provide() {
         return Stream.of(
                 Arguments.of("url", "originalNmae", -1),
-                Arguments.of("url", "originalNmae", 0),
-                Arguments.of("url", "originalNmae", 52_428_801),
+                Arguments.of("url", "originalNmae", FileFeature.MIN_SIZE - 1),
+                Arguments.of("url", "originalNmae", FileFeature.MAX_SIZE + 1),
                 Arguments.of("", "originalNmae", 1),
                 Arguments.of("url", "", 1)
         );
