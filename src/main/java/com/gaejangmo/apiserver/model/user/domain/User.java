@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Table(name = "member")
 @Entity
 @Getter
 @NoArgsConstructor
