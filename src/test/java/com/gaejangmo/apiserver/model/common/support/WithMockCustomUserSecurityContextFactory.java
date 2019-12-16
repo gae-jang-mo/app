@@ -1,6 +1,6 @@
 package com.gaejangmo.apiserver.model.common.support;
 
-import com.gaejangmo.apiserver.config.oauth.domain.SecurityUser;
+import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;

@@ -1,6 +1,6 @@
 package com.gaejangmo.apiserver.model.user.controller;
 
-import com.gaejangmo.apiserver.config.oauth.domain.SecurityUser;
+import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import com.gaejangmo.apiserver.model.common.resolver.LoginUser;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
 import com.gaejangmo.apiserver.model.user.service.UserService;

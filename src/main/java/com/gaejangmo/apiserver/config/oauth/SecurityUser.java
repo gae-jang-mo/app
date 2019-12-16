@@ -1,4 +1,4 @@
-package com.gaejangmo.apiserver.config.oauth.domain;
+package com.gaejangmo.apiserver.config.oauth;
 
 import lombok.Builder;
 import lombok.Getter;

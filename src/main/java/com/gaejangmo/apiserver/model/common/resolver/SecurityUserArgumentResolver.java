@@ -1,6 +1,6 @@
 package com.gaejangmo.apiserver.model.common.resolver;
 
-import com.gaejangmo.apiserver.config.oauth.domain.SecurityUser;
+import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;

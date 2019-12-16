@@ -1,6 +1,6 @@
 package com.gaejangmo.apiserver.config.oauth.service;
 
-import com.gaejangmo.apiserver.config.oauth.domain.SecurityUser;
+import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import com.gaejangmo.apiserver.config.oauth.dto.OAuthAttributesDto;
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
 import com.gaejangmo.apiserver.model.user.domain.User;
