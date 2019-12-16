@@ -1,8 +1,10 @@
 package com.gaejangmo.apiserver.model.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gaejangmo.apiserver.model.common.support.WithMockCustomUser;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
-import org.junit.Ignore;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc
 class UserApiControllerTest {
@@ -25,8 +28,8 @@ class UserApiControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    // TODO
-    @Ignore
+    @Test
+    @WithMockCustomUser(oauthId = "20608121", username = "JunHoPark93", email = "abc@gmail.com")
     void 사용자_로그인_시_로그인_정보_반환() throws Exception {
         ResultActions resultActions = mockMvc.perform(get(USER_API + "/logined")
                 .accept(MediaType.APPLICATION_JSON)
@@ -38,5 +41,6 @@ class UserApiControllerTest {
                 .andReturn().getResponse().getContentAsByteArray();
 
         UserResponseDto userResponseDto = MAPPER.readValue(contentAsByteArray, UserResponseDto.class);
+        log.info("userResponseDto : {}", userResponseDto);
     }
 }
