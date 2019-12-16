@@ -16,23 +16,21 @@ public class SecurityUser implements OAuth2User {
     private final String email;
     private final Set<GrantedAuthority> authorities;
     private final Map<String, Object> attributes;
-    private final String nameAttributeKey;
 
 
     @Builder
     public SecurityUser(final Long oauthId, final String username, final String email,
-                        final Set<GrantedAuthority> authorities, final Map<String, Object> attributes, final String nameAttributeKey) {
+                        final Set<GrantedAuthority> authorities, final Map<String, Object> attributes) {
         this.oauthId = oauthId;
         this.username = username;
         this.email = email;
         this.authorities = authorities;
         this.attributes = attributes;
-        this.nameAttributeKey = nameAttributeKey;
     }
 
     @Override
     public String getName() {
-        return this.getAttribute(this.nameAttributeKey).toString();
+        return this.username;
     }
 
     @Override

@@ -36,7 +36,6 @@ public class OAuth2Service {
                 .email(user.getEmail())
                 .authorities(Collections.singleton(new SimpleGrantedAuthority(user.getRoleType())))
                 .attributes(attributes)
-                .nameAttributeKey(userNameAttributeName)
                 .build();
     }
 
