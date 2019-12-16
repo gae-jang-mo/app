@@ -33,6 +33,10 @@ public class UserImageService {
         return userImageRepository.save(userImage);
     }
 
+    public void delete(final UserImage userImage) {
+        userImageRepository.delete(userImage);
+    }
+
     private UserImage createUserImage(final MultipartFile multipartFile, final String url) {
         return new UserImage(FileFeature.builder()
                 .url(url)
