@@ -2,6 +2,7 @@ package com.gaejangmo.apiserver.model.user.domain;
 
 import com.gaejangmo.apiserver.model.common.domain.BaseTimeEntity;
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
+import com.gaejangmo.apiserver.model.image.user.domain.UserImage;
 import com.gaejangmo.apiserver.model.user.domain.converter.GradeAttributeConverter;
 import com.gaejangmo.apiserver.model.user.domain.converter.RoleAttributeConverter;
 import com.gaejangmo.apiserver.model.user.domain.vo.Email;
@@ -58,6 +59,10 @@ public class User extends BaseTimeEntity {
     @Column
     private String introduce;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_image_id", foreignKey = @ForeignKey(name = "fk_user_image_to_user"))
+    private UserImage userImage;
+
     @Builder
     public User(final Long oauthId, final String username, final Role role, final Grade grade, final Email email, final Motto motto, final Link imageUrl, final String introduce) {
         this.oauthId = oauthId;
@@ -68,6 +73,10 @@ public class User extends BaseTimeEntity {
         this.motto = motto;
         this.imageUrl = imageUrl;
         this.introduce = introduce;
+    }
+
+    public void changeUserImage(final UserImage userImage) {
+        this.userImage = userImage;
     }
 
     public boolean matchId(final Long id) {
