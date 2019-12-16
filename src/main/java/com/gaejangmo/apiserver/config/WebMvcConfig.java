@@ -1,6 +1,6 @@
 package com.gaejangmo.apiserver.config;
 
-import com.gaejangmo.apiserver.model.common.resolver.SessionUserArgumentResolver;
+import com.gaejangmo.apiserver.model.common.resolver.SecurityUserArgumentResolver;
 import com.gaejangmo.apiserver.model.userproduct.controller.converter.ProductTypeConverter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -11,15 +11,15 @@ import java.util.List;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
-    private final SessionUserArgumentResolver sessionUserArgumentResolver;
+    private final SecurityUserArgumentResolver securityUserArgumentResolver;
 
-    public WebMvcConfig(final SessionUserArgumentResolver sessionUserArgumentResolver) {
-        this.sessionUserArgumentResolver = sessionUserArgumentResolver;
+    public WebMvcConfig(final SecurityUserArgumentResolver securityUserArgumentResolver) {
+        this.securityUserArgumentResolver = securityUserArgumentResolver;
     }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(sessionUserArgumentResolver);
+        argumentResolvers.add(securityUserArgumentResolver);
     }
 
     @Override
