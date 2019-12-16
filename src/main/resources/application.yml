@@ -2,11 +2,10 @@ spring:
   profiles:
     active: local
 ---
+spring.profiles: local, test
+spring.profiles.include: oauth
+
 spring:
-  profiles:
-    include: oauth
-  #  datasource:
-  #    data: classpath:data-h2.sql # 시작할때 실행시킬 script
   jpa:
     show-sql: true
     properties:
@@ -15,8 +14,8 @@ spring:
       open-in-view: false
     hibernate:
       ddl-auto: create-drop
-
   h2:
     console:
       enabled: true
       path: /h2-console
+---

@@ -29,6 +29,7 @@ ext {
 }
 
 test {
+    systemProperty 'spring.profiles.active', 'test'
     outputs.dir snippetsDir
     useJUnitPlatform()
 }

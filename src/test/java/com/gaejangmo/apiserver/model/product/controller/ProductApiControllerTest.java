@@ -4,13 +4,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
 import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -26,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("dev")
 class ProductApiControllerTest {
     private static final String PRODUCT_API = linkTo(ProductApiController.class).toString();
 
@@ -94,7 +93,7 @@ class ProductApiControllerTest {
         assertThat(managedProductResponseDtos.size()).isEqualTo(1);
     }
 
-    @Test
+    @Ignore
     void 장비_조회_외부_api_호출() throws Exception {
         // DB에 없는 장비를 조회한다.
         ResultActions resultActions = mockMvc.perform(get(PRODUCT_API + "/external")
