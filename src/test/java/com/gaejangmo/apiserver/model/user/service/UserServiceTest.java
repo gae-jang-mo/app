@@ -1,5 +1,6 @@
 package com.gaejangmo.apiserver.model.user.service;
 
+import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.domain.UserRepository;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
@@ -27,10 +29,20 @@ class UserServiceTest {
     private UserRepository userRepository;
 
     @Test
-    void 유저_조회() {
+    void OauthId_유저_조회() {
         given(userRepository.findByOauthId(anyLong())).willReturn(Optional.of(UserTestData.ENTITY));
 
         UserResponseDto result = userService.findUserResponseDtoByOauthId(1234L);
+
+        assertThat(result).isEqualTo(UserTestData.RESPONSE_DTO);
+    }
+
+    @Test
+    void username_유저_조회(){
+        given(userRepository.findByUsername(anyString())).willReturn(Optional.of(UserTestData.ENTITY));
+
+        User user = UserTestData.ENTITY;
+        UserResponseDto result = userService.findUserResponseDtoByName(user.getUsername());
 
         assertThat(result).isEqualTo(UserTestData.RESPONSE_DTO);
     }
@@ -48,4 +60,5 @@ class UserServiceTest {
         assertThat(actual.getMotto()).isEqualTo(updatedMotto.getValue());
         assertThat(userRepository.findById(USER_ID).get().getMotto()).isEqualTo(updatedMotto.getValue());
     }
+
 }

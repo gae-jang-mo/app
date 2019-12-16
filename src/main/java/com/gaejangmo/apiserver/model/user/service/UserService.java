@@ -21,7 +21,14 @@ public class UserService {
     }
 
     public User findById(final Long id) {
-        return userRepository.findById(id).get();
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
+    }
+
+    public UserResponseDto findUserResponseDtoByName(final String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
+        return toDto(user);
     }
 
     public UserResponseDto findUserResponseDtoByOauthId(final Long oauthId) {
@@ -34,12 +41,10 @@ public class UserService {
         return updateTemplate(id, (user) -> toDto(user.updateMotto(motto)));
     }
 
-
     private <T> T updateTemplate(final Long id, final Function<User, T> function) {
         User user = findById(id);
         return function.apply(user);
     }
-
 
     private UserResponseDto toDto(final User user) {
         return UserResponseDto.builder()
@@ -52,4 +57,5 @@ public class UserService {
                 .motto(user.getMotto())
                 .build();
     }
+
 }

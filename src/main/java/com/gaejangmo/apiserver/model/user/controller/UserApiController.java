@@ -22,17 +22,25 @@ public class UserApiController {
     }
 
     @GetMapping("/logined")
-    public ResponseEntity<UserResponseDto> find(HttpSession session) {
+    public ResponseEntity<UserResponseDto> showCurrentUser(HttpSession session) {
         User user = (User) session.getAttribute("user");
         UserResponseDto response = userService.findUserResponseDtoByOauthId(user.getOauthId());
         return ResponseEntity.ok().body(response);
     }
 
     @EnableLog
-    @PutMapping("/")
+    @GetMapping("/{name}")
+    public ResponseEntity<UserResponseDto> showUser(@PathVariable final String name) {
+        UserResponseDto response = userService.findUserResponseDtoByName(name);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @EnableLog
+    @PutMapping("/update/motto")
     public ResponseEntity<Motto> updateMotto(@RequestBody final Motto motto,
                                              @LoginUser SessionUser sessionUser) {
         userService.updateMotto(sessionUser.getId(), motto);
         return ResponseEntity.ok().body(motto);
     }
+
 }
