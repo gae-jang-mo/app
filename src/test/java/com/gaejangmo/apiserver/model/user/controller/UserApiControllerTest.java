@@ -3,6 +3,7 @@ package com.gaejangmo.apiserver.model.user.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaejangmo.apiserver.model.common.support.WithMockCustomUser;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
+import com.gaejangmo.apiserver.model.user.testdata.UserTestData;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -41,6 +43,7 @@ class UserApiControllerTest {
                 .andReturn().getResponse().getContentAsByteArray();
 
         UserResponseDto userResponseDto = MAPPER.readValue(contentAsByteArray, UserResponseDto.class);
-        log.info("userResponseDto : {}", userResponseDto);
+
+        assertThat(userResponseDto).isEqualTo(UserTestData.RESPONSE_DTO);
     }
 }
