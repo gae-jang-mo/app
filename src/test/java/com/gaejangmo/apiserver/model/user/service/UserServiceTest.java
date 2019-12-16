@@ -18,9 +18,9 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(SpringExtension.class)
 class UserServiceTest {
 
+    private static final long USER_ID = 100L;
     @InjectMocks
     private UserService userService;
-
     @Mock
     private UserRepository userRepository;
 
@@ -31,5 +31,11 @@ class UserServiceTest {
         UserResponseDto result = userService.findUserResponseDtoByOauthId(1234L);
 
         assertThat(result).isEqualTo(UserTestData.RESPONSE_DTO);
+    }
+
+    @Test
+    void 모토_업데이트() {
+        given(userRepository.findById(USER_ID)).willReturn(Optional.of(UserTestData.ENTITY));
+        when()
     }
 }

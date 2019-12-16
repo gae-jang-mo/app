@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Table(name = "member")
 @Entity
 @Getter
 @NoArgsConstructor
@@ -101,7 +102,11 @@ public class User extends BaseTimeEntity {
     public User update(final String username, final String imageUrl) {
         this.username = username;
         this.imageUrl = Link.of(imageUrl);
+        return this;
+    }
 
+    public User updateMotto(final Motto motto) {
+        this.motto = motto;
         return this;
     }
 }
