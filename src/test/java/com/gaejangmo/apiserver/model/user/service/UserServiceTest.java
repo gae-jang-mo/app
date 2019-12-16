@@ -1,6 +1,7 @@
 package com.gaejangmo.apiserver.model.user.service;
 
 import com.gaejangmo.apiserver.model.user.domain.UserRepository;
+import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
 import com.gaejangmo.apiserver.model.user.testdata.UserTestData;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 class UserServiceTest {
@@ -35,7 +37,15 @@ class UserServiceTest {
 
     @Test
     void 모토_업데이트() {
-        given(userRepository.findById(USER_ID)).willReturn(Optional.of(UserTestData.ENTITY));
-        when()
+        //given
+        Motto updatedMotto = Motto.of("updated");
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(UserTestData.ENTITY));
+
+        //when
+        UserResponseDto actual = userService.updateMotto(USER_ID, updatedMotto);
+
+        //then
+        assertThat(actual.getMotto()).isEqualTo(updatedMotto.getValue());
+        assertThat(userRepository.findById(USER_ID).get().getMotto()).isEqualTo(updatedMotto.getValue());
     }
 }

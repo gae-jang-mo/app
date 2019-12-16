@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.function.Function;
 
 @Service
 @Transactional
@@ -29,12 +30,16 @@ public class UserService {
         return toDto(user);
     }
 
-    public Motto updateMotto(final Motto motto, final Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
-        user.updateMotto(motto);
-        return motto;
+    public UserResponseDto updateMotto(final Long id, final Motto motto) {
+        return updateTemplate(id, (user) -> toDto(user.updateMotto(motto)));
     }
+
+
+    private <T> T updateTemplate(final Long id, final Function<User, T> function) {
+        User user = findById(id);
+        return function.apply(user);
+    }
+
 
     private UserResponseDto toDto(final User user) {
         return UserResponseDto.builder()

@@ -32,7 +32,7 @@ public class UserApiController {
     @PutMapping("/")
     public ResponseEntity<Motto> updateMotto(@RequestBody final Motto motto,
                                              @LoginUser SessionUser sessionUser) {
-        userService.updateMotto(motto, sessionUser.getId());
+        userService.updateMotto(sessionUser.getId(), motto);
         return ResponseEntity.ok().body(motto);
     }
 }
