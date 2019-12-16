@@ -22,7 +22,7 @@ public class ImageTypeValidator {
     }
 
     public static void validateImage(final String fileType) {
-        if (!imageTypes.contains(fileType.toLowerCase())) {
+        if (!imageTypes.contains(fileType.toLowerCase()) && !contentTypes.contains(fileType.toLowerCase())) {
             throw new IllegalArgumentException(NOT_MATCH_IMAGE_TYPES_MESSAGE);
         }
     }

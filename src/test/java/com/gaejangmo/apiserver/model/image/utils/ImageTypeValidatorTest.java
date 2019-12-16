@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ImageTypeValidatorTest {
 
     @ParameterizedTest
-    @ValueSource(strings = {"jpeg", "jpg", "png", "bmp", "gif", "JPG", "JPEG", "PNG", "BMP"})
+    @ValueSource(strings = {"jpeg", "jpg", "png", "bmp", "gif", "JPG", "JPEG", "PNG", "BMP", "image/png", "image/jpeg", "image/gif", "image/bmp"})
     void 유효한_이미지타입_확인(final String fileType) {
         assertDoesNotThrow(() -> ImageTypeValidator.validateImage(fileType));
     }
