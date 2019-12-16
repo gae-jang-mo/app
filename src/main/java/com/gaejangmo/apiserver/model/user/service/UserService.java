@@ -25,6 +25,12 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
     }
 
+    public UserResponseDto findUserResponseDtoById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
+        return toDto(user);
+    }
+
     public UserResponseDto findUserResponseDtoByName(final String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
@@ -57,5 +63,6 @@ public class UserService {
                 .motto(user.getMotto())
                 .build();
     }
+
 
 }

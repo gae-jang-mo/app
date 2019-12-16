@@ -21,10 +21,10 @@ public class UserApiController {
         this.userService = userService;
     }
 
+    @EnableLog
     @GetMapping("/logined")
-    public ResponseEntity<UserResponseDto> showCurrentUser(HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        UserResponseDto response = userService.findUserResponseDtoByOauthId(user.getOauthId());
+    public ResponseEntity<UserResponseDto> showCurrentUser(@LoginUser SessionUser sessionUser) {
+        UserResponseDto response = userService.findUserResponseDtoById(sessionUser.getId());
         return ResponseEntity.ok().body(response);
     }
 
