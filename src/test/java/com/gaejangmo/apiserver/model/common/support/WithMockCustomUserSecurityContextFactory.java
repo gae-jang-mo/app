@@ -15,6 +15,7 @@ public class WithMockCustomUserSecurityContextFactory
         SecurityContext context = SecurityContextHolder.createEmptyContext();
 
         SecurityUser principal = SecurityUser.builder()
+                .id(Long.valueOf(customUser.id()))
                 .oauthId(Long.valueOf(customUser.oauthId()))
                 .username(customUser.username())
                 .email(customUser.email())

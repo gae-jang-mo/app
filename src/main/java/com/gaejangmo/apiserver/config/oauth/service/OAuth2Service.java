@@ -31,6 +31,7 @@ public class OAuth2Service {
         User user = saveOrUpdate(attributesDto);
 
         return SecurityUser.builder()
+                .id(user.getId())
                 .oauthId(user.getOauthId())
                 .username(user.getUsername())
                 .email(user.getEmail())

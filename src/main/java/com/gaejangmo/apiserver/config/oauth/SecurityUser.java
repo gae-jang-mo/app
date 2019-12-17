@@ -11,6 +11,7 @@ import java.util.Set;
 
 @Getter
 public class SecurityUser implements OAuth2User {
+    private final Long id;
     private final Long oauthId;
     private final String username;
     private final String email;
@@ -19,8 +20,9 @@ public class SecurityUser implements OAuth2User {
 
 
     @Builder
-    public SecurityUser(final Long oauthId, final String username, final String email,
+    public SecurityUser(final Long id, final Long oauthId, final String username, final String email,
                         final Set<GrantedAuthority> authorities, final Map<String, Object> attributes) {
+        this.id = id;
         this.oauthId = oauthId;
         this.username = username;
         this.email = email;
