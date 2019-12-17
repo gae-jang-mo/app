@@ -40,7 +40,6 @@ public class OAuth2Service {
                 .build();
     }
 
-    // TODO: 2019-12-16 사용자 프로필 사진이 직접 설정한 경우 예외 상황 관리 요구
     private User saveOrUpdate(final OAuthAttributesDto attributes) {
         User user = userRepository.findByOauthId(attributes.getOauthId())
                 .map(userEntity -> userEntity.update(attributes.getUsername(), attributes.getImageUrl()))
