@@ -1,10 +1,7 @@
 package com.gaejangmo.apiserver.model.image.domain.vo;
 
 import com.gaejangmo.utils.StringUtils;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
@@ -14,6 +11,7 @@ import javax.persistence.Embeddable;
 @Getter
 @ToString
 @EqualsAndHashCode
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Embeddable
 public class FileFeature {
     static final int MAX_SIZE = 5_242_880;
