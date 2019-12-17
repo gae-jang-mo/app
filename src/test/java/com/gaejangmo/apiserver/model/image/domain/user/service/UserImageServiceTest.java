@@ -6,7 +6,6 @@ import com.gaejangmo.apiserver.model.image.domain.vo.ImageType;
 import com.gaejangmo.apiserver.model.image.user.domain.UserImage;
 import com.gaejangmo.apiserver.model.image.user.domain.UserImageRepository;
 import com.gaejangmo.apiserver.model.image.utils.UploadFileNameCreator;
-import com.gaejangmo.apiserver.model.image.utils.UploadFileNameUuidCreator;
 import com.gaejangmo.apiserver.model.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,8 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserImageServiceTest {
@@ -42,10 +42,6 @@ class UserImageServiceTest {
 
     @BeforeEach
     void setUp() {
-        userImageRepository = mock(UserImageRepository.class);
-        s3Connector = mock(S3Connector.class);
-        uploadFileNameCreator = mock(UploadFileNameUuidCreator.class);
-
         mockMultipartFile = new MockMultipartFile("user-file", originalFilename, "image/jpeg", new byte[10]);
 
         user = User.builder().oauthId(oauthId).build();
@@ -58,7 +54,6 @@ class UserImageServiceTest {
                 .build();
     }
 
-    // TODO: 2019/12/16 Mock이 안됨.
     @Test
     void save() {
         // given
