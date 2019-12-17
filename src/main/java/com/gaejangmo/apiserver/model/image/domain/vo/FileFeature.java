@@ -23,6 +23,9 @@ public class FileFeature {
     @Column(nullable = false)
     private String originalName;
 
+    @Column(nullable = false)
+    private String savedName;
+
     @AttributeOverride(
             name = "value",
             column = @Column(name = "image_type", nullable = false))
@@ -32,9 +35,10 @@ public class FileFeature {
     private long size;
 
     @Builder
-    private FileFeature(final String url, final String originalName, final ImageType imageType, final long size) {
+    private FileFeature(final String url, final String originalName, final ImageType imageType, final long size, final String savedName) {
         validateUrl(url);
         validateOriginalName(originalName);
+        validateSavedName(savedName);
         validateSize(size);
         this.url = url;
         this.originalName = originalName;
@@ -51,6 +55,12 @@ public class FileFeature {
     private void validateOriginalName(final String originalName) {
         if (StringUtils.isBlank(originalName)) {
             throw new IllegalArgumentException("잘못된 파일 이름입니다.");
+        }
+    }
+
+    private void validateSavedName(final String savedName) {
+        if (StringUtils.isBlank(originalName)) {
+            throw new IllegalArgumentException("잘못된 저장 파일 이름입니다.");
         }
     }
 

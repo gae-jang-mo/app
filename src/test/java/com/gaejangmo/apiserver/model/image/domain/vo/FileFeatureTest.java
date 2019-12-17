@@ -12,11 +12,12 @@ class FileFeatureTest {
 
     @ParameterizedTest
     @MethodSource("provide")
-    void name(final String url, final String originalName, final int size) {
+    void name(final String url, final String originalName, final String savedName, final int size) {
         assertThrows(IllegalArgumentException.class,
                 () -> FileFeature.builder()
                         .imageType(ImageType.of("jpg"))
                         .originalName(originalName)
+                        .savedName(savedName)
                         .url(url)
                         .size(size)
                         .build());
@@ -24,11 +25,12 @@ class FileFeatureTest {
 
     static Stream<Arguments> provide() {
         return Stream.of(
-                Arguments.of("url", "originalNmae", -1),
-                Arguments.of("url", "originalNmae", FileFeature.MIN_SIZE - 1),
-                Arguments.of("url", "originalNmae", FileFeature.MAX_SIZE + 1),
-                Arguments.of("", "originalNmae", 1),
-                Arguments.of("url", "", 1)
+                Arguments.of("url", "originalNmae", "savedName", -1),
+                Arguments.of("url", "originalNmae", "savedName", FileFeature.MIN_SIZE - 1),
+                Arguments.of("url", "originalNmae", "savedName", FileFeature.MAX_SIZE + 1),
+                Arguments.of("", "originalNmae", "savedName", 1),
+                Arguments.of("url", "", "savedName", 1),
+                Arguments.of("url", "originalName", "", 1)
         );
     }
 }
