@@ -21,3 +21,6 @@ spring:
 
 debug: true
 
+oauth:
+  redirect-url: "localhost:3000/"
+
