@@ -23,7 +23,6 @@ class S3ConnectorTest {
     private String bucket;
 
     private MockMultipartFile mockMultipartFile;
-    private String dirName = "dir";
     private String fileName = "savedFileName";
     private String serviceEndpoint = "http://localhost:8001";
 
@@ -50,11 +49,10 @@ class S3ConnectorTest {
     @Test
     void 파일_업로드_테스트() {
         // given
-        String key = getFileKey(dirName, fileName);
-        String expectedUrl = String.format("%s/%s/%s", serviceEndpoint, bucket, key);
+        String expectedUrl = String.format("%s/%s/%s", serviceEndpoint, bucket, fileName);
 
         // when
-        String actualUrl = s3Connector.upload(mockMultipartFile, dirName, fileName);
+        String actualUrl = s3Connector.upload(mockMultipartFile, fileName);
 
         // then
         assertThat(actualUrl).isEqualTo(expectedUrl);
@@ -63,19 +61,14 @@ class S3ConnectorTest {
     @Test
     void 파일_삭제_테스트() {
         //given
-        s3Connector.upload(mockMultipartFile, dirName, fileName);
-        String key = getFileKey(dirName, fileName);
-        assertDoesNotThrow(() -> mockS3Client.getObject(bucket, key));
+        s3Connector.upload(mockMultipartFile, fileName);
+        assertDoesNotThrow(() -> mockS3Client.getObject(bucket, fileName));
 
         //when
-        s3Connector.delete(key);
+        s3Connector.delete(fileName);
 
         //then
-        assertThrows(AmazonS3Exception.class, () -> mockS3Client.getObject(bucket, key));
-    }
-
-    private String getFileKey(String dirName, String fileName) {
-        return String.format("%s/%s", dirName, fileName);
+        assertThrows(AmazonS3Exception.class, () -> mockS3Client.getObject(bucket, fileName));
     }
 
     @AfterEach

@@ -17,8 +17,8 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserImageServiceTest {
@@ -34,6 +34,7 @@ class UserImageServiceTest {
 
     private long oauthId = 1234L;
     private String originalFilename = "fileName.jpg";
+    private String savedName = String.join("/", String.valueOf(oauthId), originalFilename);
     private String url = "expected/url";
 
     private MockMultipartFile mockMultipartFile;
@@ -48,6 +49,7 @@ class UserImageServiceTest {
 
         fileFeature = FileFeature.builder()
                 .originalName(originalFilename)
+                .savedName(savedName)
                 .size(10)
                 .imageType(ImageType.of("jpg"))
                 .url(url)
@@ -59,9 +61,9 @@ class UserImageServiceTest {
         // given
         UserImage expected = new UserImage(fileFeature);
 
-        when(uploadFileNameCreator.create(anyString())).thenReturn(originalFilename);
-        when(s3Connector.upload(mockMultipartFile, String.valueOf(oauthId), originalFilename)).thenReturn(url);
-        when(userImageRepository.save(expected)).thenReturn(expected);
+        given(uploadFileNameCreator.create(anyString())).willReturn(originalFilename);
+        given(s3Connector.upload(mockMultipartFile, savedName)).willReturn(url);
+        given(userImageRepository.save(expected)).willReturn(expected);
 
         // when
         UserImage actual = userImageService.save(mockMultipartFile, user);
@@ -69,7 +71,7 @@ class UserImageServiceTest {
         // then
         assertSame(actual, expected);
 
-        verify(s3Connector).upload(mockMultipartFile, String.valueOf(oauthId), originalFilename);
+        verify(s3Connector).upload(mockMultipartFile, savedName);
         verify(uploadFileNameCreator).create(anyString());
         verify(userImageRepository).save(expected);
     }

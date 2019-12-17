@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -37,9 +38,10 @@ public class UserService {
         User user = findById(id);
         UserImage savedUserImage = userImageService.save(multipartFile, user);
 
-        UserImage oldUserImage = user.getUserImage();
-        user.changeUserImage(savedUserImage);
-        userImageService.delete(oldUserImage);
+        Optional<UserImage> oldUserImage = user.getUserImage();
+        user.updateUserImage(savedUserImage);
+
+        oldUserImage.ifPresent(userImageService::delete);
 
         return FileResponseDto.builder()
                 .createdAt(savedUserImage.getCreatedAt())

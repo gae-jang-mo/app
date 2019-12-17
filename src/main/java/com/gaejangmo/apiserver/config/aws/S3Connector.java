@@ -20,13 +20,8 @@ public class S3Connector {
         this.bucket = bucket;
     }
 
-    public String upload(final MultipartFile uploadFile, final String directoryName, final String fileName) {
-        String filePath = joinDirectoryAndFileName(directoryName, fileName);
-        return putS3(uploadFile, filePath);
-    }
-
-    private String joinDirectoryAndFileName(final String directoryName, final String fileName) {
-        return String.format("%s/%s", directoryName, fileName);
+    public String upload(final MultipartFile uploadFile, final String keyName) {
+        return putS3(uploadFile, keyName);
     }
 
     private String putS3(final MultipartFile uploadFile, final String filePath) {
@@ -42,8 +37,8 @@ public class S3Connector {
         }
     }
 
-    public void delete(final String filePath) {
-        amazonS3Client.deleteObject(bucket, filePath);
+    public void delete(final String keyName) {
+        amazonS3Client.deleteObject(bucket, keyName);
     }
 
 }
