@@ -42,6 +42,7 @@ public class FileFeature {
         validateSize(size);
         this.url = url;
         this.originalName = originalName;
+        this.savedName = savedName;
         this.imageType = imageType;
         this.size = size;
     }
@@ -59,7 +60,7 @@ public class FileFeature {
     }
 
     private void validateSavedName(final String savedName) {
-        if (StringUtils.isBlank(originalName)) {
+        if (StringUtils.isBlank(savedName)) {
             throw new IllegalArgumentException("잘못된 저장 파일 이름입니다.");
         }
     }
