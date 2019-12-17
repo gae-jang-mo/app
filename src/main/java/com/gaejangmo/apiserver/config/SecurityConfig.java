@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/login/oauth2/**","/api/login/state", "/h2-console/**", "/oauth2/redirect").permitAll()
+                .antMatchers("/", "/login/oauth2/**", "/api/login/state", "/h2-console/**", "/oauth2/redirect").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/*/users/products/**").permitAll()
                 .antMatchers("/api/*/login/state").permitAll()
                 .antMatchers("/api/*/products/**").permitAll()
@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
 
         http.oauth2Login()
-                .defaultSuccessUrl("http://15.165.16.245:8082/")
+                .defaultSuccessUrl("http://15.165.16.245:8082/", true)
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService);
     }
