@@ -31,6 +31,7 @@ ext {
 }
 
 test {
+    systemProperty 'spring.profiles.active', 'test'
     outputs.dir snippetsDir
     useJUnitPlatform()
 }
@@ -61,7 +62,7 @@ dependencies {
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    compile 'com.h2database:h2'
+    implementation 'com.h2database:h2:1.4.199'
 
     runtimeOnly 'mysql:mysql-connector-java'
 

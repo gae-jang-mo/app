@@ -21,6 +21,7 @@ import java.util.Optional;
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
+@Table(name = "MEMBER")
 public class User extends BaseTimeEntity {
 
     @Id

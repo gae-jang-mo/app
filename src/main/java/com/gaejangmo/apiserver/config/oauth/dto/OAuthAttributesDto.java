@@ -16,8 +16,8 @@ public class OAuthAttributesDto {
     private final String imageUrl;
 
     @Builder
-    public OAuthAttributesDto(final Map<String, Object> attributes, final Long oauthId, final String nameAttributeKey, final String username,
-                              final String email, final String imageUrl) {
+    public OAuthAttributesDto(final Map<String, Object> attributes, final Long oauthId, final String nameAttributeKey,
+                              final String username, final String email, final String imageUrl) {
         this.attributes = attributes;
         this.oauthId = oauthId;
         this.nameAttributeKey = nameAttributeKey;

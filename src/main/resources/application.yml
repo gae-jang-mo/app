@@ -2,9 +2,10 @@ spring:
   profiles:
     active: local
 ---
+spring.profiles: local, test
+spring.profiles.include: oauth, aws
+
 spring:
-  profiles:
-    include: oauth, aws
   servlet:
     multipart:
       max-file-size: 5MB
@@ -20,9 +21,9 @@ spring:
       open-in-view: false
     hibernate:
       ddl-auto: create-drop
-
   h2:
     console:
       enabled: true
       path: /h2-console
 
+debug: true

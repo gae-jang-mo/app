@@ -1,12 +1,15 @@
 package com.gaejangmo.apiserver.model.userproduct.controller;
 
 
+import com.gaejangmo.apiserver.commons.logging.EnableLog;
+import com.gaejangmo.apiserver.model.common.exception.ApiErrorResponse;
 import com.gaejangmo.apiserver.model.common.resolver.LoginUser;
 import com.gaejangmo.apiserver.model.common.resolver.SessionUser;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import com.gaejangmo.apiserver.model.userproduct.service.UserProductService;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +18,7 @@ import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
-
+@EnableLog
 @RestController
 @RequestMapping("/api/v1/users/products")
 public class UserProductApiController {
@@ -25,6 +28,7 @@ public class UserProductApiController {
         this.userProductService = userProductService;
     }
 
+    @EnableLog
     @PostMapping
     public ResponseEntity<UserProductResponseDto> create(@RequestBody final UserProductCreateDto userProductCreateDto,
                                                          @LoginUser final SessionUser sessionUser) {
@@ -52,7 +56,7 @@ public class UserProductApiController {
     @PutMapping("/{id}/product-type")
     public ResponseEntity<UserProductResponseDto> updateProductType(@PathVariable final Long id,
                                                                     @RequestBody final String productType,
-                                                                    @LoginUser SessionUser sessionUser) {
+                                                                    @LoginUser final SessionUser sessionUser) {
         Long userId = sessionUser.getId();
         UserProductResponseDto responseDto = userProductService.updateProductType(id, userId, ProductType.ofName(productType));
         return ResponseEntity.ok(responseDto);
@@ -60,10 +64,19 @@ public class UserProductApiController {
 
     @DeleteMapping("{id}")
     public ResponseEntity delete(@PathVariable final Long id,
-                                 @LoginUser SessionUser sessionUser) {
+                                 @LoginUser final SessionUser sessionUser) {
         Long userId = sessionUser.getId();
         userProductService.delete(id, userId);
         return ResponseEntity.noContent().build();
+    }
+
+    @ExceptionHandler({RuntimeException.class})
+    public ResponseEntity<ApiErrorResponse> handleException(final Exception exception) {
+        ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder()
+                .message(exception.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .build();
+        return ResponseEntity.badRequest().body(apiErrorResponse);
     }
 
 }
