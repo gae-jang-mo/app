@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
 
         http.oauth2Login()
-                .defaultSuccessUrl("http://15.165.16.245:8082/", true)
+                .defaultSuccessUrl("http://15.165.16.245/", true)
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService);
     }
