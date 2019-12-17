@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -75,10 +76,6 @@ public class User extends BaseTimeEntity {
         this.introduce = introduce;
     }
 
-    public void changeUserImage(final UserImage userImage) {
-        this.userImage = userImage;
-    }
-
     public boolean matchId(final Long id) {
         return this.id.equals(id);
     }
@@ -107,10 +104,18 @@ public class User extends BaseTimeEntity {
         return imageUrl.value();
     }
 
+    public Optional<UserImage> getUserImage() {
+        return Optional.ofNullable(userImage);
+    }
+
     public User update(final String username, final String imageUrl) {
         this.username = username;
         this.imageUrl = Link.of(imageUrl);
+        return this;
+    }
 
+    public User updateUserImage(final UserImage userImage) {
+        this.userImage = userImage;
         return this;
     }
 }

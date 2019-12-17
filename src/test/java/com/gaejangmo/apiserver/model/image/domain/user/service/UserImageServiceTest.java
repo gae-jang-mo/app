@@ -75,4 +75,17 @@ class UserImageServiceTest {
         verify(uploadFileNameCreator).create(anyString());
         verify(userImageRepository).save(expected);
     }
+
+    @Test
+    void delete() {
+        // given
+        UserImage userImage = new UserImage(fileFeature);
+
+        // when
+        userImageService.delete(userImage);
+
+        // then
+        verify(s3Connector).delete(userImage.getFileFeature().getSavedName());
+        verify(userImageRepository).delete(userImage);
+    }
 }

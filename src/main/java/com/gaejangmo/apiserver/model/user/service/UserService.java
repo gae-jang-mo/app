@@ -40,7 +40,6 @@ public class UserService {
 
         Optional<UserImage> oldUserImage = user.getUserImage();
         user.updateUserImage(savedUserImage);
-
         oldUserImage.ifPresent(userImageService::delete);
 
         return FileResponseDto.builder()

@@ -7,10 +7,7 @@ import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
 import com.gaejangmo.apiserver.model.user.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
@@ -32,7 +29,7 @@ public class UserApiController {
     }
 
     @PostMapping("/image")
-    public ResponseEntity<FileResponseDto> updateUserImage(final MultipartFile multipartFile,
+    public ResponseEntity<FileResponseDto> updateUserImage(@RequestParam("file") final MultipartFile multipartFile,
                                                            @LoginUser final SessionUser sessionUser) {
 
         FileResponseDto fileResponseDto = userService.updateUserImage(multipartFile, 1L);
