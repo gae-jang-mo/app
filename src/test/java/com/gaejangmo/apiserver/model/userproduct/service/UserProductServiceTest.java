@@ -3,27 +3,37 @@ package com.gaejangmo.apiserver.model.userproduct.service;
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.product.service.ProductService;
+import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
 import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.service.UserService;
+import com.gaejangmo.apiserver.model.user.testdata.UserTestData;
 import com.gaejangmo.apiserver.model.userproduct.domain.UserProduct;
 import com.gaejangmo.apiserver.model.userproduct.domain.UserProductRepository;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
+import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductLatestResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.exception.NotUserProductOwnerException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -31,6 +41,7 @@ import static org.mockito.Mockito.*;
 class UserProductServiceTest {
     private static final long USER_PRODUCT_ID = 15L;
     private static final long USER_ID = 100L;
+    private static final int DEFAULT_PAGE_NUM = 0;
 
     @InjectMocks
     private UserProductService userProductService;
@@ -167,5 +178,71 @@ class UserProductServiceTest {
         // then
         assertThat(responseDto.getProductType()).isEqualTo(productType.getName());
 
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {5, 6, 7})
+    void 가장_최근에_등록된_장비_검색(final int resultSize) {
+        // given
+        PageRequest pageRequest = PageRequest.of(DEFAULT_PAGE_NUM, resultSize);
+
+        Page<UserProduct> pagedUserProducts = new PageImpl<>(LongStream.rangeClosed(1, resultSize)
+                .mapToObj(this::createUserProduct)
+                .collect(Collectors.toList()));
+
+        when(userProductRepository.findAllByOrderByIdDesc(pageRequest)).thenReturn(pagedUserProducts);
+
+        // when
+        List<UserProductLatestResponseDto> results = userProductService.findByIdLessThanOrderByIdDesc(null, resultSize);
+
+        // then
+        assertThat(results)
+                .hasSizeLessThanOrEqualTo(resultSize)
+                .contains(
+                        new UserProductLatestResponseDto((long) resultSize,
+                                ProductType.MOUSE, ProductTestData.ENTITY.getImageUrl(), ProductTestData.ENTITY.getProductName(),
+                                UserTestData.ENTITY.getImageUrl(), UserTestData.ENTITY.getUsername(), UserTestData.ENTITY.getMotto(),
+                                null));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {5, 6, 7})
+    void 특정_장비_직전에_등록된_장비_검색(final int resultSize) {
+        // given
+        long latestId = 5L;
+        PageRequest pageRequest = PageRequest.of(DEFAULT_PAGE_NUM, resultSize);
+
+        Page<UserProduct> pagedUserProducts = new PageImpl<>(LongStream.range(1, resultSize)
+                .mapToObj(this::createUserProduct)
+                .collect(Collectors.toList()));
+
+        when(userProductRepository.findByIdLessThanOrderByIdDesc(latestId, pageRequest)).thenReturn(pagedUserProducts);
+
+        // when
+        List<UserProductLatestResponseDto> results = userProductService.findByIdLessThanOrderByIdDesc(latestId, resultSize);
+
+        // then
+        assertThat(results)
+                .hasSizeLessThanOrEqualTo(resultSize)
+                .contains(
+                        new UserProductLatestResponseDto((latestId - 1),
+                                ProductType.MOUSE, ProductTestData.ENTITY.getImageUrl(), ProductTestData.ENTITY.getProductName(),
+                                UserTestData.ENTITY.getImageUrl(), UserTestData.ENTITY.getUsername(), UserTestData.ENTITY.getMotto(),
+                                null),
+                        new UserProductLatestResponseDto((latestId - 2),
+                                ProductType.MOUSE, ProductTestData.ENTITY.getImageUrl(), ProductTestData.ENTITY.getProductName(),
+                                UserTestData.ENTITY.getImageUrl(), UserTestData.ENTITY.getUsername(), UserTestData.ENTITY.getMotto(),
+                                null));
+    }
+
+    private UserProduct createUserProduct(final long id) {
+        UserProduct userProduct = UserProduct.builder()
+                .product(ProductTestData.ENTITY)
+                .user(UserTestData.ENTITY)
+                .comment(Comment.of(String.valueOf(id)))
+                .productType(ProductType.MOUSE)
+                .build();
+        ReflectionTestUtils.setField(userProduct, "id", id);
+        return userProduct;
     }
 }

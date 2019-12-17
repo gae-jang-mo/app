@@ -8,6 +8,7 @@ import com.gaejangmo.apiserver.model.common.resolver.SessionUser;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import com.gaejangmo.apiserver.model.userproduct.service.UserProductService;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
+import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductLatestResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +42,13 @@ public class UserProductApiController {
     @GetMapping("/{userId}")
     public ResponseEntity<List<UserProductResponseDto>> list(@PathVariable final Long userId) {
         List<UserProductResponseDto> responseDtos = userProductService.findByUserId(userId);
+        return ResponseEntity.ok(responseDtos);
+    }
+
+    @GetMapping("/latest") // TODO: 2019-12-17 lastId가 없을 때는 어떻게 할 거니
+    public ResponseEntity<List<UserProductLatestResponseDto>> latest(@RequestParam(required = false) final Long lastId,
+                                                                     @RequestParam(defaultValue = "10") final Integer size) {
+        List<UserProductLatestResponseDto> responseDtos = userProductService.findByIdLessThanOrderByIdDesc(lastId, size);
         return ResponseEntity.ok(responseDtos);
     }
 

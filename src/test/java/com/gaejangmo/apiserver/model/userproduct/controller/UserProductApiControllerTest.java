@@ -2,9 +2,14 @@ package com.gaejangmo.apiserver.model.userproduct.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaejangmo.apiserver.model.common.resolver.SessionUser;
+import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
+import com.gaejangmo.apiserver.model.user.testdata.UserTestData;
+import com.gaejangmo.apiserver.model.userproduct.domain.UserProduct;
+import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import com.gaejangmo.apiserver.model.userproduct.service.UserProductService;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
+import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductLatestResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,10 +21,15 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -206,5 +216,82 @@ class UserProductApiControllerTest {
 
         // then
         resultActions.andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void 최근에_등록된_데이터_조회() throws Exception {
+        // given
+        int size = 8;
+
+        List<UserProductLatestResponseDto> userProductLatestResponseDtos = LongStream.rangeClosed(1, size)
+                .mapToObj(this::createUserProduct)
+                .map(this::toLatestDto)
+                .sorted(Collections.reverseOrder(Comparator.comparingLong(UserProductLatestResponseDto::getId)))
+                .collect(Collectors.toList());
+
+        when(userProductService.findByIdLessThanOrderByIdDesc(null, size)).thenReturn(userProductLatestResponseDtos);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(get(USER_PRODUCT_URI + "/latest")
+                .param("size", String.valueOf(size))
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].id").value(size))
+                .andExpect(jsonPath("$.[1].id").value(size - 1))
+                .andExpect(jsonPath("$.[2].id").value(size - 2));
+    }
+
+    @Test
+    void 특정_장비_직전에_등록된_장비_검색() throws Exception {
+        // given
+        long lastId = 10L;
+        int size = 3;
+
+        List<UserProductLatestResponseDto> userProductLatestResponseDtos = LongStream.range(lastId - size, lastId)
+                .mapToObj(this::createUserProduct)
+                .map(this::toLatestDto)
+                .sorted(Collections.reverseOrder(Comparator.comparingLong(UserProductLatestResponseDto::getId)))
+                .collect(Collectors.toList());
+
+        when(userProductService.findByIdLessThanOrderByIdDesc(lastId, size)).thenReturn(userProductLatestResponseDtos);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(get(USER_PRODUCT_URI + "/latest")
+                .param("lastId", String.valueOf(lastId)).param("size", String.valueOf(size))
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].id").value(lastId - 1))
+                .andExpect(jsonPath("$.[1].id").value(lastId - 2));
+
+    }
+
+    private UserProductLatestResponseDto toLatestDto(final UserProduct userProduct) {
+        return UserProductLatestResponseDto.builder()
+                .id(userProduct.getId())
+                .productType(userProduct.getProductType())
+                .productImageUrl(userProduct.getProduct().getImageUrl())
+                .productName(userProduct.getProduct().getProductName())
+                .userImageUrl(userProduct.getUser().getImageUrl())
+                .username(userProduct.getUser().getUsername())
+                .motto(userProduct.getUser().getMotto())
+                .createdAt(userProduct.getCreatedAt())
+                .build();
+    }
+
+    private UserProduct createUserProduct(final long id) {
+        UserProduct userProduct = UserProduct.builder()
+                .product(ProductTestData.ENTITY)
+                .user(UserTestData.ENTITY)
+                .comment(Comment.of(String.valueOf(id)))
+                .productType(ProductType.MOUSE)
+                .build();
+        ReflectionTestUtils.setField(userProduct, "id", id);
+        return userProduct;
     }
 }
