@@ -17,7 +17,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 class UserServiceTest {
@@ -51,14 +52,13 @@ class UserServiceTest {
     void 모토_업데이트() {
         //given
         Motto updatedMotto = Motto.of("updated");
-        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(UserTestData.ENTITY));
+        given(userRepository.findById(USER_ID)).willReturn(Optional.of(UserTestData.ENTITY));
 
         //when
         UserResponseDto actual = userService.updateMotto(USER_ID, updatedMotto);
 
         //then
-        assertThat(actual.getMotto()).isEqualTo(updatedMotto.getValue());
-        assertThat(userRepository.findById(USER_ID).get().getMotto()).isEqualTo(updatedMotto.getValue());
+        assertThat(actual.getMotto()).isEqualTo(updatedMotto.value());
+        verify(userRepository,times(1)).findById(USER_ID);
     }
-
 }
