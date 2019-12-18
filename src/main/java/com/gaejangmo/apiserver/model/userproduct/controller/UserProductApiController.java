@@ -10,6 +10,9 @@ import com.gaejangmo.apiserver.model.userproduct.service.UserProductService;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductLatestResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,9 +49,9 @@ public class UserProductApiController {
     }
 
     @GetMapping("/latest")
-    public ResponseEntity<List<UserProductLatestResponseDto>> latest(@RequestParam(required = false) final Long lastId,
-                                                                     @RequestParam(defaultValue = "10") final Integer size) {
-        List<UserProductLatestResponseDto> responseDtos = userProductService.findByIdLessThanOrderByIdDesc(lastId, size);
+    public ResponseEntity<List<UserProductLatestResponseDto>> latest(
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) final Pageable pageable) {
+        List<UserProductLatestResponseDto> responseDtos = userProductService.findAllByPageable(pageable);
         return ResponseEntity.ok(responseDtos);
     }
 

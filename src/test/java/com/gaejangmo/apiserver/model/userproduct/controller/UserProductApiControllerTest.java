@@ -17,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.context.support.WithAnonymousUser;
@@ -29,7 +32,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.LongStream;
+import java.util.stream.IntStream;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -41,6 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class UserProductApiControllerTest {
     private static final String USER_PRODUCT_URI = linkTo(UserProductApiController.class).toString();
+    private static final int DEFAULT_PAGE_NUM = 0;
     private static final long USER_ID = 1L;
     private static final long PRODUCT_ID = 10L;
 
@@ -221,53 +225,31 @@ class UserProductApiControllerTest {
     @Test
     void 최근에_등록된_데이터_조회() throws Exception {
         // given
-        int size = 8;
-
-        List<UserProductLatestResponseDto> userProductLatestResponseDtos = LongStream.rangeClosed(1, size)
-                .mapToObj(this::createUserProduct)
-                .map(this::toLatestDto)
-                .sorted(Collections.reverseOrder(Comparator.comparingLong(UserProductLatestResponseDto::getId)))
-                .collect(Collectors.toList());
-
-        when(userProductService.findByIdLessThanOrderByIdDesc(null, size)).thenReturn(userProductLatestResponseDtos);
-
-        // when
-        ResultActions resultActions = mockMvc.perform(get(USER_PRODUCT_URI + "/latest")
-                .param("size", String.valueOf(size))
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
-
-        // then
-        resultActions.andExpect(status().isOk())
-                .andExpect(jsonPath("$.[0].id").value(size))
-                .andExpect(jsonPath("$.[1].id").value(size - 1))
-                .andExpect(jsonPath("$.[2].id").value(size - 2));
-    }
-
-    @Test
-    void 특정_장비_직전에_등록된_장비_검색() throws Exception {
-        // given
-        long lastId = 10L;
+        int page = 2;
         int size = 3;
+        int firstItemId = page * size + 1;
+        int lastItemId = (page + 1) * size;
 
-        List<UserProductLatestResponseDto> userProductLatestResponseDtos = LongStream.range(lastId - size, lastId)
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "id");
+
+        List<UserProductLatestResponseDto> userProductLatestResponseDtos = IntStream.rangeClosed(firstItemId, lastItemId)
                 .mapToObj(this::createUserProduct)
                 .map(this::toLatestDto)
                 .sorted(Collections.reverseOrder(Comparator.comparingLong(UserProductLatestResponseDto::getId)))
                 .collect(Collectors.toList());
 
-        when(userProductService.findByIdLessThanOrderByIdDesc(lastId, size)).thenReturn(userProductLatestResponseDtos);
+        when(userProductService.findAllByPageable(pageable)).thenReturn(userProductLatestResponseDtos);
 
         // when
         ResultActions resultActions = mockMvc.perform(get(USER_PRODUCT_URI + "/latest")
-                .param("lastId", String.valueOf(lastId)).param("size", String.valueOf(size))
+                .param("page", String.valueOf(page)).param("size", String.valueOf(size))
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print());
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(jsonPath("$.[0].id").value(lastId - 1))
-                .andExpect(jsonPath("$.[1].id").value(lastId - 2));
+                .andExpect(jsonPath("$.[0].id").value(lastItemId))
+                .andExpect(jsonPath("$.[1].id").value(lastItemId - 1));
 
     }
 

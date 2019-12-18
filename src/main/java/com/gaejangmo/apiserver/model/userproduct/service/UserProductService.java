@@ -12,13 +12,12 @@ import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDt
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductLatestResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.exception.NotUserProductOwnerException;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -79,16 +78,9 @@ public class UserProductService {
         throw new NotUserProductOwnerException();
     }
 
-    public List<UserProductLatestResponseDto> findByIdLessThanOrderByIdDesc(final Long lastUserProductId, final Integer size) {
-        PageRequest pageRequest = PageRequest.of(DEFAULT_PAGE_NUM, size);
-
-        if (Objects.isNull(lastUserProductId)) {
-            return userProductRepository.findAllByOrderByIdDesc(pageRequest).map(this::toLatestDto).toList();
-        }
-
-        return userProductRepository.findByIdLessThanOrderByIdDesc(lastUserProductId, pageRequest).stream()
-                .map(this::toLatestDto)
-                .collect(Collectors.toList());
+    public List<UserProductLatestResponseDto> findAllByPageable(final Pageable pageable) {
+        return userProductRepository.findAll(pageable)
+                .map(this::toLatestDto).toList();
     }
 
     private UserProductLatestResponseDto toLatestDto(final UserProduct userProduct) {

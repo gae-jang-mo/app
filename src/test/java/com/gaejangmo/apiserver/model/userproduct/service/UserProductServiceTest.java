@@ -25,6 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.persistence.EntityNotFoundException;
@@ -182,54 +183,24 @@ class UserProductServiceTest {
 
     @ParameterizedTest
     @ValueSource(ints = {5, 6, 7})
-    void 가장_최근에_등록된_장비_검색(final int resultSize) {
+    void 가장_최근에_등록된_장비_검색(final int size) {
         // given
-        PageRequest pageRequest = PageRequest.of(DEFAULT_PAGE_NUM, resultSize);
+        Pageable pageable = PageRequest.of(DEFAULT_PAGE_NUM, size);
 
-        Page<UserProduct> pagedUserProducts = new PageImpl<>(LongStream.rangeClosed(1, resultSize)
+        Page<UserProduct> pagedUserProducts = new PageImpl<>(LongStream.rangeClosed(1, size)
                 .mapToObj(this::createUserProduct)
                 .collect(Collectors.toList()));
 
-        when(userProductRepository.findAllByOrderByIdDesc(pageRequest)).thenReturn(pagedUserProducts);
+        when(userProductRepository.findAll(pageable)).thenReturn(pagedUserProducts);
 
         // when
-        List<UserProductLatestResponseDto> results = userProductService.findByIdLessThanOrderByIdDesc(null, resultSize);
+        List<UserProductLatestResponseDto> results = userProductService.findAllByPageable(pageable);
 
         // then
         assertThat(results)
-                .hasSizeLessThanOrEqualTo(resultSize)
+                .hasSizeLessThanOrEqualTo(size)
                 .contains(
-                        new UserProductLatestResponseDto((long) resultSize,
-                                ProductType.MOUSE, ProductTestData.ENTITY.getImageUrl(), ProductTestData.ENTITY.getProductName(),
-                                UserTestData.ENTITY.getImageUrl(), UserTestData.ENTITY.getUsername(), UserTestData.ENTITY.getMotto(),
-                                null));
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = {5, 6, 7})
-    void 특정_장비_직전에_등록된_장비_검색(final int resultSize) {
-        // given
-        long latestId = 5L;
-        PageRequest pageRequest = PageRequest.of(DEFAULT_PAGE_NUM, resultSize);
-
-        Page<UserProduct> pagedUserProducts = new PageImpl<>(LongStream.range(1, resultSize)
-                .mapToObj(this::createUserProduct)
-                .collect(Collectors.toList()));
-
-        when(userProductRepository.findByIdLessThanOrderByIdDesc(latestId, pageRequest)).thenReturn(pagedUserProducts);
-
-        // when
-        List<UserProductLatestResponseDto> results = userProductService.findByIdLessThanOrderByIdDesc(latestId, resultSize);
-
-        // then
-        assertThat(results)
-                .hasSizeLessThanOrEqualTo(resultSize)
-                .contains(
-                        new UserProductLatestResponseDto((latestId - 1),
-                                ProductType.MOUSE, ProductTestData.ENTITY.getImageUrl(), ProductTestData.ENTITY.getProductName(),
-                                UserTestData.ENTITY.getImageUrl(), UserTestData.ENTITY.getUsername(), UserTestData.ENTITY.getMotto(),
-                                null),
-                        new UserProductLatestResponseDto((latestId - 2),
+                        new UserProductLatestResponseDto((long) size,
                                 ProductType.MOUSE, ProductTestData.ENTITY.getImageUrl(), ProductTestData.ENTITY.getProductName(),
                                 UserTestData.ENTITY.getImageUrl(), UserTestData.ENTITY.getUsername(), UserTestData.ENTITY.getMotto(),
                                 null));
