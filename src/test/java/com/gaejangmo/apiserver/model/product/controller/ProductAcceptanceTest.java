@@ -32,7 +32,7 @@ import static org.springframework.restdocs.webtestclient.WebTestClientRestDocume
 @AutoConfigureWebTestClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
-public class ProductAcceptanceTest {
+class ProductAcceptanceTest {
     private static final String PRODUCT_API = linkTo(ProductApiController.class).toString();
     private static final String LOCALHOST = "http://localhost:";
 
@@ -60,7 +60,7 @@ public class ProductAcceptanceTest {
     }
 
     @Test
-    @WithMockCustomUser(oauthId = "20608121", username = "JunHoPark93", email = "abc@gmail.com")
+    @WithMockCustomUser
     void 장비조회() {
         List<ManagedProductResponseDto> managedProductResponseDtoList = webTestClient.get()
                 .uri(uriBuilder ->
