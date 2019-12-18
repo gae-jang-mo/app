@@ -1,7 +1,6 @@
 package com.gaejangmo.apiserver.config;
 
 import com.gaejangmo.apiserver.config.oauth.service.CustomOAuth2UserService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
