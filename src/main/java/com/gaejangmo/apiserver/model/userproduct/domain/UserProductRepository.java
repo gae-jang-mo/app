@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface UserProductRepository extends JpaRepository<UserProduct, Long> {
     List<UserProduct> findByUser(User user);
-    /*Page<UserProduct> findAllByPageable(Long id, Pageable pageable);
 
     Page<UserProduct> findAllByOrderByIdDesc(Pageable pageable);*/
 }
