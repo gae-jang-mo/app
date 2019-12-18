@@ -10,9 +10,11 @@ import java.lang.annotation.RetentionPolicy;
 public @interface WithMockCustomUser {
     String id() default "1";
 
-    String oauthId() default "12345";
+    String oauthId() default "20608121";
 
-    String username() default "rob";
+    String username() default "JunHoPark93";
 
-    String email() default "example@gmail.com";
+    String email() default "abc@gmail.com";
+
+    String role() default "ROLE_USER";
 }
