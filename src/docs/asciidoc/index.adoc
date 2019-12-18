@@ -1,12 +1,27 @@
-= Getting Started With Spring REST Docs
+= Gae Jang Mo Spring REST Docs
 
 This is an example output for a service running at http://localhost:8080:
 
-== Post
+== Product
+=== save() API
 .request
-include::{snippets}/post/http-request.adoc[]
+include::{snippets}/product/save/http-request.adoc[]
 
-include::{snippets}/post/request-parameters.adoc[]
+.request fields
+include::{snippets}/product/save/request-fields.adoc[]
 
 .response
-include::{snippets}/post/http-response.adoc[]
+include::{snippets}/product/save/http-response.adoc[]
+
+=== findFromInternalResource() API
+.request
+include::{snippets}/product/findFromInternalResource/http-request.adoc[]
+
+.request parameters
+include::{snippets}/product/findFromInternalResource/request-parameters.adoc[]
+
+.response
+include::{snippets}/product/findFromInternalResource/http-response.adoc[]
+
+.response fields
+include::{snippets}/product/findFromInternalResource/response-fields.adoc[]
