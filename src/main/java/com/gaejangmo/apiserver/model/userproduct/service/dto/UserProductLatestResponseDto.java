@@ -25,7 +25,7 @@ public class UserProductLatestResponseDto {
         this.product.put("type", productType);
         this.product.put("imageUrl", productImageUrl);
         this.product.put("name", productName);
-        this.user.put("user", userImageUrl);
+        this.user.put("imageUrl", userImageUrl);
         this.user.put("username", username);
         this.user.put("motto", motto);
         this.createdAt = createdAt;
