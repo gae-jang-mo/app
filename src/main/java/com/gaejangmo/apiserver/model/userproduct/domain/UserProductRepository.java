@@ -8,5 +8,4 @@ import java.util.List;
 public interface UserProductRepository extends JpaRepository<UserProduct, Long> {
     List<UserProduct> findByUser(User user);
 
-    Page<UserProduct> findAllByOrderByIdDesc(Pageable pageable);*/
 }
