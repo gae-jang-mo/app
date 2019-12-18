@@ -7,12 +7,17 @@ import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -63,13 +68,41 @@ class ProductApiControllerTest extends MockMvcTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(OBJECT_MAPPER.writeValueAsString(ProductTestData.REQUEST_DTO)))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andDo(document("product/save",
+                        requestFields(
+                                fieldWithPath("title").type(JsonFieldType.STRING).description("제품 이름"),
+                                fieldWithPath("link").type(JsonFieldType.STRING).description("제품 판매 경로"),
+                                fieldWithPath("image").type(JsonFieldType.STRING).description("제품 사진"),
+                                fieldWithPath("lowestPrice").type(JsonFieldType.NUMBER).description("제품 최저 가격"),
+                                fieldWithPath("highestPrice").type(JsonFieldType.NUMBER).description("제품 최고 가격"),
+                                fieldWithPath("mallName").type(JsonFieldType.STRING).description("제품 판매처"),
+                                fieldWithPath("productId").type(JsonFieldType.NUMBER).description("제품 외부 고유 번호"),
+                                fieldWithPath("naverProductType").type(JsonFieldType.STRING).description("네이버 기준 제품 종류"),
+                                fieldWithPath("productType").type(JsonFieldType.STRING).description("제품 종류")
+                        )));
 
         ResultActions resultActions = mockMvc.perform(get(PRODUCT_API + "/internal")
                 .param("productName", "애플 맥북 프로 15형 2019년형 MV912KH/A")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("product/findFromInternalResource",
+                        requestParameters(
+                                parameterWithName("productName").description("제품 이름")
+                        ),
+                        responseFields(
+                                fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("제품 고유 번호"),
+                                fieldWithPath("[].productName").type(JsonFieldType.STRING).description("제품 이름"),
+                                fieldWithPath("[].buyUrl").type(JsonFieldType.STRING).description("제품 구매 경로"),
+                                fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("제품 사진"),
+                                fieldWithPath("[].lowestPrice").type(JsonFieldType.NUMBER).description("제품 최저 가격"),
+                                fieldWithPath("[].highestPrice").type(JsonFieldType.NUMBER).description("제품 최고 가격"),
+                                fieldWithPath("[].mallName").type(JsonFieldType.STRING).description("제품 판매처"),
+                                fieldWithPath("[].productId").type(JsonFieldType.NUMBER).description("제품 외부 고유 번호"),
+                                fieldWithPath("[].naverProductType").type(JsonFieldType.STRING).description("네이버 기준 제품 종류"),
+                                fieldWithPath("[].productType").type(JsonFieldType.STRING).description("제품 종류"))
+                ));
 
         byte[] contentAsByteArray = resultActions.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
