@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaejangmo.apiserver.model.common.support.WithMockCustomUser;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
 import com.gaejangmo.apiserver.model.user.testdata.UserTestData;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,7 +19,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc
 class UserApiControllerTest {
@@ -31,7 +29,7 @@ class UserApiControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @WithMockCustomUser(oauthId = "20608121", username = "JunHoPark93", email = "abc@gmail.com")
+    @WithMockCustomUser
     void 사용자_로그인_시_로그인_정보_반환() throws Exception {
         // given
         ResultActions resultActions = mockMvc.perform(get(USER_API + "/logined")
