@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Embeddable;
 
 @Embeddable
-@Getter
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Motto {
