@@ -3,9 +3,16 @@ spring:
     active: local
 ---
 spring.profiles: local, test
-spring.profiles.include: oauth
+spring.profiles.include: oauth, aws
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+  #  datasource:
+  #    data: classpath:data-h2.sql # 시작할때 실행시킬 script
   jpa:
     show-sql: true
     properties:
@@ -20,4 +27,3 @@ spring:
       path: /h2-console
 
 debug: true
-

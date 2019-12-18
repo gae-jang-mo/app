@@ -22,10 +22,12 @@ configurations {
 repositories {
     mavenCentral()
     maven { url 'https://dl.bintray.com/jaypark3749/maven/' }
+    maven { url 'https://repo.spring.io/snapshot' }
 }
 
 ext {
     set('snippetsDir', file("build/generated-snippets"))
+    set('springCloudVersion', "Greenwich.BUILD-SNAPSHOT")
 }
 
 test {
@@ -54,17 +56,19 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     implementation 'org.springframework.security:spring-security-oauth2-client'
     implementation 'org.springframework.cloud:spring-cloud-starter-config:2.2.0.RELEASE'
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws'
     implementation 'org.projectlombok:lombok'
     implementation 'com.gaejangmo:gae-jang-mo-utils:0.0.1'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    compile 'com.h2database:h2'
+    implementation 'com.h2database:h2:1.4.199'
 
     runtimeOnly 'mysql:mysql-connector-java'
 
     annotationProcessor 'org.projectlombok:lombok'
 
+    testImplementation 'io.findify:s3mock_2.12:0.2.5'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
@@ -75,4 +79,10 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-webflux' // webtestclient 를 위한 추가
 
     asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }
