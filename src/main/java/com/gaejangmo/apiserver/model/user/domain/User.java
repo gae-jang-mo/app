@@ -15,10 +15,12 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Table(name = "member")
 @Entity
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
+@Table(name = "MEMBER")
 public class User extends BaseTimeEntity {
 
     @Id
