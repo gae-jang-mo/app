@@ -36,7 +36,7 @@ public class UserApiController {
     }
 
     @EnableLog
-    @PutMapping("/update/motto")
+    @PutMapping("/motto")
     public ResponseEntity<Motto> updateMotto(@RequestBody final Motto motto,
                                              @LoginUser SessionUser sessionUser) {
         userService.updateMotto(sessionUser.getId(), motto);
