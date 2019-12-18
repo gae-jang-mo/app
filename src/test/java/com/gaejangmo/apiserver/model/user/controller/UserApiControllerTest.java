@@ -33,15 +33,18 @@ class UserApiControllerTest {
     @Test
     @WithMockCustomUser(oauthId = "20608121", username = "JunHoPark93", email = "abc@gmail.com")
     void 사용자_로그인_시_로그인_정보_반환() throws Exception {
+        // given
         ResultActions resultActions = mockMvc.perform(get(USER_API + "/logined")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
 
+        // when
         byte[] contentAsByteArray = resultActions.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsByteArray();
 
+        // then
         UserResponseDto userResponseDto = MAPPER.readValue(contentAsByteArray, UserResponseDto.class);
 
         assertThat(userResponseDto).isEqualTo(UserTestData.RESPONSE_DTO);

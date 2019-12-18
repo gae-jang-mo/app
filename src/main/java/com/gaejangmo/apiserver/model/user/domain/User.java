@@ -2,6 +2,7 @@ package com.gaejangmo.apiserver.model.user.domain;
 
 import com.gaejangmo.apiserver.model.common.domain.BaseTimeEntity;
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
+import com.gaejangmo.apiserver.model.image.user.domain.UserImage;
 import com.gaejangmo.apiserver.model.user.domain.converter.GradeAttributeConverter;
 import com.gaejangmo.apiserver.model.user.domain.converter.RoleAttributeConverter;
 import com.gaejangmo.apiserver.model.user.domain.vo.Email;
@@ -14,8 +15,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Optional;
 
-@Table(name = "member")
 @Entity
 @Getter
 @NoArgsConstructor
@@ -60,6 +61,10 @@ public class User extends BaseTimeEntity {
     @Column
     private String introduce;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_image_id", foreignKey = @ForeignKey(name = "fk_user_image_to_user"))
+    private UserImage userImage;
+
     @Builder
     public User(final Long oauthId, final String username, final Role role, final Grade grade, final Email email, final Motto motto, final Link imageUrl, final String introduce) {
         this.oauthId = oauthId;
@@ -100,6 +105,10 @@ public class User extends BaseTimeEntity {
         return imageUrl.value();
     }
 
+    public Optional<UserImage> getUserImage() {
+        return Optional.ofNullable(userImage);
+    }
+
     public User update(final String username, final String imageUrl) {
         this.username = username;
         this.imageUrl = Link.of(imageUrl);
@@ -108,6 +117,11 @@ public class User extends BaseTimeEntity {
 
     public User updateMotto(final Motto motto) {
         this.motto = motto;
+        return this;
+    }
+
+    public User updateUserImage(final UserImage userImage) {
+        this.userImage = userImage;
         return this;
     }
 }

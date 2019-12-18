@@ -1,7 +1,9 @@
 package com.gaejangmo.apiserver.model.userproduct.domain.vo;
 
 import com.gaejangmo.utils.StringUtils;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.Embeddable;
@@ -9,11 +11,12 @@ import javax.persistence.Embeddable;
 
 @ToString
 @EqualsAndHashCode
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Embeddable
 public class Comment {
     static final String EMPTY_VALUE = "";
 
-    private final String value;
+    private String value;
 
     public Comment(final String value) {
         this.value = validate(value);

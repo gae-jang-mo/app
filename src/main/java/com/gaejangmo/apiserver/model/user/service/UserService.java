@@ -1,13 +1,18 @@
 package com.gaejangmo.apiserver.model.user.service;
 
+import com.gaejangmo.apiserver.model.image.domain.user.service.UserImageService;
+import com.gaejangmo.apiserver.model.image.dto.FileResponseDto;
+import com.gaejangmo.apiserver.model.image.user.domain.UserImage;
 import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.domain.UserRepository;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -15,11 +20,14 @@ import java.util.function.Function;
 public class UserService {
     private static final String USER_NOT_FOUND_MESSAGE = "해당하는 유저가 없습니다.";
     private final UserRepository userRepository;
+    private final UserImageService userImageService;
 
-    public UserService(final UserRepository userRepository) {
+    public UserService(final UserRepository userRepository, final UserImageService userImageService) {
         this.userRepository = userRepository;
+        this.userImageService = userImageService;
     }
 
+    @Transactional(readOnly = true)
     public User findById(final Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
@@ -37,6 +45,7 @@ public class UserService {
         return toDto(user);
     }
 
+    @Transactional(readOnly = true)
     public UserResponseDto findUserResponseDtoByOauthId(final Long oauthId) {
         User user = userRepository.findByOauthId(oauthId)
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
@@ -52,6 +61,21 @@ public class UserService {
         return function.apply(user);
     }
 
+    public FileResponseDto updateUserImage(final MultipartFile multipartFile, final Long id) {
+        User user = findById(id);
+        UserImage savedUserImage = userImageService.save(multipartFile, user);
+
+        Optional<UserImage> oldUserImage = user.getUserImage();
+        user.updateUserImage(savedUserImage);
+        oldUserImage.ifPresent(userImageService::delete);
+
+        return FileResponseDto.builder()
+                .createdAt(savedUserImage.getCreatedAt())
+                .id(savedUserImage.getId())
+                .fileFeature(savedUserImage.getFileFeature())
+                .build();
+    }
+
     private UserResponseDto toDto(final User user) {
         return UserResponseDto.builder()
                 .id(user.getId())
@@ -63,6 +87,4 @@ public class UserService {
                 .motto(user.getMotto())
                 .build();
     }
-
-
 }

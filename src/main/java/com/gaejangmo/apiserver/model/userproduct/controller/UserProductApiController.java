@@ -2,9 +2,9 @@ package com.gaejangmo.apiserver.model.userproduct.controller;
 
 
 import com.gaejangmo.apiserver.commons.logging.EnableLog;
+import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import com.gaejangmo.apiserver.model.common.exception.ApiErrorResponse;
 import com.gaejangmo.apiserver.model.common.resolver.LoginUser;
-import com.gaejangmo.apiserver.model.common.resolver.SessionUser;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import com.gaejangmo.apiserver.model.userproduct.service.UserProductService;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
@@ -31,8 +31,8 @@ public class UserProductApiController {
     @EnableLog
     @PostMapping
     public ResponseEntity<UserProductResponseDto> create(@RequestBody final UserProductCreateDto userProductCreateDto,
-                                                         @LoginUser final SessionUser sessionUser) {
-        Long userId = sessionUser.getId();
+                                                         @LoginUser final SecurityUser securityUser) {
+        Long userId = securityUser.getId();
         UserProductResponseDto responseDto = userProductService.save(userProductCreateDto, userId);
         URI uri = linkTo(UserProductApiController.class).slash(responseDto.getId()).toUri();
         return ResponseEntity.created(uri).body(responseDto);
@@ -47,8 +47,8 @@ public class UserProductApiController {
     @PutMapping("/{id}/comment")
     public ResponseEntity<UserProductResponseDto> updateComment(@PathVariable final Long id,
                                                                 @RequestBody final String comment,
-                                                                @LoginUser final SessionUser sessionUser) {
-        Long userId = sessionUser.getId();
+                                                                @LoginUser final SecurityUser securityUser) {
+        Long userId = securityUser.getId();
         UserProductResponseDto responseDto = userProductService.updateComment(id, userId, comment);
         return ResponseEntity.ok(responseDto);
     }
@@ -56,16 +56,16 @@ public class UserProductApiController {
     @PutMapping("/{id}/product-type")
     public ResponseEntity<UserProductResponseDto> updateProductType(@PathVariable final Long id,
                                                                     @RequestBody final String productType,
-                                                                    @LoginUser final SessionUser sessionUser) {
-        Long userId = sessionUser.getId();
+                                                                    @LoginUser final SecurityUser securityUser) {
+        Long userId = securityUser.getId();
         UserProductResponseDto responseDto = userProductService.updateProductType(id, userId, ProductType.ofName(productType));
         return ResponseEntity.ok(responseDto);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity delete(@PathVariable final Long id,
-                                 @LoginUser final SessionUser sessionUser) {
-        Long userId = sessionUser.getId();
+                                 @LoginUser final SecurityUser securityUser) {
+        Long userId = securityUser.getId();
         userProductService.delete(id, userId);
         return ResponseEntity.noContent().build();
     }
