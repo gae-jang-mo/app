@@ -36,7 +36,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
 
         http.oauth2Login()
-                .defaultSuccessUrl("http://gaejangmo.com", true)
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService);
     }
