@@ -115,6 +115,11 @@ public class User extends BaseTimeEntity {
         return this;
     }
 
+    public User updateMotto(final Motto motto) {
+        this.motto = motto;
+        return this;
+    }
+
     public User updateUserImage(final UserImage userImage) {
         this.userImage = userImage;
         return this;

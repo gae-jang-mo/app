@@ -19,15 +19,15 @@ public class Motto {
         this.value = validate(value);
     }
 
+    public static Motto of(final String value) {
+        return new Motto(value);
+    }
+
     private String validate(final String value) {
         if (value.length() <= MAX_LENGTH) {
             return value;
         }
         throw new InvalidMottoException(String.format("입력값의 길이가 %d자 이하여야 합니다.", MAX_LENGTH));
-    }
-
-    public static Motto of(final String value) {
-        return new Motto(value);
     }
 
     public String value() {
