@@ -45,7 +45,7 @@ public class UserProductApiController {
         return ResponseEntity.ok(responseDtos);
     }
 
-    @GetMapping("/latest") // TODO: 2019-12-17 lastId가 없을 때는 어떻게 할 거니
+    @GetMapping("/latest")
     public ResponseEntity<List<UserProductLatestResponseDto>> latest(@RequestParam(required = false) final Long lastId,
                                                                      @RequestParam(defaultValue = "10") final Integer size) {
         List<UserProductLatestResponseDto> responseDtos = userProductService.findByIdLessThanOrderByIdDesc(lastId, size);
