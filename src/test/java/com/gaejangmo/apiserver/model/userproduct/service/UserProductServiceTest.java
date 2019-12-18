@@ -3,27 +3,38 @@ package com.gaejangmo.apiserver.model.userproduct.service;
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.product.service.ProductService;
+import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
 import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.service.UserService;
+import com.gaejangmo.apiserver.model.user.testdata.UserTestData;
 import com.gaejangmo.apiserver.model.userproduct.domain.UserProduct;
 import com.gaejangmo.apiserver.model.userproduct.domain.UserProductRepository;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
+import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductLatestResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.exception.NotUserProductOwnerException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -31,6 +42,7 @@ import static org.mockito.Mockito.*;
 class UserProductServiceTest {
     private static final long USER_PRODUCT_ID = 15L;
     private static final long USER_ID = 100L;
+    private static final int DEFAULT_PAGE_NUM = 0;
 
     @InjectMocks
     private UserProductService userProductService;
@@ -167,5 +179,41 @@ class UserProductServiceTest {
         // then
         assertThat(responseDto.getProductType()).isEqualTo(productType.getName());
 
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {5, 6, 7})
+    void 가장_최근에_등록된_장비_검색(final int size) {
+        // given
+        Pageable pageable = PageRequest.of(DEFAULT_PAGE_NUM, size);
+
+        Page<UserProduct> pagedUserProducts = new PageImpl<>(LongStream.rangeClosed(1, size)
+                .mapToObj(this::createUserProduct)
+                .collect(Collectors.toList()));
+
+        when(userProductRepository.findAll(pageable)).thenReturn(pagedUserProducts);
+
+        // when
+        List<UserProductLatestResponseDto> results = userProductService.findAllByPageable(pageable);
+
+        // then
+        assertThat(results)
+                .hasSizeLessThanOrEqualTo(size)
+                .contains(
+                        new UserProductLatestResponseDto((long) size,
+                                ProductType.MOUSE, ProductTestData.ENTITY.getImageUrl(), ProductTestData.ENTITY.getProductName(),
+                                UserTestData.ENTITY.getImageUrl(), UserTestData.ENTITY.getUsername(), UserTestData.ENTITY.getMotto(),
+                                null));
+    }
+
+    private UserProduct createUserProduct(final long id) {
+        UserProduct userProduct = UserProduct.builder()
+                .product(ProductTestData.ENTITY)
+                .user(UserTestData.ENTITY)
+                .comment(Comment.of(String.valueOf(id)))
+                .productType(ProductType.MOUSE)
+                .build();
+        ReflectionTestUtils.setField(userProduct, "id", id);
+        return userProduct;
     }
 }
