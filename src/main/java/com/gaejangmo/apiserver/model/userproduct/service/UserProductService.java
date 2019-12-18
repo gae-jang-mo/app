@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class UserProductService {
-    private static final int DEFAULT_PAGE_NUM = 0;
 
     private final ProductService productService;
     private final UserService userService;
