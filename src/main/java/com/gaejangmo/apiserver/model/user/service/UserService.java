@@ -24,10 +24,12 @@ public class UserService {
         this.userImageService = userImageService;
     }
 
+    @Transactional(readOnly = true)
     public User findById(final Long id) {
         return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
+    @Transactional(readOnly = true)
     public UserResponseDto findUserResponseDtoByOauthId(final Long oauthId) {
         User user = userRepository.findByOauthId(oauthId)
                 .orElseThrow(() -> new EntityNotFoundException("해당하는 유저가 없습니다."));
