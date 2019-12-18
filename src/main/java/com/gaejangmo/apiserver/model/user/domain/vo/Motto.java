@@ -3,7 +3,6 @@ package com.gaejangmo.apiserver.model.user.domain.vo;
 import com.gaejangmo.apiserver.model.user.exception.InvalidMottoException;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
