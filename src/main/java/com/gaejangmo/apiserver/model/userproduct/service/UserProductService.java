@@ -9,8 +9,10 @@ import com.gaejangmo.apiserver.model.userproduct.domain.UserProductRepository;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
+import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductLatestResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.exception.NotUserProductOwnerException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class UserProductService {
+
     private final ProductService productService;
     private final UserService userService;
     private final UserProductRepository userProductRepository;
@@ -72,6 +75,24 @@ public class UserProductService {
             return function.apply(userProduct);
         }
         throw new NotUserProductOwnerException();
+    }
+
+    public List<UserProductLatestResponseDto> findAllByPageable(final Pageable pageable) {
+        return userProductRepository.findAll(pageable)
+                .map(this::toLatestDto).toList();
+    }
+
+    private UserProductLatestResponseDto toLatestDto(final UserProduct userProduct) {
+        return UserProductLatestResponseDto.builder()
+                .id(userProduct.getId())
+                .productType(userProduct.getProductType())
+                .productImageUrl(userProduct.getProduct().getImageUrl())
+                .productName(userProduct.getProduct().getProductName())
+                .userImageUrl(userProduct.getUser().getImageUrl())
+                .username(userProduct.getUser().getUsername())
+                .motto(userProduct.getUser().getMotto())
+                .createdAt(userProduct.getCreatedAt())
+                .build();
     }
 
     private UserProductResponseDto toDto(final UserProduct userProduct) {

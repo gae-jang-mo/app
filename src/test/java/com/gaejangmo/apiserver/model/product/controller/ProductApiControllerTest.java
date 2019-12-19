@@ -1,38 +1,31 @@
 package com.gaejangmo.apiserver.model.product.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gaejangmo.apiserver.model.MockMvcTest;
 import com.gaejangmo.apiserver.model.product.dto.ProductResponseDto;
 import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-class ProductApiControllerTest {
-    private static final String PRODUCT_API = linkTo(ProductApiController.class).toString();
-
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-
-    @Autowired
-    private MockMvc mockMvc;
+class ProductApiControllerTest extends MockMvcTest {
+    private static final String PRODUCT_API = getApiUrl(ProductApiController.class);
 
     @Test
     @WithMockUser
@@ -40,7 +33,7 @@ class ProductApiControllerTest {
         mockMvc.perform(post(PRODUCT_API)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(MAPPER.writeValueAsString(ProductTestData.INVALID_LINK_REQUEST_DTO)))
+                .content(OBJECT_MAPPER.writeValueAsString(ProductTestData.INVALID_LINK_REQUEST_DTO)))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -51,7 +44,7 @@ class ProductApiControllerTest {
         mockMvc.perform(post(PRODUCT_API)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(MAPPER.writeValueAsString(ProductTestData.INVALID_PRICE_REQUEST_DTO)))
+                .content(OBJECT_MAPPER.writeValueAsString(ProductTestData.INVALID_PRICE_REQUEST_DTO)))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -62,7 +55,7 @@ class ProductApiControllerTest {
         mockMvc.perform(post(PRODUCT_API)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(MAPPER.writeValueAsString(ProductTestData.INVALID_PRODUCT_TYPE_REQUEST_DTO)))
+                .content(OBJECT_MAPPER.writeValueAsString(ProductTestData.INVALID_PRODUCT_TYPE_REQUEST_DTO)))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -73,21 +66,49 @@ class ProductApiControllerTest {
         mockMvc.perform(post(PRODUCT_API)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(MAPPER.writeValueAsString(ProductTestData.REQUEST_DTO)))
+                .content(OBJECT_MAPPER.writeValueAsString(ProductTestData.REQUEST_DTO)))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andDo(document("product/save",
+                        requestFields(
+                                fieldWithPath("title").type(JsonFieldType.STRING).description("제품 이름"),
+                                fieldWithPath("link").type(JsonFieldType.STRING).description("제품 판매 경로"),
+                                fieldWithPath("image").type(JsonFieldType.STRING).description("제품 사진"),
+                                fieldWithPath("lowestPrice").type(JsonFieldType.NUMBER).description("제품 최저 가격"),
+                                fieldWithPath("highestPrice").type(JsonFieldType.NUMBER).description("제품 최고 가격"),
+                                fieldWithPath("mallName").type(JsonFieldType.STRING).description("제품 판매처"),
+                                fieldWithPath("productId").type(JsonFieldType.NUMBER).description("제품 외부 고유 번호"),
+                                fieldWithPath("naverProductType").type(JsonFieldType.STRING).description("네이버 기준 제품 종류"),
+                                fieldWithPath("productType").type(JsonFieldType.STRING).description("제품 종류")
+                        )));
 
         ResultActions resultActions = mockMvc.perform(get(PRODUCT_API + "/internal")
                 .param("productName", "애플 맥북 프로 15형 2019년형 MV912KH/A")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("product/findFromInternalResource",
+                        requestParameters(
+                                parameterWithName("productName").description("제품 이름")
+                        ),
+                        responseFields(
+                                fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("제품 고유 번호"),
+                                fieldWithPath("[].productName").type(JsonFieldType.STRING).description("제품 이름"),
+                                fieldWithPath("[].buyUrl").type(JsonFieldType.STRING).description("제품 구매 경로"),
+                                fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("제품 사진"),
+                                fieldWithPath("[].lowestPrice").type(JsonFieldType.NUMBER).description("제품 최저 가격"),
+                                fieldWithPath("[].highestPrice").type(JsonFieldType.NUMBER).description("제품 최고 가격"),
+                                fieldWithPath("[].mallName").type(JsonFieldType.STRING).description("제품 판매처"),
+                                fieldWithPath("[].productId").type(JsonFieldType.NUMBER).description("제품 외부 고유 번호"),
+                                fieldWithPath("[].naverProductType").type(JsonFieldType.STRING).description("네이버 기준 제품 종류"),
+                                fieldWithPath("[].productType").type(JsonFieldType.STRING).description("제품 종류"))
+                ));
 
         byte[] contentAsByteArray = resultActions.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsByteArray();
 
-        List<ProductResponseDto> managedProductResponseDtos = MAPPER.readValue(contentAsByteArray, new TypeReference<List<ProductResponseDto>>() {
+        List<ProductResponseDto> managedProductResponseDtos = OBJECT_MAPPER.readValue(contentAsByteArray, new TypeReference<List<ProductResponseDto>>() {
         });
 
         assertThat(managedProductResponseDtos.size()).isEqualTo(1);
@@ -107,7 +128,7 @@ class ProductApiControllerTest {
                 .andReturn().getResponse().getContentAsByteArray();
 
         List<ProductResponseDto> naverProductResponseDtos =
-                MAPPER.readValue(contentAsByteArray, new TypeReference<List<ProductResponseDto>>() {
+                OBJECT_MAPPER.readValue(contentAsByteArray, new TypeReference<List<ProductResponseDto>>() {
                 });
 
         assertThat(naverProductResponseDtos).isNotNull();

@@ -8,7 +8,6 @@ import lombok.ToString;
 
 import javax.persistence.Embeddable;
 
-
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
