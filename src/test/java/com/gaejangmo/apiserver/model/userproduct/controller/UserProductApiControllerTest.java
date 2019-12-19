@@ -1,6 +1,6 @@
 package com.gaejangmo.apiserver.model.userproduct.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gaejangmo.apiserver.model.MockMvcTest;
 import com.gaejangmo.apiserver.model.common.support.WithMockCustomUser;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import com.gaejangmo.apiserver.model.userproduct.service.UserProductService;
@@ -8,36 +8,25 @@ import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDt
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-class UserProductApiControllerTest {
-    private static final String USER_PRODUCT_URI = linkTo(UserProductApiController.class).toString();
+class UserProductApiControllerTest extends MockMvcTest {
+    private static final String USER_PRODUCT_URI = getApiUrl(UserProductApiController.class);
     private static final long USER_ID = 1L;
     private static final long PRODUCT_ID = 10L;
 
     @MockBean
     private UserProductService userProductService;
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
 
     private UserProductCreateDto userProductCreateDto;
     private UserProductResponseDto userProductResponseDto;
@@ -65,7 +54,7 @@ class UserProductApiControllerTest {
         ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userProductCreateDto)))
+                .content(OBJECT_MAPPER.writeValueAsString(userProductCreateDto)))
                 .andDo(print());
 
         // then
@@ -82,7 +71,7 @@ class UserProductApiControllerTest {
         ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userProductCreateDto)))
+                .content(OBJECT_MAPPER.writeValueAsString(userProductCreateDto)))
                 .andDo(print());
 
         // then

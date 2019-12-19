@@ -1,37 +1,24 @@
 package com.gaejangmo.apiserver.model.user.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gaejangmo.apiserver.model.MockMvcTest;
 import com.gaejangmo.apiserver.model.common.support.WithMockCustomUser;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
 import com.gaejangmo.apiserver.model.user.testdata.UserTestData;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Slf4j
-@SpringBootTest
-@AutoConfigureMockMvc
-class UserApiControllerTest {
-    private static final String USER_API = linkTo(UserApiController.class).toString();
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-
-    @Autowired
-    private MockMvc mockMvc;
+class UserApiControllerTest extends MockMvcTest {
+    private static final String USER_API = getApiUrl(UserApiController.class);
 
     @Test
-    @WithMockCustomUser(oauthId = "20608121", username = "JunHoPark93", email = "abc@gmail.com")
+    @WithMockCustomUser
     void 사용자_로그인_시_로그인_정보_반환() throws Exception {
         // given
         ResultActions resultActions = mockMvc.perform(get(USER_API + "/logined")
@@ -45,7 +32,7 @@ class UserApiControllerTest {
                 .andReturn().getResponse().getContentAsByteArray();
 
         // then
-        UserResponseDto userResponseDto = MAPPER.readValue(contentAsByteArray, UserResponseDto.class);
+        UserResponseDto userResponseDto = OBJECT_MAPPER.readValue(contentAsByteArray, UserResponseDto.class);
 
         assertThat(userResponseDto).isEqualTo(UserTestData.RESPONSE_DTO);
     }
