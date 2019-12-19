@@ -35,7 +35,7 @@ class UserProductApiControllerTest extends MockMvcTest {
     void setUp() {
         userProductCreateDto = UserProductCreateDto.builder()
                 .productId(PRODUCT_ID)
-                .productType(ProductType.KEY_BOARD)
+                .productType(ProductType.MOUSE.getName())
                 .comment("인생 마우스")
                 .build();
 

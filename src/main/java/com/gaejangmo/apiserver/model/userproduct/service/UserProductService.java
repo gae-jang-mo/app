@@ -110,7 +110,7 @@ public class UserProductService {
         return UserProduct.builder()
                 .user(user)
                 .product(product)
-                .productType(userProductCreateDto.getProductType())
+                .productType(ProductType.ofName(userProductCreateDto.getProductType()))
                 .comment(Comment.of(userProductCreateDto.getComment()))
                 .build();
     }
