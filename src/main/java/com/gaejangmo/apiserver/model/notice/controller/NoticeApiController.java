@@ -20,7 +20,7 @@ public class NoticeApiController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<NoticeResponseDto> findNoticeResponse(@PathVariable long id) {
+    public ResponseEntity<NoticeResponseDto> find(@PathVariable long id) {
         NoticeResponseDto responseDto = noticeService.findById(id);
         return ResponseEntity.ok(responseDto);
     }
