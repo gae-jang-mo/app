@@ -1,9 +1,21 @@
 = Gae Jang Mo Spring REST Docs
+gaejangmo.com
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
 
-This is an example output for a service running at http://localhost:8080:
+== 소개
 
-== Product
-=== save() API
+개발자 장비 모음 Spring Rest Docs API
+
+
+== Product API
+
+=== save()
+
 .request
 include::{snippets}/product/save/http-request.adoc[]
 
@@ -13,7 +25,7 @@ include::{snippets}/product/save/request-fields.adoc[]
 .response
 include::{snippets}/product/save/http-response.adoc[]
 
-=== findFromInternalResource() API
+=== findFromInternalResource()
 .request
 include::{snippets}/product/findFromInternalResource/http-request.adoc[]
 
