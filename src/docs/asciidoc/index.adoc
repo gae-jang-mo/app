@@ -25,3 +25,18 @@ include::{snippets}/product/findFromInternalResource/http-response.adoc[]
 
 .response fields
 include::{snippets}/product/findFromInternalResource/response-fields.adoc[]
+
+== UserProduct
+=== create() API
+.request
+include::{snippets}/users/products/create/http-request.adoc[]
+
+.request fields
+include::{snippets}/users/products/create/request-fields.adoc[]
+
+.response
+include::{snippets}/users/products/create/http-response.adoc[]
+
+.response fields
+include::{snippets}/users/products/create/response-fields.adoc[]
+
