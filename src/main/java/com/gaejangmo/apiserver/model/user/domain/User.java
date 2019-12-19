@@ -102,7 +102,10 @@ public class User extends BaseTimeEntity {
     }
 
     public String getImageUrl() {
-        return imageUrl.value();
+        if (userImage == null) {
+            return imageUrl.value();
+        }
+        return userImage.getFileFeature().getUrl();
     }
 
     public Optional<UserImage> getUserImage() {
