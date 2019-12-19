@@ -12,9 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -44,9 +41,7 @@ class NoticeApiControllerTest {
 
     @Test
     void 공지사항_조회() throws Exception {
-        String createdDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
-        ResultActions resultActions = mockMvc.perform(get(NOTICE_API)
-                .param("createdDate", createdDate)
+        ResultActions resultActions = mockMvc.perform(get(NOTICE_API + "/1")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());

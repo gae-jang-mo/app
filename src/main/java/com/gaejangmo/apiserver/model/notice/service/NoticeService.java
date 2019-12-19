@@ -7,6 +7,8 @@ import com.gaejangmo.apiserver.model.notice.dto.NoticeRequestDto;
 import com.gaejangmo.apiserver.model.notice.dto.NoticeResponseDto;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 public class NoticeService {
     private final NoticeRepository noticeRepository;
@@ -15,8 +17,8 @@ public class NoticeService {
         this.noticeRepository = noticeRepository;
     }
 
-    public NoticeResponseDto findByCreatedDate(final String createdDate) {
-        Notice notice = noticeRepository.findByCreatedDate(createdDate).orElseThrow(RuntimeException::new);
+    public NoticeResponseDto findById(final long id) {
+        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id + "번 공지를 찾을 수 없습니다."));
         return toDto(notice);
     }
 
@@ -31,7 +33,6 @@ public class NoticeService {
                 .noticeType(notice.getNoticeType())
                 .header(notice.getHeader())
                 .contents(notice.getContents())
-                .noticeCreatedDate(notice.getCreatedDate())
                 .build();
     }
 

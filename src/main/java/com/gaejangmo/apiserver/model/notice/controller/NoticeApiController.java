@@ -19,9 +19,9 @@ public class NoticeApiController {
         this.noticeService = noticeService;
     }
 
-    @GetMapping
-    public ResponseEntity<NoticeResponseDto> findNoticeResponse(@RequestParam String createdDate) {
-        NoticeResponseDto responseDto = noticeService.findByCreatedDate(createdDate);
+    @GetMapping("/{id}")
+    public ResponseEntity<NoticeResponseDto> findNoticeResponse(@PathVariable long id) {
+        NoticeResponseDto responseDto = noticeService.findById(id);
         return ResponseEntity.ok(responseDto);
     }
 

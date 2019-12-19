@@ -6,14 +6,14 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 @Converter
-public class NoticeTypeConverter implements AttributeConverter<NoticeType, String> {
+public class NoticeTypeConverter implements AttributeConverter<NoticeType, Integer> {
     @Override
-    public String convertToDatabaseColumn(final NoticeType attribute) {
-        return attribute.getName();
+    public Integer convertToDatabaseColumn(final NoticeType attribute) {
+        return attribute.getCode();
     }
 
     @Override
-    public NoticeType convertToEntityAttribute(final String dbData) {
-        return NoticeType.ofName(dbData);
+    public NoticeType convertToEntityAttribute(final Integer dbData) {
+        return NoticeType.ofCode(dbData);
     }
 }

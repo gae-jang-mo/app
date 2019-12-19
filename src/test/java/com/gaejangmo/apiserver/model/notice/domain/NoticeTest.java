@@ -3,9 +3,6 @@ package com.gaejangmo.apiserver.model.notice.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,9 +20,8 @@ class NoticeTest {
 
     @Test
     void 공지사항_초기화() {
-        String createdDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
-
-        assertThat(notice.getCreatedDate()).isEqualTo(createdDate);
+        assertThat(notice.getHeader()).isEqualTo("개장모 서비스 오픈!");
+        assertThat(notice.getContents()).isEqualTo("많이 이용해주세요!! by 개장모 CREW");
         assertFalse(notice.isDeleted());
     }
 

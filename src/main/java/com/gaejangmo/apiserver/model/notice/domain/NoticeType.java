@@ -9,11 +9,18 @@ import java.util.stream.Stream;
 @Getter
 @RequiredArgsConstructor
 public enum NoticeType {
-    // TODO code 추가
-    NOTICE("공지"),
-    EVENT("이벤트");
+    NOTICE("공지", 1),
+    EVENT("이벤트", 2);
 
     private final String name;
+    private final int code;
+
+    public static NoticeType ofCode(final int code) {
+        return Stream.of(values())
+                .filter(noticeType -> noticeType.code == code)
+                .findAny()
+                .orElseThrow(() -> new NoticeTypeNotFoundException("등록되지 않은 코드입니다."));
+    }
 
     public static NoticeType ofName(final String name) {
         return Stream.of(values())

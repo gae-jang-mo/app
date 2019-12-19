@@ -14,5 +14,4 @@ public class NoticeResponseDto {
     private NoticeType noticeType;
     private String header;
     private String contents;
-    private String noticeCreatedDate;
 }

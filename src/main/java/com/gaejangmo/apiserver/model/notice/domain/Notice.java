@@ -34,16 +34,12 @@ public class Notice extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean deleted;
 
-    @Column(nullable = false, unique = true)
-    private String createdDate;
-
     @Builder
     public Notice(final NoticeType noticeType, final String header, final String contents) {
         this.noticeType = noticeType;
         this.header = header;
         this.contents = contents;
         this.deleted = false;
-        this.createdDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
     }
 
     public void delete() {
