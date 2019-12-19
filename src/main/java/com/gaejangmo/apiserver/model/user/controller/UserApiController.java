@@ -41,10 +41,9 @@ public class UserApiController {
     }
 
     @PostMapping("/image")
-    public ResponseEntity<FileResponseDto> updateUserImage(@RequestParam("file") final MultipartFile multipartFile,
+    public ResponseEntity<FileResponseDto> updateUserImage(@RequestParam final MultipartFile file,
                                                            @LoginUser final SecurityUser securityUser) {
-
-        FileResponseDto fileResponseDto = userService.updateUserImage(multipartFile, securityUser.getId());
+        FileResponseDto fileResponseDto = userService.updateUserImage(file, securityUser.getId());
         return ResponseEntity.ok(fileResponseDto);
     }
 }

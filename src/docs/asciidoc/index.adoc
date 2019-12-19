@@ -25,3 +25,67 @@ include::{snippets}/product/findFromInternalResource/http-response.adoc[]
 
 .response fields
 include::{snippets}/product/findFromInternalResource/response-fields.adoc[]
+
+== User
+=== checkLogin() API
+로그인 되어 있는지 확인
+
+.request
+include::{snippets}/sign/checkLogin/http-request.adoc[]
+
+.response
+include::{snippets}/sign/checkLogin/http-response.adoc[]
+
+=== showUser() API
+로그인 되어 있는 유저 정보 반환
+
+.request
+include::{snippets}/user/showUser/http-request.adoc[]
+
+.response
+include::{snippets}/user/showUser/http-response.adoc[]
+
+.response fields
+include::{snippets}/user/showUser/response-fields.adoc[]
+
+=== showUserByName API
+username으로 유저 정보 검색
+
+.request
+include::{snippets}/user/showUserByName/http-request.adoc[]
+
+.response
+include::{snippets}/user/showUserByName/http-response.adoc[]
+
+.response fields
+include::{snippets}/user/showUserByName/response-fields.adoc[]
+
+=== updateMotto API
+유저 Motto(좌우명) 수정
+
+.request
+include::{snippets}/user/updateMotto/http-request.adoc[]
+
+.request fields
+include::{snippets}/user/updateMotto/request-fields.adoc[]
+
+.response
+include::{snippets}/user/updateMotto/http-response.adoc[]
+
+.response fields
+include::{snippets}/user/updateMotto/response-fields.adoc[]
+
+=== updateUserImage API
+유저 프로필 사진 수정
+
+.request
+include::{snippets}/user/updateUserImage/http-request.adoc[]
+
+.request parts
+include::{snippets}/user/updateUserImage/request-parts.adoc[]
+
+.response
+include::{snippets}/user/updateUserImage/http-response.adoc[]
+
+.response fields
+include::{snippets}/user/updateUserImage/response-fields.adoc[]
