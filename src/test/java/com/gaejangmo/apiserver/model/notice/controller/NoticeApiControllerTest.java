@@ -10,6 +10,8 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getDocumentRequest;
+import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getDocumentResponse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -32,6 +34,8 @@ class NoticeApiControllerTest extends MockMvcTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andDo(document("notice/save",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("noticeType").type(JsonFieldType.STRING).description("공지 타입"),
                                 fieldWithPath("header").type(JsonFieldType.STRING).description("공지 헤더"),
@@ -49,6 +53,8 @@ class NoticeApiControllerTest extends MockMvcTest {
 
         byte[] contentAsByteArray = resultActions.andExpect(status().isOk())
                 .andDo(document("notice",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         pathParameters(
                                 parameterWithName("id").description("공지 고유 번호")
                         ),

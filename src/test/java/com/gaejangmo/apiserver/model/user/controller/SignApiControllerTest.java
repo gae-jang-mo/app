@@ -6,9 +6,10 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getDocumentRequest;
+import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getDocumentResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -25,8 +26,8 @@ class SignApiControllerTest extends MockMvcTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("sign/checkLogin",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())
+                        getDocumentRequest(),
+                        getDocumentResponse()
                 ));
 
         // when

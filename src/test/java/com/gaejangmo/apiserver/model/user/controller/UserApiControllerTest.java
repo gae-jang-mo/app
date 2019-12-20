@@ -17,6 +17,8 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getDocumentRequest;
+import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getDocumentResponse;
 import static com.gaejangmo.apiserver.model.user.testdata.UserTestData.RESPONSE_DTO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -55,8 +57,8 @@ class UserApiControllerTest extends MockMvcTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("user/showUser",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         responseFields(userResponseDtoDescriptors)
                 ));
 
