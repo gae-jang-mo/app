@@ -2,18 +2,21 @@ package com.gaejangmo.apiserver.model.notice.domain;
 
 import com.gaejangmo.apiserver.model.notice.exception.NoticeTypeNotFoundException;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.util.stream.Stream;
 
 @Getter
-@RequiredArgsConstructor
 public enum NoticeType {
     NOTICE("공지", 1),
     EVENT("이벤트", 2);
 
     private final String name;
     private final int code;
+
+    NoticeType(final String name, final int code) {
+        this.name = name;
+        this.code = code;
+    }
 
     public static NoticeType ofCode(final int code) {
         return Stream.of(values())
