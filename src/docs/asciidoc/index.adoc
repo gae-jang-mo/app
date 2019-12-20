@@ -125,3 +125,18 @@ include::{snippets}/user/updateUserImage/http-response.adoc[]
 
 .response fields
 include::{snippets}/user/updateUserImage/response-fields.adoc[]
+
+=== search()
+유저 이름으로 유저 리스트 검색
+
+.request
+include::{snippets}/user/search/http-request.adoc[]
+
+.request parameters
+include::{snippets}/user/search/request-parameters.adoc[]
+
+.response
+include::{snippets}/user/search/http-response.adoc[]
+
+.response fields
+include::{snippets}/user/search/response-fields.adoc[]
