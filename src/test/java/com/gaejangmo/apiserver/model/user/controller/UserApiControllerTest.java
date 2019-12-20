@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
@@ -24,8 +25,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -74,16 +74,17 @@ class UserApiControllerTest extends MockMvcTest {
     @WithAnonymousUser
     void username으로_유저_정보_받기() throws Exception {
         // when
-        ResultActions resultActions = mockMvc.perform(get("/api/v1/users/{name}", RESPONSE_DTO.getUsername())
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+        ResultActions resultActions = mockMvc.perform(
+                RestDocumentationRequestBuilders.get("/api/v1/users/{name}", RESPONSE_DTO.getUsername())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("user/showUserByName",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-//                        pathParameters(
-//                                parameterWithName("name").description("검색하고 싶은 유저의 이름")
-//                        ),
+                        pathParameters(
+                                parameterWithName("name").description("검색하고 싶은 유저의 이름")
+                        ),
                         responseFields(userResponseDtoDescriptors)
                 ));
 
