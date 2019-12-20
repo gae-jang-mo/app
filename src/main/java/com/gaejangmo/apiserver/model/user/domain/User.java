@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Optional;
 
 @Entity
@@ -102,10 +103,9 @@ public class User extends BaseTimeEntity {
     }
 
     public String getImageUrl() {
-        if (userImage == null) {
-            return imageUrl.value();
-        }
-        return userImage.getFileFeature().getUrl();
+        return Objects.isNull(userImage) ?
+                imageUrl.value()
+                : userImage.getFileFeature().getUrl();
     }
 
     public Optional<UserImage> getUserImage() {
