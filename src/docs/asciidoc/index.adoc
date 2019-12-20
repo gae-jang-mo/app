@@ -1,9 +1,21 @@
 = Gae Jang Mo Spring REST Docs
+gaejangmo.com
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
 
-This is an example output for a service running at http://localhost:8080:
+== 소개
 
-== Product
-=== save() API
+개발자 장비 모음 Spring Rest Docs API
+
+
+== Product API
+
+=== save()
+
 .request
 include::{snippets}/product/save/http-request.adoc[]
 
@@ -13,7 +25,7 @@ include::{snippets}/product/save/request-fields.adoc[]
 .response
 include::{snippets}/product/save/http-response.adoc[]
 
-=== findFromInternalResource() API
+=== findFromInternalResource()
 .request
 include::{snippets}/product/findFromInternalResource/http-request.adoc[]
 
@@ -26,8 +38,32 @@ include::{snippets}/product/findFromInternalResource/http-response.adoc[]
 .response fields
 include::{snippets}/product/findFromInternalResource/response-fields.adoc[]
 
-== User
-=== checkLogin() API
+== Notice API
+=== save()
+.request
+include::{snippets}/notice/save/http-request.adoc[]
+
+.request fields
+include::{snippets}/notice/save/request-fields.adoc[]
+
+.response
+include::{snippets}/notice/save/http-response.adoc[]
+
+=== find()
+.request
+include::{snippets}/notice/http-request.adoc[]
+
+.request path
+include::{snippets}/notice/path-parameters.adoc[]
+
+.response
+include::{snippets}/notice/http-response.adoc[]
+
+.response fields
+include::{snippets}/notice/response-fields.adoc[]
+
+== User API
+=== checkLogin()
 로그인 되어 있는지 확인
 
 .request
@@ -36,7 +72,7 @@ include::{snippets}/sign/checkLogin/http-request.adoc[]
 .response
 include::{snippets}/sign/checkLogin/http-response.adoc[]
 
-=== showUser() API
+=== showUser()
 로그인 되어 있는 유저 정보 반환
 
 .request

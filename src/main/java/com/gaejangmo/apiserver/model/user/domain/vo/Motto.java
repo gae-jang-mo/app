@@ -1,13 +1,14 @@
 package com.gaejangmo.apiserver.model.user.domain.vo;
 
 import com.gaejangmo.apiserver.model.user.exception.InvalidMottoException;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 
-
 @Getter
-@ToString
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Embeddable

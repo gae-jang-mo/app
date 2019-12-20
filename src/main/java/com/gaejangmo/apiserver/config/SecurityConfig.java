@@ -19,6 +19,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+        web.ignoring().antMatchers("/img/**");
     }
 
     @Override
@@ -28,6 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/*/users/products/**").permitAll()
                 .antMatchers("/api/*/login/state").permitAll()
                 .antMatchers("/api/*/products/**").permitAll()
+                .antMatchers("/api/*/notice/**").permitAll()
                 .antMatchers("/api/*/users/products/latest").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/*/users/{name}").permitAll()
                 .antMatchers("/api/*/users/products/**").hasRole("USER")
