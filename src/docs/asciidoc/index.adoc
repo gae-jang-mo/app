@@ -37,3 +37,27 @@ include::{snippets}/product/findFromInternalResource/http-response.adoc[]
 
 .response fields
 include::{snippets}/product/findFromInternalResource/response-fields.adoc[]
+
+== Notice
+=== save() API
+.request
+include::{snippets}/notice/save/http-request.adoc[]
+
+.request fields
+include::{snippets}/notice/save/request-fields.adoc[]
+
+.response
+include::{snippets}/notice/save/http-response.adoc[]
+
+=== find() API
+.request
+include::{snippets}/notice/http-request.adoc[]
+
+.request path
+include::{snippets}/notice/path-parameters.adoc[]
+
+.response
+include::{snippets}/notice/http-response.adoc[]
+
+.response fields
+include::{snippets}/notice/response-fields.adoc[]
