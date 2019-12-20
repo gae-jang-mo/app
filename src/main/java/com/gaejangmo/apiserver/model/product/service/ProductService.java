@@ -33,12 +33,12 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
-    public List<ManagedProductResponseDto> findFromInternal(final String productName) {
-        List<Product> products = productRepository.findByProductName(ProductName.of(productName));
-        if (products.isEmpty()) {
+    public ManagedProductResponseDto findFromInternal(final String productName) {
+        Product product = productRepository.findByProductName(ProductName.of(productName));
+        if (product == null) {
             throw new EntityNotFoundException("DB에 없는 장비입니다");
         }
-        return products.stream().map(this::toDto).collect(Collectors.toList());
+        return toDto(product);
     }
 
     public List<NaverProductResponseDto> findFromExternal(final String productName) {
@@ -69,7 +69,6 @@ public class ProductService {
                 .mallName(product.getMallName())
                 .productId(product.getProductId())
                 .naverProductType(product.getNaverProductType())
-                .productType(product.getProductType())
                 .build();
     }
 

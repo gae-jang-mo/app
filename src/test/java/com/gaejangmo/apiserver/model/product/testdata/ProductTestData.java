@@ -18,7 +18,6 @@ public class ProductTestData {
             .mallName("네이버")
             .productId(19805790169L)
             .naverProductType(NaverProductType.find(1).toString())
-            .productType(ProductType.find(1).toString())
             .build();
     public static final ProductRequestDto INVALID_LINK_REQUEST_DTO = ProductRequestDto.builder()
             .title("애플 맥북 프로 15형 2019년형 MV912KH/A")
@@ -29,7 +28,6 @@ public class ProductTestData {
             .mallName("네이버")
             .productId(19805790169L)
             .naverProductType(NaverProductType.find(1).toString())
-            .productType(ProductType.find(1).toString())
             .build();
     public static final ProductRequestDto INVALID_PRICE_REQUEST_DTO = ProductRequestDto.builder()
             .title("애플 맥북 프로 15형 2019년형 MV912KH/A")
@@ -40,7 +38,6 @@ public class ProductTestData {
             .mallName("네이버")
             .productId(19805790169L)
             .naverProductType(NaverProductType.find(1).toString())
-            .productType(ProductType.find(1).toString())
             .build();
     public static final ProductRequestDto INVALID_PRODUCT_TYPE_REQUEST_DTO = ProductRequestDto.builder()
             .title("애플 맥북 프로 15형 2019년형 MV912KH/A")
@@ -51,7 +48,6 @@ public class ProductTestData {
             .mallName("네이버")
             .productId(19805790169L)
             .naverProductType("wrong params")
-            .productType(ProductType.find(1).toString())
             .build();
     public static final NaverProductResponseDto NAVER_PRODUCT_RESPONSE_DTO = NaverProductResponseDto.builder()
             .productName("애플 맥북 프로 15형 2019년형 MV912KH/A")
@@ -74,7 +70,6 @@ public class ProductTestData {
             .mallName("네이버")
             .productId(19805790169L)
             .naverProductType(NaverProductType.find(1))
-            .productType(ProductType.find(1))
             .build();
 
     public static final Product ENTITY = Product.builder()

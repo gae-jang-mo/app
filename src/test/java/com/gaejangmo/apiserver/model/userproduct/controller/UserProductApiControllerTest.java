@@ -2,10 +2,10 @@ package com.gaejangmo.apiserver.model.userproduct.controller;
 
 import com.gaejangmo.apiserver.model.MockMvcTest;
 import com.gaejangmo.apiserver.model.common.support.WithMockCustomUser;
+import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import com.gaejangmo.apiserver.model.userproduct.service.UserProductService;
-import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
-import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
+import com.gaejangmo.apiserver.model.userproduct.service.dto.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,38 +23,64 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserProductApiControllerTest extends MockMvcTest {
     private static final String USER_PRODUCT_URI = getApiUrl(UserProductApiController.class);
     private static final long USER_ID = 1L;
-    private static final long PRODUCT_ID = 10L;
 
     @MockBean
     private UserProductService userProductService;
 
-    private UserProductCreateDto userProductCreateDto;
     private UserProductResponseDto userProductResponseDto;
+
+    private UserProductInternalRequestDto userProductInternalRequestDto;
+    private UserProductExternalRequestDto userProductExternalRequestDto;
 
     @BeforeEach
     void setUp() {
-        userProductCreateDto = UserProductCreateDto.builder()
-                .productId(PRODUCT_ID)
-                .productType(ProductType.KEY_BOARD)
-                .comment("인생 마우스")
-                .build();
-
         userProductResponseDto = UserProductResponseDto.builder()
                 .id(1L)
-                .comment("userProductResponseDto comment")
+                .comment("넘 좋앙")
+                .build();
+
+        userProductInternalRequestDto = UserProductInternalRequestDto.builder()
+                .productId(1L)
+                .productType(ProductType.MAIN_DEVICE)
+                .comment("넘 좋앙")
+                .build();
+
+        userProductExternalRequestDto = UserProductExternalRequestDto.builder()
+                .productRequestDto(ProductTestData.REQUEST_DTO)
+                .productType(ProductType.MAIN_DEVICE)
+                .comment("넘 좋앙")
                 .build();
     }
 
     @Test
     @WithMockCustomUser
-    void 장비_등록() throws Exception {
-        when(userProductService.save(userProductCreateDto, USER_ID)).thenReturn(userProductResponseDto);
+    void 내부_장비_UserProduct_등록() throws Exception {
+        when(userProductService.saveFromInternal(userProductInternalRequestDto, USER_ID)).thenReturn(userProductResponseDto);
 
         // when
-        ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI)
+        ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI + "/internal")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(OBJECT_MAPPER.writeValueAsString(userProductCreateDto)))
+                .content(OBJECT_MAPPER.writeValueAsString(userProductInternalRequestDto)))
+                .andDo(print());
+
+        // then
+        resultActions.andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("id").value(userProductResponseDto.getId()))
+                .andExpect(jsonPath("comment").value(userProductResponseDto.getComment()));
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 외부_장비_UserProduct_등록() throws Exception {
+        when(userProductService.saveFromExternal(userProductExternalRequestDto, USER_ID)).thenReturn(userProductResponseDto);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI + "/external")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(OBJECT_MAPPER.writeValueAsString(userProductExternalRequestDto)))
                 .andDo(print());
 
         // then
@@ -68,10 +94,10 @@ class UserProductApiControllerTest extends MockMvcTest {
     @WithAnonymousUser
     void 비로그인_장비_등록시도_Unauthorized() throws Exception {
         // when
-        ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI)
+        ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI + "/internal")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(OBJECT_MAPPER.writeValueAsString(userProductCreateDto)))
+                .content(OBJECT_MAPPER.writeValueAsString(userProductInternalRequestDto)))
                 .andDo(print());
 
         // then

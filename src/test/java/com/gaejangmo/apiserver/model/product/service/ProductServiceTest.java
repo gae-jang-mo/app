@@ -29,11 +29,11 @@ class ProductServiceTest {
 
     @Test
     void 상품_조회() {
-        given(productRepository.findByProductName(ProductName.of(PRODUCT_NAME))).willReturn(Collections.singletonList(ProductTestData.ENTITY));
+        given(productRepository.findByProductName(ProductName.of(PRODUCT_NAME))).willReturn(ProductTestData.ENTITY);
 
-        List<ManagedProductResponseDto> result = productService.findFromInternal(PRODUCT_NAME);
+        ManagedProductResponseDto result = productService.findFromInternal(PRODUCT_NAME);
 
-        assertThat(result.get(0)).isEqualTo(ProductTestData.MANAGED_PRODUCT_RESPONSE_DTO);
+        assertThat(result).isEqualTo(ProductTestData.MANAGED_PRODUCT_RESPONSE_DTO);
     }
 
     @Test
