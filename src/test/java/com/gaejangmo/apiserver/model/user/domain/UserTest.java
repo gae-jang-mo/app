@@ -1,10 +1,14 @@
 package com.gaejangmo.apiserver.model.user.domain;
 
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
+import com.gaejangmo.apiserver.model.image.domain.vo.FileFeature;
+import com.gaejangmo.apiserver.model.image.domain.vo.ImageType;
+import com.gaejangmo.apiserver.model.image.user.domain.UserImage;
 import com.gaejangmo.apiserver.model.user.domain.vo.Email;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
 import com.gaejangmo.apiserver.model.user.domain.vo.Role;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -42,5 +46,38 @@ class UserTest {
 
         assertThat(user.matchId(id)).isTrue();
         assertThat(user.matchId(2L)).isFalse();
+    }
+
+    @Test
+    @DisplayName("getImageUrl() 했을 때 UserImage가 null이면 imageUrl을 반환해야 한다.")
+    void getImageUrl01() {
+        user.updateUserImage(null);
+        String imageUrl = user.getImageUrl();
+
+        assertThat(imageUrl).isNotNull();
+    }
+
+    @Test
+    @DisplayName("getImageUrl() 했을 때 UserImage가 null이 아니면 UserImage를 반환해야 한다.")
+    void getImageUrl02() {
+        // given
+        UserImage userImage = UserImage.builder()
+                .fileFeature(
+                        FileFeature.builder().url("url")
+                                .savedName("savedName")
+                                .originalName("originalName")
+                                .size(11)
+                                .imageType(ImageType.of("jpg"))
+                                .build())
+                .build();
+
+        String expected = userImage.getFileFeature().getUrl();
+
+        // when
+        user.updateUserImage(userImage);
+        String actual = user.getImageUrl();
+
+        // then
+        assertThat(actual).isEqualTo(expected);
     }
 }

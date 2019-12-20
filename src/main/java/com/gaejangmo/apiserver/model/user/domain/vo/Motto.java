@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Embeddable;
 
 @Getter
-@Embeddable
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Embeddable
 public class Motto {
     private static final int MAX_LENGTH = 10;
 

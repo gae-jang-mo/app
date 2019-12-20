@@ -22,13 +22,13 @@ public class UserApiController {
     }
 
     @GetMapping("/logined")
-    public ResponseEntity<UserResponseDto> find(@LoginUser SecurityUser user) {
+    public ResponseEntity<UserResponseDto> showUser(@LoginUser SecurityUser user) {
         UserResponseDto response = userService.findUserResponseDtoByOauthId(user.getOauthId());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<UserResponseDto> showUser(@PathVariable final String name) {
+    public ResponseEntity<UserResponseDto> showUserByName(@PathVariable final String name) {
         UserResponseDto response = userService.findUserResponseDtoByName(name);
         return ResponseEntity.ok().body(response);
     }
@@ -41,10 +41,9 @@ public class UserApiController {
     }
 
     @PostMapping("/image")
-    public ResponseEntity<FileResponseDto> updateUserImage(@RequestParam("file") final MultipartFile multipartFile,
+    public ResponseEntity<FileResponseDto> updateUserImage(@RequestParam final MultipartFile file,
                                                            @LoginUser final SecurityUser securityUser) {
-
-        FileResponseDto fileResponseDto = userService.updateUserImage(multipartFile, securityUser.getId());
+        FileResponseDto fileResponseDto = userService.updateUserImage(file, securityUser.getId());
         return ResponseEntity.ok(fileResponseDto);
     }
 }
