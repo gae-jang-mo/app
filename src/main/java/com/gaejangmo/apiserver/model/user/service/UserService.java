@@ -3,6 +3,8 @@ package com.gaejangmo.apiserver.model.user.service;
 import com.gaejangmo.apiserver.model.image.domain.user.service.UserImageService;
 import com.gaejangmo.apiserver.model.image.dto.FileResponseDto;
 import com.gaejangmo.apiserver.model.image.user.domain.UserImage;
+import com.gaejangmo.apiserver.model.like.domain.Likes;
+import com.gaejangmo.apiserver.model.like.service.LikeService;
 import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.domain.UserRepository;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
@@ -12,8 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -21,10 +25,12 @@ public class UserService {
     private static final String USER_NOT_FOUND_MESSAGE = "해당하는 유저가 없습니다.";
     private final UserRepository userRepository;
     private final UserImageService userImageService;
+    private final LikeService likeService;
 
-    public UserService(final UserRepository userRepository, final UserImageService userImageService) {
+    public UserService(final UserRepository userRepository, final UserImageService userImageService, final LikeService likeService) {
         this.userRepository = userRepository;
         this.userImageService = userImageService;
+        this.likeService = likeService;
     }
 
     @Transactional(readOnly = true)
@@ -74,6 +80,14 @@ public class UserService {
                 .id(savedUserImage.getId())
                 .fileFeature(savedUserImage.getFileFeature())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserResponseDto> findUserResponseDtoBySourceId(final Long sourceId) {
+        return likeService.findAllBySource(sourceId).stream()
+                .map(Likes::getTarget)
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 
     private UserResponseDto toDto(final User user) {

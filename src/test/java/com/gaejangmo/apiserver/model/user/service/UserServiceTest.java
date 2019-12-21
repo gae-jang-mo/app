@@ -1,5 +1,7 @@
 package com.gaejangmo.apiserver.model.user.service;
 
+import com.gaejangmo.apiserver.model.like.domain.Likes;
+import com.gaejangmo.apiserver.model.like.service.LikeService;
 import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.domain.UserRepository;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
@@ -11,14 +13,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 class UserServiceTest {
@@ -28,6 +30,8 @@ class UserServiceTest {
     private UserService userService;
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private LikeService likeService;
 
     @Test
     void OauthId_유저_조회() {
@@ -60,5 +64,23 @@ class UserServiceTest {
         //then
         assertThat(actual.getMotto()).isEqualTo(updatedMotto.value());
         verify(userRepository,times(1)).findById(USER_ID);
+    }
+
+    @Test
+    void 내가_좋아요를_누른_사람들을_조회() {
+        // given
+        Likes like = Likes.builder()
+                .source(mock(User.class))
+                .target(UserTestData.ENTITY)
+                .build();
+
+        given(likeService.findAllBySource(anyLong())).willReturn(List.of(like));
+
+        // when
+        List<UserResponseDto> actual = userService.findUserResponseDtoBySourceId(1L);
+
+        // then
+        assertThat(actual).isEqualTo(List.of(UserTestData.RESPONSE_DTO));
+        verify(likeService, times(1)).findAllBySource(1L);
     }
 }
