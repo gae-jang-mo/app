@@ -29,14 +29,28 @@ include::{snippets}/product/findFromInternalResource/response-fields.adoc[]
 == UserProduct
 === create() API
 .request
-include::{snippets}/users/products/create/http-request.adoc[]
+include::{snippets}/userproduct/create/http-request.adoc[]
 
 .request fields
-include::{snippets}/users/products/create/request-fields.adoc[]
+include::{snippets}/userproduct/create/request-fields.adoc[]
 
 .response
-include::{snippets}/users/products/create/http-response.adoc[]
+include::{snippets}/userproduct/create/http-response.adoc[]
 
 .response fields
-include::{snippets}/users/products/create/response-fields.adoc[]
+include::{snippets}/userproduct/create/response-fields.adoc[]
+
+=== list() API
+
+.request
+include::{snippets}/userproduct/list/http-request.adoc[]
+
+.request fields
+include::{snippets}/userproduct/list/request-fields.adoc[]
+
+.response
+include::{snippets}/userproduct/list/http-response.adoc[]
+
+.response fields
+include::{snippets}/userproduct/list/response-fields.adoc[]
 
