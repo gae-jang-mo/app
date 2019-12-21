@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface LikeRepository extends JpaRepository<Likes, Long> {
     List<Likes> findAllBySource(final User source);
+
+    void deleteBySourceAndTarget(final User source, final User target);
 }

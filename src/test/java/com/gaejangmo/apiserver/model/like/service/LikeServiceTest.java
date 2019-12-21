@@ -62,4 +62,16 @@ class LikeServiceTest {
         verify(userService, times(1)).findById(SOURCE_ID);
         verify(likeRepository, times(1)).findAllBySource(any());
     }
+
+    @Test
+    void 좋아요_취소() {
+        // given
+        given(userService.findById(anyLong())).willReturn(mock(User.class));
+        doNothing().when(likeRepository).deleteBySourceAndTarget(any(), any());
+
+        // when & then
+        assertDoesNotThrow(() -> likeService.deleteBySourceAndTarget(SOURCE_ID, TARGET_ID));
+        verify(userService, times(2)).findById(anyLong());
+        verify(likeRepository, times(1)).deleteBySourceAndTarget(any(), any());
+    }
 }
