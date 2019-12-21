@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -35,12 +36,23 @@ public class LikeService {
     @Transactional(readOnly = true)
     public List<Likes> findAllBySource(final Long sourceId) {
         User source = userService.findById(sourceId);
+
         return likeRepository.findAllBySource(source);
     }
 
     public void deleteBySourceAndTarget(final Long sourceId, final Long targetId) {
         User source = userService.findById(sourceId);
         User target = userService.findById(targetId);
+
         likeRepository.deleteBySourceAndTarget(source, target);
+    }
+
+    public boolean isLiked(final Long sourceId, final Long targetId) {
+        User source = userService.findById(sourceId);
+        User target = userService.findById(targetId);
+
+        Optional<Likes> like = likeRepository.findBySourceAndTarget(source, target);
+
+        return like.isPresent();
     }
 }

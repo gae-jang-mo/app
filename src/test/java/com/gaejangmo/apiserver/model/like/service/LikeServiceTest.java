@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -73,5 +74,25 @@ class LikeServiceTest {
         assertDoesNotThrow(() -> likeService.deleteBySourceAndTarget(SOURCE_ID, TARGET_ID));
         verify(userService, times(2)).findById(anyLong());
         verify(likeRepository, times(1)).deleteBySourceAndTarget(any(), any());
+    }
+
+    @Test
+    void 좋아요_눌렀을_때_true_반환_확인() {
+        // given
+        given(userService.findById(anyLong())).willReturn(mock(User.class));
+        given(likeRepository.findBySourceAndTarget(any(), any())).willReturn(Optional.of(mock(Likes.class)));
+
+        // when & then
+        assertThat(likeService.isLiked(SOURCE_ID, TARGET_ID)).isTrue();
+    }
+
+    @Test
+    void 좋아요_눌르지_않았을_때_false_반환_확인() {
+        // given
+        given(userService.findById(anyLong())).willReturn(mock(User.class));
+        given(likeRepository.findBySourceAndTarget(any(), any())).willReturn(Optional.empty());
+
+        // when & then
+        assertThat(likeService.isLiked(SOURCE_ID, TARGET_ID)).isFalse();
     }
 }
