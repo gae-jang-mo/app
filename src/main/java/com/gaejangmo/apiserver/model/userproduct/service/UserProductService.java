@@ -1,5 +1,7 @@
 package com.gaejangmo.apiserver.model.userproduct.service;
 
+import com.gaejangmo.apiserver.config.oauth.SecurityUser;
+import com.gaejangmo.apiserver.model.like.service.LikeService;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.product.service.ProductService;
 import com.gaejangmo.apiserver.model.user.domain.User;
@@ -28,11 +30,13 @@ public class UserProductService {
     private final ProductService productService;
     private final UserService userService;
     private final UserProductRepository userProductRepository;
+    private final LikeService likeService;
 
-    public UserProductService(final ProductService productService, final UserService userService, final UserProductRepository userProductRepository) {
+    public UserProductService(final ProductService productService, final UserService userService, final UserProductRepository userProductRepository, final LikeService likeService) {
         this.productService = productService;
         this.userService = userService;
         this.userProductRepository = userProductRepository;
+        this.likeService = likeService;
     }
 
     public UserProductResponseDto save(final UserProductCreateDto userProductCreateDto, final Long userId) {
@@ -80,6 +84,27 @@ public class UserProductService {
     public List<UserProductLatestResponseDto> findAllByPageable(final Pageable pageable) {
         return userProductRepository.findAll(pageable)
                 .map(this::toLatestDto).toList();
+    }
+
+    public List<UserProductLatestResponseDto> findAllByPageable(final Pageable pageable, final SecurityUser loginUser) {
+        return userProductRepository.findAll(pageable)
+                .map(userProduct -> toLatestDto(userProduct,
+                        likeService.isLiked(loginUser, userProduct.getUser().getId())))
+                .toList();
+    }
+
+    private UserProductLatestResponseDto toLatestDto(final UserProduct userProduct, final boolean isLiked) {
+        return UserProductLatestResponseDto.builder()
+                .id(userProduct.getId())
+                .productType(userProduct.getProductType())
+                .productImageUrl(userProduct.getProduct().getImageUrl())
+                .productName(userProduct.getProduct().getProductName())
+                .userImageUrl(userProduct.getUser().getImageUrl())
+                .username(userProduct.getUser().getUsername())
+                .motto(userProduct.getUser().getMotto())
+                .isLiked(isLiked)
+                .createdAt(userProduct.getCreatedAt())
+                .build();
     }
 
     private UserProductLatestResponseDto toLatestDto(final UserProduct userProduct) {

@@ -1,6 +1,8 @@
 package com.gaejangmo.apiserver.model.userproduct.service;
 
+import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
+import com.gaejangmo.apiserver.model.like.service.LikeService;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.product.service.ProductService;
 import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
@@ -14,6 +16,7 @@ import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductLatestResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.exception.NotUserProductOwnerException;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,6 +41,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+@Slf4j
 @ExtendWith(MockitoExtension.class)
 class UserProductServiceTest {
     private static final long USER_PRODUCT_ID = 15L;
@@ -52,6 +56,8 @@ class UserProductServiceTest {
     private UserProductRepository userProductRepository;
     @Mock
     private UserService userService;
+    @Mock
+    private LikeService likeService;
 
     private UserProduct userProduct;
     private UserProduct mockUserProduct;
@@ -192,9 +198,11 @@ class UserProductServiceTest {
                 .collect(Collectors.toList()));
 
         when(userProductRepository.findAll(pageable)).thenReturn(pagedUserProducts);
+        when(likeService.isLiked(any(), anyLong())).thenReturn(true);
 
         // when
-        List<UserProductLatestResponseDto> results = userProductService.findAllByPageable(pageable);
+        List<UserProductLatestResponseDto> results =
+                userProductService.findAllByPageable(pageable, SecurityUser.builder().id(1L).build());
 
         // then
         assertThat(results)
@@ -203,7 +211,8 @@ class UserProductServiceTest {
                         new UserProductLatestResponseDto((long) size,
                                 ProductType.MOUSE, ProductTestData.ENTITY.getImageUrl(), ProductTestData.ENTITY.getProductName(),
                                 UserTestData.ENTITY.getImageUrl(), UserTestData.ENTITY.getUsername(), UserTestData.ENTITY.getMotto(),
-                                null));
+                                true, null));
+        verify(likeService, times(size)).isLiked(any(), anyLong());
     }
 
     private UserProduct createUserProduct(final long id) {
