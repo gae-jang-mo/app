@@ -81,11 +81,6 @@ public class UserProductService {
         throw new NotUserProductOwnerException();
     }
 
-    public List<UserProductLatestResponseDto> findAllByPageable(final Pageable pageable) {
-        return userProductRepository.findAll(pageable)
-                .map(this::toLatestDto).toList();
-    }
-
     public List<UserProductLatestResponseDto> findAllByPageable(final Pageable pageable, final SecurityUser loginUser) {
         return userProductRepository.findAll(pageable)
                 .map(userProduct -> toLatestDto(userProduct,
@@ -103,19 +98,6 @@ public class UserProductService {
                 .username(userProduct.getUser().getUsername())
                 .motto(userProduct.getUser().getMotto())
                 .isLiked(isLiked)
-                .createdAt(userProduct.getCreatedAt())
-                .build();
-    }
-
-    private UserProductLatestResponseDto toLatestDto(final UserProduct userProduct) {
-        return UserProductLatestResponseDto.builder()
-                .id(userProduct.getId())
-                .productType(userProduct.getProductType())
-                .productImageUrl(userProduct.getProduct().getImageUrl())
-                .productName(userProduct.getProduct().getProductName())
-                .userImageUrl(userProduct.getUser().getImageUrl())
-                .username(userProduct.getUser().getUsername())
-                .motto(userProduct.getUser().getMotto())
                 .createdAt(userProduct.getCreatedAt())
                 .build();
     }
