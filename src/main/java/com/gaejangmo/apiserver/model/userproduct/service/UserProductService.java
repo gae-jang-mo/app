@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class UserProductService {
-
     private final ProductService productService;
     private final UserService userService;
     private final UserProductRepository userProductRepository;
@@ -38,22 +37,30 @@ public class UserProductService {
     }
 
     public UserProductResponseDto saveFromInternal(final UserProductInternalRequestDto requestDto, final Long userId) {
+        return save(requestDto.getUserProductRequestDto(), userId, requestDto.getProductId());
+    }
+
+    public UserProductResponseDto saveFromExternal(final UserProductExternalRequestDto requestDto, final Long userId) {
+        ManagedProductResponseDto managedProductResponseDto = productService.save(requestDto.getProductRequestDto());
+        return save(requestDto.getUserProductRequestDto(), userId, managedProductResponseDto.getId());
+    }
+
+    private UserProductResponseDto save(final UserProductRequestDto requestDto, final Long userId, final Long productId) {
         User user = userService.findById(userId);
-        Product product = productService.findById(requestDto.getProductId());
-        UserProduct userProduct = toEntityFromInternal(requestDto, product, user);
+        Product product = productService.findById(productId);
+        UserProduct userProduct = toEntity(requestDto, product, user);
         UserProduct saved = userProductRepository.save(userProduct);
 
         return toDto(saved);
     }
 
-    public UserProductResponseDto saveFromExternal(final UserProductExternalRequestDto requestDto, final Long userId) {
-        User user = userService.findById(userId);
-        ManagedProductResponseDto managedProductResponseDto = productService.save(requestDto.getProductRequestDto());
-        Product product = productService.findById(managedProductResponseDto.getId());
-        UserProduct userProduct = toEntityFromExternal(requestDto, product, user);
-        UserProduct saved = userProductRepository.save(userProduct);
-
-        return toDto(saved);
+    private UserProduct toEntity(final UserProductRequestDto requestDto, final Product product, final User user) {
+        return UserProduct.builder()
+                .product(product)
+                .user(user)
+                .comment(Comment.of(requestDto.getComment()))
+                .productType(requestDto.getProductType())
+                .build();
     }
 
     @Transactional(readOnly = true)
@@ -122,8 +129,8 @@ public class UserProductService {
         return UserProduct.builder()
                 .user(user)
                 .product(product)
-                .productType(requestDto.getProductType())
-                .comment(Comment.of(requestDto.getComment()))
+                .productType(requestDto.getUserProductRequestDto().getProductType())
+                .comment(Comment.of(requestDto.getUserProductRequestDto().getComment()))
                 .build();
     }
 
@@ -131,8 +138,8 @@ public class UserProductService {
         return UserProduct.builder()
                 .user(user)
                 .product(product)
-                .productType(requestDto.getProductType())
-                .comment(Comment.of(requestDto.getComment()))
+                .productType(requestDto.getUserProductRequestDto().getProductType())
+                .comment(Comment.of(requestDto.getUserProductRequestDto().getComment()))
                 .build();
     }
 }

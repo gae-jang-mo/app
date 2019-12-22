@@ -1,7 +1,6 @@
 package com.gaejangmo.apiserver.model.userproduct.service.dto;
 
 import com.gaejangmo.apiserver.model.product.dto.ProductRequestDto;
-import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import lombok.*;
 
 @Getter
@@ -9,14 +8,12 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class UserProductExternalRequestDto {
+    private UserProductRequestDto userProductRequestDto;
     private ProductRequestDto productRequestDto;
-    private ProductType productType;
-    private String comment;
 
     @Builder
-    public UserProductExternalRequestDto(final ProductRequestDto productRequestDto, final ProductType productType, final String comment) {
+    public UserProductExternalRequestDto(final UserProductRequestDto userProductRequestDto, final ProductRequestDto productRequestDto) {
+        this.userProductRequestDto = userProductRequestDto;
         this.productRequestDto = productRequestDto;
-        this.productType = productType;
-        this.comment = comment;
     }
 }
