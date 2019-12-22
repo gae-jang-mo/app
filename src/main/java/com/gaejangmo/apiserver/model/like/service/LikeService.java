@@ -49,6 +49,7 @@ public class LikeService {
         likeRepository.deleteBySourceAndTarget(source, target);
     }
 
+    @Transactional(readOnly = true)
     public boolean isLiked(final SecurityUser loginUser, final Long targetId) {
         if (Objects.isNull(loginUser)) {
             return false;
