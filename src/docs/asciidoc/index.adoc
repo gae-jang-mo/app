@@ -54,6 +54,20 @@ include::{snippets}/userproduct/list/http-response.adoc[]
 .response fields
 include::{snippets}/userproduct/list/response-fields.adoc[]
 
+=== latest() API
+
+.request
+include::{snippets}/userproduct/latest/http-request.adoc[]
+
+.request fields
+include::{snippets}/userproduct/latest/request-fields.adoc[]
+
+.response
+include::{snippets}/userproduct/latest/http-response.adoc[]
+
+.response fields
+include::{snippets}/userproduct/latest/response-fields.adoc[]
+
 === delete() API
 
 .request
