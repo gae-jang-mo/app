@@ -133,4 +133,18 @@ class UserProductApiControllerTest2 extends MockMvcTest {
                 .imageUrl("https://shopping-phinf.pstatic.net/main_2051460/20514607838.20190806111610.jpg")
                 .build();
     }
+
+    @Test
+    @WithMockCustomUser
+    void 장비_삭제() throws Exception {
+        mockMvc.perform(
+                RestDocumentationRequestBuilders.delete(USER_PRODUCT_URI + "/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("userproduct/delete",
+                        pathParameters(parameterWithName("id").description("삭제할 유저 장비의 식별자")))
+                )
+                .andExpect(status().isNoContent());
+    }
 }

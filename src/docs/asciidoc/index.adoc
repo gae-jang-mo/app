@@ -45,8 +45,8 @@ include::{snippets}/userproduct/create/response-fields.adoc[]
 .request
 include::{snippets}/userproduct/list/http-request.adoc[]
 
-.request fields
-include::{snippets}/userproduct/list/request-fields.adoc[]
+.path parameters
+include::{snippets}/userproduct/list/path-parameters.adoc[]
 
 .response
 include::{snippets}/userproduct/list/http-response.adoc[]
@@ -54,3 +54,13 @@ include::{snippets}/userproduct/list/http-response.adoc[]
 .response fields
 include::{snippets}/userproduct/list/response-fields.adoc[]
 
+=== delete() API
+
+.request
+include::{snippets}/userproduct/delete/http-request.adoc[]
+
+.path parameters
+include::{snippets}/userproduct/delete/path-parameters.adoc[]
+
+.response
+include::{snippets}/userproduct/delete/http-response.adoc[]
