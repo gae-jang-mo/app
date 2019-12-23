@@ -5,6 +5,7 @@ import lombok.*;
 @Getter
 @ToString
 @EqualsAndHashCode
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserSearchDto {
     private Long id;
     private String imageUrl;
