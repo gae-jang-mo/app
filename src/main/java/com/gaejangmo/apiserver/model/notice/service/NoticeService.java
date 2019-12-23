@@ -5,9 +5,11 @@ import com.gaejangmo.apiserver.model.notice.domain.NoticeRepository;
 import com.gaejangmo.apiserver.model.notice.domain.NoticeType;
 import com.gaejangmo.apiserver.model.notice.dto.NoticeRequestDto;
 import com.gaejangmo.apiserver.model.notice.dto.NoticeResponseDto;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 public class NoticeService {
@@ -27,6 +29,12 @@ public class NoticeService {
         return toDto(notice);
     }
 
+    public List<NoticeResponseDto> findAll(final Pageable pageable) {
+        return noticeRepository.findAll(pageable)
+                .map(this::toDto)
+                .toList();
+    }
+
     private NoticeResponseDto toDto(final Notice notice) {
         return NoticeResponseDto.builder()
                 .id(notice.getId())
@@ -42,5 +50,6 @@ public class NoticeService {
                 .header(noticeRequestDto.getHeader())
                 .contents(noticeRequestDto.getContents())
                 .build();
+
     }
 }
