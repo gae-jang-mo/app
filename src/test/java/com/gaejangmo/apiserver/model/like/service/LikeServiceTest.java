@@ -4,7 +4,7 @@ import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import com.gaejangmo.apiserver.model.like.domain.LikeRepository;
 import com.gaejangmo.apiserver.model.like.domain.Likes;
 import com.gaejangmo.apiserver.model.user.domain.User;
-import com.gaejangmo.apiserver.model.user.service.UserService;
+import com.gaejangmo.apiserver.model.user.domain.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,14 +33,14 @@ class LikeServiceTest {
     private LikeRepository likeRepository;
 
     @Mock
-    private UserService userService;
+    private UserRepository userRepository;
 
     private SecurityUser loginUser = null;
 
     @Test
     void 좋아요_저장() {
         // given
-        given(userService.findById(anyLong())).willReturn(mock(User.class));
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(mock(User.class)));
         given(likeRepository.save(any())).willReturn(mock(Likes.class));
 
         // when & then
@@ -55,7 +55,7 @@ class LikeServiceTest {
                 .target(mock(User.class))
                 .build();
 
-        given(userService.findById(SOURCE_ID)).willReturn(mock(User.class));
+        given(userRepository.findById(SOURCE_ID)).willReturn(Optional.of(mock(User.class)));
         given(likeRepository.findAllBySource(any())).willReturn(List.of(like));
 
         // when
@@ -63,19 +63,19 @@ class LikeServiceTest {
 
         // then
         assertThat(likes).isEqualTo(List.of(like));
-        verify(userService, times(1)).findById(SOURCE_ID);
+        verify(userRepository, times(1)).findById(SOURCE_ID);
         verify(likeRepository, times(1)).findAllBySource(any());
     }
 
     @Test
     void 좋아요_취소() {
         // given
-        given(userService.findById(anyLong())).willReturn(mock(User.class));
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(mock(User.class)));
         doNothing().when(likeRepository).deleteBySourceAndTarget(any(), any());
 
         // when & then
         assertDoesNotThrow(() -> likeService.deleteBySourceAndTarget(SOURCE_ID, TARGET_ID));
-        verify(userService, times(2)).findById(anyLong());
+        verify(userRepository, times(2)).findById(anyLong());
         verify(likeRepository, times(1)).deleteBySourceAndTarget(any(), any());
     }
 
@@ -84,7 +84,7 @@ class LikeServiceTest {
         // given
         loginUser = SecurityUser.builder().id(SOURCE_ID).build();
 
-        given(userService.findById(anyLong())).willReturn(mock(User.class));
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(mock(User.class)));
         given(likeRepository.findBySourceAndTarget(any(), any())).willReturn(Optional.of(mock(Likes.class)));
 
         // when & then
@@ -96,7 +96,7 @@ class LikeServiceTest {
         // given
         loginUser = SecurityUser.builder().id(SOURCE_ID).build();
 
-        given(userService.findById(anyLong())).willReturn(mock(User.class));
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(mock(User.class)));
         given(likeRepository.findBySourceAndTarget(any(), any())).willReturn(Optional.empty());
 
         // when & then
