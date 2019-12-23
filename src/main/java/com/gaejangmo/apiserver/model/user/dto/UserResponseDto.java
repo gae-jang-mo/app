@@ -1,11 +1,13 @@
 package com.gaejangmo.apiserver.model.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 @Getter
 @ToString
 @NoArgsConstructor
 @EqualsAndHashCode
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserResponseDto {
     private Long id;
     private Long oauthId;
@@ -14,9 +16,11 @@ public class UserResponseDto {
     private String motto;
     private String imageUrl;
     private String introduce;
+    private Boolean isLiked;
 
     @Builder
-    public UserResponseDto(final Long id, final Long oauthId, final String username, final String email, final String motto, final String imageUrl, final String introduce) {
+    public UserResponseDto(final Long id, final Long oauthId, final String username, final String email,
+                           final String motto, final String imageUrl, final String introduce, final Boolean isLiked) {
         this.id = id;
         this.oauthId = oauthId;
         this.username = username;
@@ -24,6 +28,7 @@ public class UserResponseDto {
         this.motto = motto;
         this.imageUrl = imageUrl;
         this.introduce = introduce;
+        this.isLiked = isLiked;
     }
 }
 
