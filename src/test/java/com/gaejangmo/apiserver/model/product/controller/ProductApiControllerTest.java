@@ -13,6 +13,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
+import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getDocumentRequest;
+import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getDocumentResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -70,6 +72,8 @@ class ProductApiControllerTest extends MockMvcTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andDo(document("product/save",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("제품 이름"),
                                 fieldWithPath("link").type(JsonFieldType.STRING).description("제품 판매 경로"),
@@ -88,6 +92,8 @@ class ProductApiControllerTest extends MockMvcTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("product/findFromInternalResource",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestParameters(
                                 parameterWithName("productName").description("제품 이름")
                         ),

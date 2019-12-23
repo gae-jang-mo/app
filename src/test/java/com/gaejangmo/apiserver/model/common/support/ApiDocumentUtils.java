@@ -13,7 +13,7 @@ public class ApiDocumentUtils {
         return preprocessRequest(
                 modifyUris()
                         .scheme("https")
-                        .host("docs.api.com")
+                        .host("gaejangmo.com")
                         .removePort(),
                 prettyPrint());
     }
