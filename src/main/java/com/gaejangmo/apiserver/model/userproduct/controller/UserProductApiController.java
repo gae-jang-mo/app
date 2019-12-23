@@ -24,7 +24,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @EnableLog
 @RestController
-@RequestMapping("/api/v1/users/products")
+@RequestMapping("/api/v1/users")
 public class UserProductApiController {
     private final UserProductService userProductService;
 
@@ -33,7 +33,7 @@ public class UserProductApiController {
     }
 
     @EnableLog
-    @PostMapping
+    @PostMapping("/products")
     public ResponseEntity<UserProductResponseDto> create(@RequestBody final UserProductCreateDto userProductCreateDto,
                                                          @LoginUser final SecurityUser securityUser) {
         Long userId = securityUser.getId();
@@ -42,20 +42,20 @@ public class UserProductApiController {
         return ResponseEntity.created(uri).body(responseDto);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/{userId}/products")
     public ResponseEntity<List<UserProductResponseDto>> list(@PathVariable final Long userId) {
         List<UserProductResponseDto> responseDtos = userProductService.findByUserId(userId);
         return ResponseEntity.ok(responseDtos);
     }
 
-    @GetMapping("/latest")
+    @GetMapping("/products/latest")
     public ResponseEntity<List<UserProductLatestResponseDto>> latest(
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC) final Pageable pageable) {
         List<UserProductLatestResponseDto> responseDtos = userProductService.findAllByPageable(pageable);
         return ResponseEntity.ok(responseDtos);
     }
 
-    @PutMapping("/{id}/comment")
+    @PutMapping("/products/{id}/comment")
     public ResponseEntity<UserProductResponseDto> updateComment(@PathVariable final Long id,
                                                                 @RequestBody final String comment,
                                                                 @LoginUser final SecurityUser securityUser) {
@@ -64,7 +64,7 @@ public class UserProductApiController {
         return ResponseEntity.ok(responseDto);
     }
 
-    @PutMapping("/{id}/product-type")
+    @PutMapping("/products/{id}/product-type")
     public ResponseEntity<UserProductResponseDto> updateProductType(@PathVariable final Long id,
                                                                     @RequestBody final String productType,
                                                                     @LoginUser final SecurityUser securityUser) {
@@ -73,7 +73,7 @@ public class UserProductApiController {
         return ResponseEntity.ok(responseDto);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/products/{id}")
     public ResponseEntity delete(@PathVariable final Long id,
                                  @LoginUser final SecurityUser securityUser) {
         Long userId = securityUser.getId();
