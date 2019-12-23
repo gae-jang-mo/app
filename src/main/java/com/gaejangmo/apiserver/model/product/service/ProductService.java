@@ -15,7 +15,6 @@ import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -34,11 +33,9 @@ public class ProductService {
     }
 
     public ManagedProductResponseDto findFromInternal(final String productName) {
-        Product product = productRepository.findByProductName(ProductName.of(productName));
-        if (product == null) {
-            throw new EntityNotFoundException("DB에 없는 장비입니다");
-        }
-        return toDto(product);
+        return productRepository.findByProductName(ProductName.of(productName))
+                .map(this::toDto)
+                .orElseThrow(() -> new EntityNotFoundException("DB에 없는 장비입니다"));
     }
 
     public List<NaverProductResponseDto> findFromExternal(final String productName) {
