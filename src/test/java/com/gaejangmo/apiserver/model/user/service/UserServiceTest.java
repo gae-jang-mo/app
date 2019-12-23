@@ -76,6 +76,6 @@ class UserServiceTest {
 
         // then
         assertThat(actual).isEqualTo(expected);
-
+        verify(userRepository).findAllByUsernameContainingIgnoreCase(username);
     }
 }
