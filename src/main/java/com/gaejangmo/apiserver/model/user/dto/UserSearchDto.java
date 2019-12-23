@@ -4,7 +4,6 @@ import lombok.*;
 
 @Getter
 @ToString
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode
 public class UserSearchDto {
     private Long id;
