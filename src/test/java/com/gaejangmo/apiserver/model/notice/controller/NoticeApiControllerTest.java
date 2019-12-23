@@ -1,5 +1,6 @@
 package com.gaejangmo.apiserver.model.notice.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.gaejangmo.apiserver.model.MockMvcTest;
 import com.gaejangmo.apiserver.model.notice.dto.NoticeResponseDto;
 import com.gaejangmo.apiserver.model.notice.testdata.NoticeTestData;
@@ -10,13 +11,15 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
+
 import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getDocumentRequest;
 import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getDocumentResponse;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -70,5 +73,38 @@ class NoticeApiControllerTest extends MockMvcTest {
         NoticeResponseDto noticeResponseDto = OBJECT_MAPPER.readValue(contentAsByteArray, NoticeResponseDto.class);
 
         assertNotNull(noticeResponseDto);
+    }
+
+    @Test
+    void 공지사항_페이지조회() throws Exception {
+        ResultActions resultActions = mockMvc.perform(
+                RestDocumentationRequestBuilders.get(NOTICE_API)
+                        .param("pageSize", "3")
+                        .param("page", "0")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        byte[] contentAsByteArray = resultActions.andExpect(status().isOk())
+                .andDo(document("notice",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestParameters(
+                                parameterWithName("pageSize").description("개수 (디폴트 3)"),
+                                parameterWithName("page").description("원하는 페이지 (디폴트 0)")
+                        ),
+                        responseFields(
+                                fieldWithPath(".[]id").type(JsonFieldType.NUMBER).description("공지 고유 번호"),
+                                fieldWithPath(".[]noticeType").type(JsonFieldType.STRING).description("공지 타입"),
+                                fieldWithPath(".[]header").type(JsonFieldType.STRING).description("공지 헤더"),
+                                fieldWithPath(".[]contents").type(JsonFieldType.STRING).description("공지 본문")
+                        )))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsByteArray();
+
+        List<NoticeResponseDto> list = OBJECT_MAPPER.readValue(contentAsByteArray, new TypeReference<>() {
+        });
+
+        assertThat(list.size()).isEqualTo(3);
     }
 }

@@ -58,3 +58,15 @@ values ('ㅎㅎ장비좋아요ㅋㅋㅋㅋ', '2', '1', '3');
 
 insert into user_product(comment, product_type, product_id, user_id)
 values ('ㅎㅎ장비좋아요ㅋㅋㅋㅋ', '1', '2', '1');
+
+insert into notice(notice_type, header, contents)
+values ('1', '1번공지사항', '상남자이바');
+
+insert into notice(notice_type, header, contents)
+values ('1', '2번공지사항', '전략가베디');
+
+insert into notice(notice_type, header, contents)
+values ('1', '3번공지사항', '폭풍규동');
+
+insert into notice(notice_type, header, contents)
+values ('1', '4번공지사항', '목장인에헴');
