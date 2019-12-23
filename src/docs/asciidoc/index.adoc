@@ -15,6 +15,7 @@ gaejangmo.com
 == Product API
 
 === save()
+장비 저장
 
 .request
 include::{snippets}/product/save/http-request.adoc[]
@@ -26,6 +27,8 @@ include::{snippets}/product/save/request-fields.adoc[]
 include::{snippets}/product/save/http-response.adoc[]
 
 === findFromInternalResource()
+DB에 저장된 장비 조회
+
 .request
 include::{snippets}/product/findFromInternalResource/http-request.adoc[]
 
@@ -39,7 +42,10 @@ include::{snippets}/product/findFromInternalResource/http-response.adoc[]
 include::{snippets}/product/findFromInternalResource/response-fields.adoc[]
 
 == Notice API
+
 === save()
+공지 저장
+
 .request
 include::{snippets}/notice/save/http-request.adoc[]
 
@@ -50,6 +56,8 @@ include::{snippets}/notice/save/request-fields.adoc[]
 include::{snippets}/notice/save/http-response.adoc[]
 
 === find()
+공지 조회
+
 .request
 include::{snippets}/notice/http-request.adoc[]
 
@@ -63,6 +71,7 @@ include::{snippets}/notice/http-response.adoc[]
 include::{snippets}/notice/response-fields.adoc[]
 
 == User API
+
 === checkLogin()
 로그인 되어 있는지 확인
 
@@ -84,7 +93,7 @@ include::{snippets}/user/showUser/http-response.adoc[]
 .response fields
 include::{snippets}/user/showUser/response-fields.adoc[]
 
-=== showUserByName API
+=== showUserByName()
 username으로 유저 정보 검색
 
 .request
@@ -96,7 +105,7 @@ include::{snippets}/user/showUserByName/http-response.adoc[]
 .response fields
 include::{snippets}/user/showUserByName/response-fields.adoc[]
 
-=== updateMotto API
+=== updateMotto()
 유저 Motto(좌우명) 수정
 
 .request
@@ -111,7 +120,7 @@ include::{snippets}/user/updateMotto/http-response.adoc[]
 .response fields
 include::{snippets}/user/updateMotto/response-fields.adoc[]
 
-=== updateUserImage API
+=== updateUserImage()
 유저 프로필 사진 수정
 
 .request
