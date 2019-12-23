@@ -51,3 +51,6 @@ values ('ㅎㅎ장비좋아요ㅋㅋㅋㅋ', '2', '1', '3');
 
 insert into user_product(comment, product_type, product_id, user_id)
 values ('ㅎㅎ장비좋아요ㅋㅋㅋㅋ', '1', '2', '1');
+
+insert into likes(user_source_id, user_target_id)
+values ('1', '3')

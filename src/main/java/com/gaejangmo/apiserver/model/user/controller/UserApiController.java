@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @EnableLog
 @RestController
 @RequestMapping("/api/v1/users")
@@ -28,9 +30,15 @@ public class UserApiController {
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<UserResponseDto> showUserByName(@PathVariable final String name) {
-        UserResponseDto response = userService.findUserResponseDtoByName(name);
-        return ResponseEntity.ok().body(response);
+    public ResponseEntity<UserResponseDto> showUserByName(@PathVariable final String name, @LoginUser SecurityUser securityUser) {
+        UserResponseDto response = userService.findUserResponseDtoByName(name, securityUser);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/likes")
+    public ResponseEntity<List<UserResponseDto>> showLikeUser(@LoginUser SecurityUser securityUser) {
+        List<UserResponseDto> response = userService.findUserResponseDtoBySourceId(securityUser.getId());
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/motto")

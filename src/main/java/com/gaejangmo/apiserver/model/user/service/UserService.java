@@ -1,5 +1,6 @@
 package com.gaejangmo.apiserver.model.user.service;
 
+import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import com.gaejangmo.apiserver.model.image.domain.user.service.UserImageService;
 import com.gaejangmo.apiserver.model.image.dto.FileResponseDto;
 import com.gaejangmo.apiserver.model.image.user.domain.UserImage;
@@ -39,16 +40,10 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
     }
 
-    public UserResponseDto findUserResponseDtoById(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
-        return toDto(user);
-    }
-
-    public UserResponseDto findUserResponseDtoByName(final String username) {
+    public UserResponseDto findUserResponseDtoByName(final String username, final SecurityUser loginUser) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
-        return toDto(user);
+        return toDto(user, likeService.isLiked(loginUser, user.getId()));
     }
 
     @Transactional(readOnly = true)
@@ -86,11 +81,15 @@ public class UserService {
     public List<UserResponseDto> findUserResponseDtoBySourceId(final Long sourceId) {
         return likeService.findAllBySource(sourceId).stream()
                 .map(Likes::getTarget)
-                .map(this::toDto)
+                .map(user -> toDto(user, true))
                 .collect(Collectors.toList());
     }
 
     private UserResponseDto toDto(final User user) {
+        return toDto(user, null);
+    }
+
+    private UserResponseDto toDto(final User user, final Boolean isLiked) {
         return UserResponseDto.builder()
                 .id(user.getId())
                 .oauthId(user.getOauthId())
@@ -99,6 +98,7 @@ public class UserService {
                 .imageUrl(user.getImageUrl())
                 .introduce(user.getIntroduce())
                 .motto(user.getMotto())
+                .isLiked(isLiked)
                 .build();
     }
 }
