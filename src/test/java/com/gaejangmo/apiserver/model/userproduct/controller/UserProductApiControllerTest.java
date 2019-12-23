@@ -2,9 +2,13 @@ package com.gaejangmo.apiserver.model.userproduct.controller;
 
 import com.gaejangmo.apiserver.model.MockMvcTest;
 import com.gaejangmo.apiserver.model.common.support.WithMockCustomUser;
+import com.gaejangmo.apiserver.model.product.domain.vo.NaverProductType;
+import com.gaejangmo.apiserver.model.product.dto.ProductRequestDto;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import com.gaejangmo.apiserver.model.userproduct.service.UserProductService;
-import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
+import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductExternalRequestDto;
+import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductInternalRequestDto;
+import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductRequestDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -23,38 +28,81 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserProductApiControllerTest extends MockMvcTest {
     private static final String USER_PRODUCT_URI = getApiUrl(UserProductApiController.class);
     private static final long USER_ID = 1L;
-    private static final long PRODUCT_ID = 10L;
 
     @MockBean
     private UserProductService userProductService;
 
-    private UserProductCreateDto userProductCreateDto;
     private UserProductResponseDto userProductResponseDto;
+    private UserProductInternalRequestDto userProductInternalRequestDto;
+    private UserProductExternalRequestDto userProductExternalRequestDto;
 
     @BeforeEach
     void setUp() {
-        userProductCreateDto = UserProductCreateDto.builder()
-                .productId(PRODUCT_ID)
-                .productType(ProductType.KEY_BOARD)
-                .comment("인생 마우스")
+        ProductRequestDto productRequestDto = ProductRequestDto.builder()
+                .title("애플 맥북 프로 15형 2019년형 MV912KH/A")
+                .link("https://shopping-phinf.pstatic.net/main_2057150/20571500240.20190819112004.jpg")
+                .image("https://shopping-phinf.pstatic.net/main_1980579/19805790169.20190617105809.jpg")
+                .lowestPrice(2980720)
+                .highestPrice(4835230)
+                .mallName("네이버")
+                .productId(19805790169L)
+                .naverProductType(NaverProductType.find(1).toString())
+                .build();
+
+        UserProductRequestDto userProductRequestDto = UserProductRequestDto.builder()
+                .comment("넘 좋앙")
+                .productType(ProductType.MAIN_DEVICE)
                 .build();
 
         userProductResponseDto = UserProductResponseDto.builder()
                 .id(1L)
-                .comment("userProductResponseDto comment")
+                .productId(1L)
+                .productType(ProductType.MAIN_DEVICE.getName())
+                .comment("넘 좋앙")
+                .createdAt(LocalDateTime.now())
+                .imageUrl("https://shopping-phinf.pstatic.net/main_1980579/19805790169.20190617105809.jpg")
+                .build();
+
+        userProductInternalRequestDto = UserProductInternalRequestDto.builder()
+                .userProductRequestDto(userProductRequestDto)
+                .productId(1L)
+                .build();
+
+        userProductExternalRequestDto = UserProductExternalRequestDto.builder()
+                .userProductRequestDto(userProductRequestDto)
+                .productRequestDto(productRequestDto)
                 .build();
     }
 
     @Test
     @WithMockCustomUser
-    void 장비_등록() throws Exception {
-        when(userProductService.save(userProductCreateDto, USER_ID)).thenReturn(userProductResponseDto);
+    void 내부_장비_UserProduct_등록() throws Exception {
+        when(userProductService.saveFromInternal(userProductInternalRequestDto, USER_ID)).thenReturn(userProductResponseDto);
 
         // when
-        ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI)
+        ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI + "/internal")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(OBJECT_MAPPER.writeValueAsString(userProductCreateDto)))
+                .content(OBJECT_MAPPER.writeValueAsString(userProductInternalRequestDto)))
+                .andDo(print());
+
+        // then
+        resultActions.andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("id").value(userProductResponseDto.getId()))
+                .andExpect(jsonPath("comment").value(userProductResponseDto.getComment()));
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 외부_장비_UserProduct_등록() throws Exception {
+        when(userProductService.saveFromExternal(userProductExternalRequestDto, USER_ID)).thenReturn(userProductResponseDto);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI + "/external")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(OBJECT_MAPPER.writeValueAsString(userProductExternalRequestDto)))
                 .andDo(print());
 
         // then
@@ -68,10 +116,10 @@ class UserProductApiControllerTest extends MockMvcTest {
     @WithAnonymousUser
     void 비로그인_장비_등록시도_Unauthorized() throws Exception {
         // when
-        ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI)
+        ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI + "/internal")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(OBJECT_MAPPER.writeValueAsString(userProductCreateDto)))
+                .content(OBJECT_MAPPER.writeValueAsString(userProductInternalRequestDto)))
                 .andDo(print());
 
         // then

@@ -7,15 +7,13 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @EqualsAndHashCode
-public class UserProductCreateDto {
-    private String comment;
+public class UserProductRequestDto {
     private ProductType productType;
-    private Long productId;
+    private String comment;
 
     @Builder
-    public UserProductCreateDto(final String comment, final ProductType productType, final Long productId) {
-        this.comment = comment;
+    public UserProductRequestDto(final ProductType productType, final String comment) {
         this.productType = productType;
-        this.productId = productId;
+        this.comment = comment;
     }
 }
