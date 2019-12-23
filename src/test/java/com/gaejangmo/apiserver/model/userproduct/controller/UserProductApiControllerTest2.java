@@ -39,7 +39,7 @@ class UserProductApiControllerTest2 extends MockMvcTest {
         UserProductCreateDto userProductCreateDto = getUserProductCreateDto();
 
         // when
-        ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI)
+        ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI + "/products")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(OBJECT_MAPPER.writeValueAsString(userProductCreateDto)))
@@ -79,7 +79,7 @@ class UserProductApiControllerTest2 extends MockMvcTest {
         UserProductCreateDto userProductCreateDto = getUserProductCreateDto();
 
         // when
-        ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI)
+        ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI + "/products")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(OBJECT_MAPPER.writeValueAsString(userProductCreateDto)))
@@ -98,14 +98,14 @@ class UserProductApiControllerTest2 extends MockMvcTest {
     }
 
     @Test
-    @WithAnonymousUser
+    @WithMockCustomUser
     void 유저_ID로_소유장비_리스트_조회() throws Exception {
         // given
         UserProductResponseDto userProductResponseDto = getUserProductResponseDto();
 
         // when
         ResultActions resultActions = mockMvc.perform(
-                RestDocumentationRequestBuilders.get(USER_PRODUCT_URI + "/{userId}", 1L)
+                RestDocumentationRequestBuilders.get(USER_PRODUCT_URI + "/{userId}/products", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -132,7 +132,7 @@ class UserProductApiControllerTest2 extends MockMvcTest {
     @WithMockCustomUser
     void 장비_삭제() throws Exception {
         mockMvc.perform(
-                RestDocumentationRequestBuilders.delete(USER_PRODUCT_URI + "/{id}", 1L)
+                RestDocumentationRequestBuilders.delete(USER_PRODUCT_URI + "/products/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -147,7 +147,7 @@ class UserProductApiControllerTest2 extends MockMvcTest {
                 .id(1L)
                 .productId(1L)
                 .productType(ProductType.MOUSE.name())
-                .comment("ㅎㅎ")
+                .comment("ㅎㅎ장비좋아요ㅋㅋ")
                 .createdAt(LocalDateTime.of(2014, 4, 1, 0, 0, 0, 0))
                 .imageUrl("https://shopping-phinf.pstatic.net/main_2051460/20514607838.20190806111610.jpg")
                 .build();
@@ -162,7 +162,7 @@ class UserProductApiControllerTest2 extends MockMvcTest {
 
         // when
         ResultActions resultActions = mockMvc.perform(
-                RestDocumentationRequestBuilders.get(USER_PRODUCT_URI + "/latest")
+                RestDocumentationRequestBuilders.get(USER_PRODUCT_URI + "/products/latest")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(OBJECT_MAPPER.writeValueAsString(pageable)))
