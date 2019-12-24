@@ -60,7 +60,7 @@ insert into user_product(comment, product_type, product_id, user_id)
 values ('ㅎㅎ장비좋아요ㅋㅋㅋㅋ', '1', '2', '1');
 
 insert into likes(user_source_id, user_target_id)
-values ('1', '3')
+values (1, 3);
 
 insert into notice(notice_type, header, contents)
 values ('1', '1번공지사항', '상남자이바');
