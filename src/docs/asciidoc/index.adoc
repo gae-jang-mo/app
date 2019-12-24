@@ -68,6 +68,40 @@ include::{snippets}/userproduct/latest/http-response.adoc[]
 .response fields
 include::{snippets}/userproduct/latest/response-fields.adoc[]
 
+=== updateComment() API
+
+.request
+include::{snippets}/userproduct/updateComment/http-request.adoc[]
+
+.path parameters
+include::{snippets}/userproduct/updateComment/path-parameters.adoc[]
+
+.request fields
+include::{snippets}/userproduct/updateComment/request-fields.adoc[]
+
+.response
+include::{snippets}/userproduct/updateComment/http-response.adoc[]
+
+.response fields
+include::{snippets}/userproduct/updateComment/response-fields.adoc[]
+
+=== updateProductType() API
+
+.request
+include::{snippets}/userproduct/updateProductType/http-request.adoc[]
+
+.path parameters
+include::{snippets}/userproduct/updateProductType/path-parameters.adoc[]
+
+.request fields
+include::{snippets}/userproduct/updateProductType/request-fields.adoc[]
+
+.response
+include::{snippets}/userproduct/updateProductType/http-response.adoc[]
+
+.response fields
+include::{snippets}/userproduct/updateProductType/response-fields.adoc[]
+
 === delete() API
 
 .request
