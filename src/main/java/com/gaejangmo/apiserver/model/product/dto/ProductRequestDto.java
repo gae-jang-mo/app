@@ -25,16 +25,16 @@ public class ProductRequestDto {
     private String image;
 
     @Min(0)
-    private long lowestPrice;
+    private Long lowestPrice;
 
     @Min(0)
-    private long highestPrice;
+    private Long highestPrice;
 
     @NotBlank
     private String mallName;
 
     @Min(0)
-    private long productId;
+    private Long productId;
 
     @EnumValue(enumClass = NaverProductType.class)
     private String naverProductType;

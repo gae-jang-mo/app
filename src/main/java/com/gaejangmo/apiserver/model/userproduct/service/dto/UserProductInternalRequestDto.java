@@ -8,10 +8,10 @@ import lombok.*;
 @EqualsAndHashCode
 public class UserProductInternalRequestDto {
     private UserProductRequestDto userProductRequestDto;
-    private long productId;
+    private Long productId;
 
     @Builder
-    public UserProductInternalRequestDto(final UserProductRequestDto userProductRequestDto, final long productId) {
+    public UserProductInternalRequestDto(final UserProductRequestDto userProductRequestDto, final Long productId) {
         this.userProductRequestDto = userProductRequestDto;
         this.productId = productId;
     }

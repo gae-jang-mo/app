@@ -47,17 +47,22 @@ insert into member(oauth_id, username, role, grade, email, motto, image_url, int
 values (30608121, 'ParkJunHo', 2, 1, 'abce@gmail.com', '장비충개발자', 'https://previews.123rf.com/images/aquir/aquir1311/aquir131100316/23569861-%EC%83%98%ED%94%8C-%EC%A7%80-%EB%B9%A8%EA%B0%84%EC%83%89-%EB%9D%BC%EC%9A%B4%EB%93%9C-%EC%8A%A4%ED%83%AC%ED%94%84.jpg', '안녕 난 제이');
 
 
-insert into user_product(comment, product_type, product_id, user_id)
-values ('ㅎㅎ장비좋아요ㅋㅋ', '1', '1', '1');
+insert into user_product(comment, product_type, product_id, user_id, created_at)
+values ('ㅎㅎ장비좋아요ㅋㅋ', '1', '1', '1', '2014-04-01 00:00:00');
+insert into user_product(comment, product_type, product_id, user_id, created_at)
+values ('ㅎㅎ장비좋아요ㅋㅋ', '1', '1', '1', '2014-04-01 00:00:00');
 
-insert into user_product(comment, product_type, product_id, user_id)
-values ('ㅎㅎ장비좋아요ㅋㅋㅋ', '1', '1', '2');
+insert into user_product(comment, product_type, product_id, user_id, created_at)
+values ('ㅎㅎ장비좋아요ㅋㅋㅋ', '1', '1', '2', '2014-04-01 00:00:00');
 
-insert into user_product(comment, product_type, product_id, user_id)
-values ('ㅎㅎ장비좋아요ㅋㅋㅋㅋ', '2', '1', '3');
+insert into user_product(comment, product_type, product_id, user_id, created_at)
+values ('ㅎㅎ장비좋아요ㅋㅋㅋㅋ', '2', '1', '3', '2014-04-01 00:00:00');
 
-insert into user_product(comment, product_type, product_id, user_id)
-values ('ㅎㅎ장비좋아요ㅋㅋㅋㅋ', '1', '2', '1');
+insert into user_product(comment, product_type, product_id, user_id, created_at)
+values ('ㅎㅎ장비좋아요ㅋㅋㅋㅋ', '1', '2', '1', '2014-04-01 00:00:00');
+
+insert into user_product(comment, product_type, product_id, user_id, created_at)
+values ('ㅎㅎ장비좋아요ㅋㅋㅋㅋ', '1', '2', '1', '2014-04-01 00:00:00');
 
 insert into likes(user_source_id, user_target_id)
 values (1, 3);

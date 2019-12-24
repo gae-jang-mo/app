@@ -13,6 +13,7 @@ import com.gaejangmo.apiserver.model.userproduct.domain.UserProduct;
 import com.gaejangmo.apiserver.model.userproduct.domain.UserProductRepository;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
+import com.gaejangmo.apiserver.model.userproduct.dto.CommentDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductLatestResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.exception.NotUserProductOwnerException;
@@ -163,14 +164,14 @@ class UserProductServiceTest {
     @Test
     void Comment_수정() {
         // given
-        String comment = "changed comment";
+        CommentDto commentDto = new CommentDto("changed comment");
         when(userProductRepository.findById(USER_PRODUCT_ID)).thenReturn(Optional.of(userProduct));
 
         // when
-        UserProductResponseDto responseDto = userProductService.updateComment(USER_PRODUCT_ID, USER_ID, comment);
+        UserProductResponseDto responseDto = userProductService.updateComment(USER_PRODUCT_ID, USER_ID, commentDto);
 
         // then
-        assertThat(responseDto.getComment()).isEqualTo(comment);
+        assertThat(responseDto.getComment()).isEqualTo(commentDto.getComment());
     }
 
     @Test
