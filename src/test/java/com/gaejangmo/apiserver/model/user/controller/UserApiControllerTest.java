@@ -88,7 +88,7 @@ class UserApiControllerTest extends MockMvcTest {
 
         // when
         ResultActions resultActions = mockMvc.perform(
-                RestDocumentationRequestBuilders.get("/api/v1/users/{name}", RESPONSE_DTO.getUsername())
+                RestDocumentationRequestBuilders.get(USER_API + "/{name}", RESPONSE_DTO.getUsername())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -316,7 +316,7 @@ class UserApiControllerTest extends MockMvcTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsByteArray();
 
-        List<UserSearchDto> userResponseDtos = OBJECT_MAPPER.readValue(contentAsByteArray, new TypeReference<List<UserSearchDto>>() {
+        List<UserSearchDto> userResponseDtos = OBJECT_MAPPER.readValue(contentAsByteArray, new TypeReference<>() {
         });
 
         assertThat(userResponseDtos.size()).isEqualTo(3);
