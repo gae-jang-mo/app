@@ -99,6 +99,8 @@ class LikeServiceTest {
 
         // when & then
         assertThat(likeService.isLiked(loginUser, TARGET_ID)).isTrue();
+        verify(userRepository, times(2)).findById(anyLong());
+        verify(likeRepository, times(1)).findBySourceAndTarget(any(), any());
     }
 
     @Test
@@ -111,6 +113,8 @@ class LikeServiceTest {
 
         // when & then
         assertThat(likeService.isLiked(loginUser, TARGET_ID)).isFalse();
+        verify(userRepository, times(2)).findById(anyLong());
+        verify(likeRepository, times(1)).findBySourceAndTarget(any(), any());
     }
 
     @Test
