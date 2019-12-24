@@ -1,15 +1,13 @@
 package com.gaejangmo.apiserver.model.userproduct.domain.vo;
 
 import com.gaejangmo.utils.StringUtils;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Embeddable;
 
 @ToString
 @EqualsAndHashCode
+@Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Embeddable
 public class Comment {

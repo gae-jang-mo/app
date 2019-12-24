@@ -149,3 +149,146 @@ include::{snippets}/user/search/http-response.adoc[]
 
 .response fields
 include::{snippets}/user/search/response-fields.adoc[]
+
+== Like API
+
+=== save()
+좋아요 저장
+
+.request
+include::{snippets}/like/save/http-request.adoc[]
+
+.path parameters
+include::{snippets}/like/save/path-parameters.adoc[]
+
+.response
+include::{snippets}/like/save/http-response.adoc[]
+
+=== delete()
+좋아요 취소
+
+.request
+include::{snippets}/like/delete/http-request.adoc[]
+
+.path parameters
+include::{snippets}/like/delete/path-parameters.adoc[]
+
+.response
+include::{snippets}/like/delete/http-response.adoc[]
+
+== UserProduct
+
+=== createFromInternal() API
+
+내부 유저 장비 생성
+
+.request
+include::{snippets}/userproduct/createFromInternal/http-request.adoc[]
+
+.request fields
+include::{snippets}/userproduct/createFromInternal/request-fields.adoc[]
+
+.response
+include::{snippets}/userproduct/createFromInternal/http-response.adoc[]
+
+.response fields
+include::{snippets}/userproduct/createFromInternal/response-fields.adoc[]
+
+=== createFromExternal() API
+
+외부 유저 장비 생성
+
+.request
+include::{snippets}/userproduct/createFromExternal/http-request.adoc[]
+
+.request fields
+include::{snippets}/userproduct/createFromExternal/request-fields.adoc[]
+
+.response
+include::{snippets}/userproduct/createFromExternal/http-response.adoc[]
+
+.response fields
+include::{snippets}/userproduct/createFromExternal/response-fields.adoc[]
+
+=== list() API
+
+사용자별 유저 장비 리스트 조회
+
+.request
+include::{snippets}/userproduct/list/http-request.adoc[]
+
+.path parameters
+include::{snippets}/userproduct/list/path-parameters.adoc[]
+
+.response
+include::{snippets}/userproduct/list/http-response.adoc[]
+
+.response fields
+include::{snippets}/userproduct/list/response-fields.adoc[]
+
+=== latest() API
+
+가장 최근에 등록된 유저 장비 조회
+
+.request
+include::{snippets}/userproduct/latest/http-request.adoc[]
+
+.request fields
+include::{snippets}/userproduct/latest/request-fields.adoc[]
+
+.response
+include::{snippets}/userproduct/latest/http-response.adoc[]
+
+.response fields
+include::{snippets}/userproduct/latest/response-fields.adoc[]
+
+=== updateComment() API
+
+유저 장비에 대한 상품평 수정
+
+.request
+include::{snippets}/userproduct/updateComment/http-request.adoc[]
+
+.path parameters
+include::{snippets}/userproduct/updateComment/path-parameters.adoc[]
+
+.request fields
+include::{snippets}/userproduct/updateComment/request-fields.adoc[]
+
+.response
+include::{snippets}/userproduct/updateComment/http-response.adoc[]
+
+.response fields
+include::{snippets}/userproduct/updateComment/response-fields.adoc[]
+
+=== updateProductType() API
+
+유저 장비에 대한 장비 유형 수정
+
+.request
+include::{snippets}/userproduct/updateProductType/http-request.adoc[]
+
+.path parameters
+include::{snippets}/userproduct/updateProductType/path-parameters.adoc[]
+
+.request fields
+include::{snippets}/userproduct/updateProductType/request-fields.adoc[]
+
+.response
+include::{snippets}/userproduct/updateProductType/http-response.adoc[]
+
+.response fields
+include::{snippets}/userproduct/updateProductType/response-fields.adoc[]
+
+=== delete() API
+
+유저 장비 삭제
+
+.request
+include::{snippets}/userproduct/delete/http-request.adoc[]
+
+.path parameters
+include::{snippets}/userproduct/delete/path-parameters.adoc[]
+
+.response
+include::{snippets}/userproduct/delete/http-response.adoc[]

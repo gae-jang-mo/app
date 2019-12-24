@@ -1,7 +1,8 @@
 package com.gaejangmo.apiserver.model.userproduct.service;
 
+import com.gaejangmo.apiserver.config.oauth.SecurityUser;
+import com.gaejangmo.apiserver.model.like.service.LikeService;
 import com.gaejangmo.apiserver.model.product.domain.Product;
-import com.gaejangmo.apiserver.model.product.domain.ProductRepository;
 import com.gaejangmo.apiserver.model.product.dto.ManagedProductResponseDto;
 import com.gaejangmo.apiserver.model.product.service.ProductService;
 import com.gaejangmo.apiserver.model.user.domain.User;
@@ -10,6 +11,7 @@ import com.gaejangmo.apiserver.model.userproduct.domain.UserProduct;
 import com.gaejangmo.apiserver.model.userproduct.domain.UserProductRepository;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
+import com.gaejangmo.apiserver.model.userproduct.dto.CommentDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.*;
 import com.gaejangmo.apiserver.model.userproduct.service.exception.NotUserProductOwnerException;
 import org.springframework.data.domain.Pageable;
@@ -27,13 +29,14 @@ public class UserProductService {
     private final ProductService productService;
     private final UserService userService;
     private final UserProductRepository userProductRepository;
-    private final ProductRepository productRepository;
+    private final LikeService likeService;
 
-    public UserProductService(final ProductService productService, final UserService userService, final UserProductRepository userProductRepository, final ProductRepository productRepository) {
+    public UserProductService(final ProductService productService, final UserService userService,
+                              final UserProductRepository userProductRepository, final LikeService likeService) {
         this.productService = productService;
         this.userService = userService;
         this.userProductRepository = userProductRepository;
-        this.productRepository = productRepository;
+        this.likeService = likeService;
     }
 
     public UserProductResponseDto saveFromInternal(final UserProductInternalRequestDto requestDto, final Long userId) {
@@ -76,8 +79,8 @@ public class UserProductService {
                 .collect(Collectors.toList());
     }
 
-    public UserProductResponseDto updateComment(final Long id, final Long userId, final String comment) {
-        return updateTemplate(id, userId, (userProduct) -> toDto(userProduct.changeComment(Comment.of(comment))));
+    public UserProductResponseDto updateComment(final Long id, final Long userId, final CommentDto commentDto) {
+        return updateTemplate(id, userId, (userProduct) -> toDto(userProduct.changeComment(Comment.of(commentDto.getComment()))));
     }
 
     public UserProductResponseDto updateProductType(final Long id, final Long userId, final ProductType productType) {
@@ -96,12 +99,14 @@ public class UserProductService {
         throw new NotUserProductOwnerException();
     }
 
-    public List<UserProductLatestResponseDto> findAllByPageable(final Pageable pageable) {
+    public List<UserProductLatestResponseDto> findAllByPageable(final Pageable pageable, final SecurityUser loginUser) {
         return userProductRepository.findAll(pageable)
-                .map(this::toLatestDto).toList();
+                .map(userProduct -> toLatestDto(userProduct,
+                        likeService.isLiked(loginUser, userProduct.getUser().getId())))
+                .toList();
     }
 
-    private UserProductLatestResponseDto toLatestDto(final UserProduct userProduct) {
+    private UserProductLatestResponseDto toLatestDto(final UserProduct userProduct, final boolean isLiked) {
         return UserProductLatestResponseDto.builder()
                 .id(userProduct.getId())
                 .productType(userProduct.getProductType())
@@ -110,6 +115,7 @@ public class UserProductService {
                 .userImageUrl(userProduct.getUser().getImageUrl())
                 .username(userProduct.getUser().getUsername())
                 .motto(userProduct.getUser().getMotto())
+                .isLiked(isLiked)
                 .createdAt(userProduct.getCreatedAt())
                 .build();
     }
@@ -122,24 +128,6 @@ public class UserProductService {
                 .productType(userProduct.getProductType().getName())
                 .imageUrl(userProduct.getProduct().getImageUrl())
                 .productId(userProduct.getProduct().getId())
-                .build();
-    }
-
-    private UserProduct toEntityFromInternal(final UserProductInternalRequestDto requestDto, final Product product, final User user) {
-        return UserProduct.builder()
-                .user(user)
-                .product(product)
-                .productType(requestDto.getUserProductRequestDto().getProductType())
-                .comment(Comment.of(requestDto.getUserProductRequestDto().getComment()))
-                .build();
-    }
-
-    private UserProduct toEntityFromExternal(final UserProductExternalRequestDto requestDto, final Product product, final User user) {
-        return UserProduct.builder()
-                .user(user)
-                .product(product)
-                .productType(requestDto.getUserProductRequestDto().getProductType())
-                .comment(Comment.of(requestDto.getUserProductRequestDto().getComment()))
                 .build();
     }
 }

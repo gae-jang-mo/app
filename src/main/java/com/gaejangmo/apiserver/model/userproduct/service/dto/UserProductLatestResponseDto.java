@@ -20,7 +20,7 @@ public class UserProductLatestResponseDto {
     @Builder
     public UserProductLatestResponseDto(final Long id, final ProductType productType, final String productImageUrl,
                                         final String productName, final String userImageUrl, final String username,
-                                        final String motto, final LocalDateTime createdAt) {
+                                        final String motto, final boolean isLiked, final LocalDateTime createdAt) {
         this.id = id;
         this.product.put("type", productType);
         this.product.put("imageUrl", productImageUrl);
@@ -28,6 +28,7 @@ public class UserProductLatestResponseDto {
         this.user.put("imageUrl", userImageUrl);
         this.user.put("username", username);
         this.user.put("motto", motto);
+        this.user.put("isLiked", isLiked);
         this.createdAt = createdAt;
     }
 }

@@ -1,11 +1,13 @@
 package com.gaejangmo.apiserver.model.notice.controller;
 
+import com.gaejangmo.apiserver.model.common.exception.ApiErrorResponse;
 import com.gaejangmo.apiserver.model.notice.dto.NoticeRequestDto;
 import com.gaejangmo.apiserver.model.notice.dto.NoticeResponseDto;
 import com.gaejangmo.apiserver.model.notice.service.NoticeService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,5 +44,14 @@ public class NoticeApiController {
         return ResponseEntity.created(linkTo(NoticeApiController.class)
                 .slash(notice.getId()).toUri())
                 .body(notice);
+    }
+
+    @ExceptionHandler({RuntimeException.class})
+    public ResponseEntity<ApiErrorResponse> handleException(final Exception exception) {
+        ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder()
+                .message(exception.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .build();
+        return ResponseEntity.badRequest().body(apiErrorResponse);
     }
 }

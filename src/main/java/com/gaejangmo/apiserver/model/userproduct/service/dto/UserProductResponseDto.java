@@ -1,14 +1,12 @@
 package com.gaejangmo.apiserver.model.userproduct.service.dto;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @ToString
+@NoArgsConstructor
 @EqualsAndHashCode
 public class UserProductResponseDto {
     private Long id;

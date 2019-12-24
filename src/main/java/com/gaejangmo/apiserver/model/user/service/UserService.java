@@ -1,13 +1,17 @@
 package com.gaejangmo.apiserver.model.user.service;
 
+import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import com.gaejangmo.apiserver.model.image.domain.user.service.UserImageService;
 import com.gaejangmo.apiserver.model.image.dto.FileResponseDto;
 import com.gaejangmo.apiserver.model.image.user.domain.UserImage;
+import com.gaejangmo.apiserver.model.like.domain.Likes;
+import com.gaejangmo.apiserver.model.like.service.LikeService;
 import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.domain.UserRepository;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
 import com.gaejangmo.apiserver.model.user.dto.UserSearchDto;
+import com.gaejangmo.utils.RandomUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,13 +25,18 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class UserService {
+    private static final int RANDOM_USER_COUNT = 3;
+    private static final int USER_START_IDX = 1;
     private static final String USER_NOT_FOUND_MESSAGE = "해당하는 유저가 없습니다.";
+
     private final UserRepository userRepository;
     private final UserImageService userImageService;
+    private final LikeService likeService;
 
-    public UserService(final UserRepository userRepository, final UserImageService userImageService) {
+    public UserService(final UserRepository userRepository, final UserImageService userImageService, final LikeService likeService) {
         this.userRepository = userRepository;
         this.userImageService = userImageService;
+        this.likeService = likeService;
     }
 
     @Transactional(readOnly = true)
@@ -36,16 +45,10 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
     }
 
-    public UserResponseDto findUserResponseDtoById(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
-        return toDto(user);
-    }
-
-    public UserResponseDto findUserResponseDtoByName(final String username) {
+    public UserResponseDto findUserResponseDtoByName(final String username, final SecurityUser loginUser) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
-        return toDto(user);
+        return toDto(user, likeService.isLiked(loginUser, user.getId()));
     }
 
     @Transactional(readOnly = true)
@@ -86,6 +89,14 @@ public class UserService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
+    public List<UserResponseDto> findUserResponseDtoBySourceId(final Long sourceId) {
+        return likeService.findAllBySource(sourceId).stream()
+                .map(Likes::getTarget)
+                .map(user -> toDto(user, true))
+                .collect(Collectors.toList());
+    }
+
     private UserSearchDto toUserSearchDto(final User user) {
         return UserSearchDto.builder()
                 .id(user.getId())
@@ -94,7 +105,19 @@ public class UserService {
                 .build();
     }
 
+    public List<UserSearchDto> findRandomUserResponse() {
+        return RandomUtils.getRandomLongsInRange(USER_START_IDX, userRepository.getMaxId(), RANDOM_USER_COUNT)
+                .stream()
+                .map(this::findById)
+                .map(this::toUserSearchDto)
+                .collect(Collectors.toList());
+    }
+
     private UserResponseDto toDto(final User user) {
+        return toDto(user, null);
+    }
+
+    private UserResponseDto toDto(final User user, final Boolean isLiked) {
         return UserResponseDto.builder()
                 .id(user.getId())
                 .oauthId(user.getOauthId())
@@ -103,6 +126,7 @@ public class UserService {
                 .imageUrl(user.getImageUrl())
                 .introduce(user.getIntroduce())
                 .motto(user.getMotto())
+                .isLiked(isLiked)
                 .build();
     }
 }

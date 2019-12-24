@@ -1,5 +1,8 @@
 package com.gaejangmo.apiserver.model.user.service;
 
+import com.gaejangmo.apiserver.config.oauth.SecurityUser;
+import com.gaejangmo.apiserver.model.like.domain.Likes;
+import com.gaejangmo.apiserver.model.like.service.LikeService;
 import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.domain.UserRepository;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
@@ -29,22 +32,26 @@ class UserServiceTest {
     private UserService userService;
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private LikeService likeService;
 
     @Test
     void OauthId_유저_조회() {
-        given(userRepository.findByOauthId(anyLong())).willReturn(Optional.of(UserTestData.ENTITY));
+        given(userRepository.findByOauthId(anyLong())).willReturn(Optional.of(UserTestData.ENTITY_NOT_INCLUDE_ISLIKED));
 
         UserResponseDto result = userService.findUserResponseDtoByOauthId(1234L);
 
-        assertThat(result).isEqualTo(UserTestData.RESPONSE_DTO);
+        assertThat(result).isEqualTo(UserTestData.RESPONSE_DTO_NOT_INCLUDE_ISLIKED);
     }
 
     @Test
     void username_유저_조회() {
+        SecurityUser loginUser = SecurityUser.builder().id(2L).build();
         given(userRepository.findByUsername(anyString())).willReturn(Optional.of(UserTestData.ENTITY));
+        given(likeService.isLiked(any(), anyLong())).willReturn(false);
 
         User user = UserTestData.ENTITY;
-        UserResponseDto result = userService.findUserResponseDtoByName(user.getUsername());
+        UserResponseDto result = userService.findUserResponseDtoByName(user.getUsername(), loginUser);
 
         assertThat(result).isEqualTo(UserTestData.RESPONSE_DTO);
     }
@@ -64,11 +71,39 @@ class UserServiceTest {
     }
 
     @Test
+    void 내가_좋아요를_누른_사람들을_조회() {
+        // given
+        Likes like = Likes.builder()
+                .source(mock(User.class))
+                .target(UserTestData.ENTITY)
+                .build();
+
+        given(likeService.findAllBySource(anyLong())).willReturn(List.of(like));
+
+        // when
+        List<UserResponseDto> actual = userService.findUserResponseDtoBySourceId(1L);
+
+        // then
+        assertThat(actual).isEqualTo(
+                List.of(UserResponseDto.builder()
+                        .id(1L)
+                        .oauthId(20608121L)
+                        .username("JunHoPark93")
+                        .email("abc@gmail.com")
+                        .motto("장비충개발자")
+                        .imageUrl("https://previews.123rf.com/images/aquir/aquir1311/aquir131100316/23569861-%EC%83%98%ED%94%8C-%EC%A7%80-%EB%B9%A8%EA%B0%84%EC%83%89-%EB%9D%BC%EC%9A%B4%EB%93%9C-%EC%8A%A4%ED%83%AC%ED%94%84.jpg")
+                        .introduce("안녕 난 제이")
+                        .isLiked(true)
+                        .build()));
+        verify(likeService, times(1)).findAllBySource(1L);
+    }
+
+    @Test
     void username으로_list_검색() {
         // given
         String username = "username";
         List<User> users = List.of(UserTestData.ENTITY);
-        List<UserSearchDto> expected = List.of(new UserSearchDto( UserTestData.ENTITY.getId(), UserTestData.ENTITY.getImageUrl(), UserTestData.ENTITY.getUsername()));
+        List<UserSearchDto> expected = List.of(new UserSearchDto(UserTestData.ENTITY.getId(), UserTestData.ENTITY.getImageUrl(), UserTestData.ENTITY.getUsername()));
         when(userRepository.findAllByUsernameContainingIgnoreCase(username)).thenReturn(users);
 
         // when
