@@ -39,7 +39,4 @@ public class ProductRequestDto {
 
     @EnumValue(enumClass = NaverProductType.class)
     private String naverProductType;
-
-    @EnumValue(enumClass = ProductType.class)
-    private String productType;
 }

@@ -7,6 +7,7 @@ import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.domain.UserRepository;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
+import com.gaejangmo.apiserver.model.user.dto.UserSearchDto;
 import com.gaejangmo.apiserver.model.user.testdata.UserTestData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -95,5 +96,21 @@ class UserServiceTest {
                         .isLiked(true)
                         .build()));
         verify(likeService, times(1)).findAllBySource(1L);
+    }
+
+    @Test
+    void username으로_list_검색() {
+        // given
+        String username = "username";
+        List<User> users = List.of(UserTestData.ENTITY);
+        List<UserSearchDto> expected = List.of(new UserSearchDto( UserTestData.ENTITY.getId(), UserTestData.ENTITY.getImageUrl(), UserTestData.ENTITY.getUsername()));
+        when(userRepository.findAllByUsernameContainingIgnoreCase(username)).thenReturn(users);
+
+        // when
+        List<UserSearchDto> actual = userService.findUserSearchDtosByUserName(username);
+
+        // then
+        assertThat(actual).isEqualTo(expected);
+        verify(userRepository).findAllByUsernameContainingIgnoreCase(username);
     }
 }

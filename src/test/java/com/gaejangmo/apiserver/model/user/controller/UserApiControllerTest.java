@@ -8,7 +8,8 @@ import com.gaejangmo.apiserver.model.image.domain.vo.FileFeature;
 import com.gaejangmo.apiserver.model.image.dto.FileResponseDto;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
-import lombok.extern.slf4j.Slf4j;
+import com.gaejangmo.apiserver.model.user.dto.UserSearchDto;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -21,9 +22,12 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getDocumentRequest;
+import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getDocumentResponse;
 import static com.gaejangmo.apiserver.model.user.testdata.UserTestData.RESPONSE_DTO;
 import static com.gaejangmo.apiserver.model.user.testdata.UserTestData.RESPONSE_DTO_NOT_INCLUDE_ISLIKED;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -33,10 +37,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Slf4j
 class UserApiControllerTest extends MockMvcTest {
     private static final String USER_API = getApiUrl(UserApiController.class);
 
@@ -63,8 +65,8 @@ class UserApiControllerTest extends MockMvcTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("user/showUser",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         responseFields(userResponseDtoDescriptors)
                 ));
 
@@ -231,5 +233,35 @@ class UserApiControllerTest extends MockMvcTest {
         assertThat(fileFeature.getOriginalName()).isEqualTo(file.getOriginalFilename());
         assertThat(fileFeature.getUrl()).isEqualTo(expectedUrl);
         assertThat(fileFeature.getSavedName()).isNotBlank();
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 이름으로_유저_리스트_조회() throws Exception {
+        // when
+        ResultActions resultActions = mockMvc.perform(get(USER_API + "/search")
+                .param("username", "junho")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("user/search",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestParameters(
+                                parameterWithName("username").description("검색하고 싶은 유저 이름")
+                        ),
+                        responseFields(
+                                fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("식별자"),
+                                fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("프로필 사진"),
+                                fieldWithPath("[].username").type(JsonFieldType.STRING).description("유저 이름")
+                        )
+                ));
+
+        // then
+        String contentAsString = resultActions.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsString();
+
+        List<UserSearchDto> userSearchDtos = OBJECT_MAPPER.readValue(contentAsString, List.class);
+        assertThat(userSearchDtos).hasSize(3);
     }
 }

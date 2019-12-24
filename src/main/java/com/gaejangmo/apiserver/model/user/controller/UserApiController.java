@@ -6,6 +6,7 @@ import com.gaejangmo.apiserver.model.common.resolver.LoginUser;
 import com.gaejangmo.apiserver.model.image.dto.FileResponseDto;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
+import com.gaejangmo.apiserver.model.user.dto.UserSearchDto;
 import com.gaejangmo.apiserver.model.user.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +46,7 @@ public class UserApiController {
     public ResponseEntity<Motto> updateMotto(@RequestBody final Motto motto,
                                              @LoginUser SecurityUser user) {
         userService.updateMotto(user.getId(), motto);
-        return ResponseEntity.ok().body(motto);
+        return ResponseEntity.ok(motto);
     }
 
     @PostMapping("/image")
@@ -53,5 +54,11 @@ public class UserApiController {
                                                            @LoginUser final SecurityUser securityUser) {
         FileResponseDto fileResponseDto = userService.updateUserImage(file, securityUser.getId());
         return ResponseEntity.ok(fileResponseDto);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<UserSearchDto>> search(@RequestParam final String username){
+        List<UserSearchDto> userSearchDtos = userService.findUserSearchDtosByUserName(username);
+        return ResponseEntity.ok(userSearchDtos);
     }
 }

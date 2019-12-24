@@ -20,5 +20,4 @@ public class ManagedProductResponseDto {
     private String mallName;
     private long productId;
     private NaverProductType naverProductType;
-    private ProductType productType;
 }

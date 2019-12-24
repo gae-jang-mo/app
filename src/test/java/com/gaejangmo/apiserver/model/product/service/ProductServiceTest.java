@@ -10,8 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,11 +28,11 @@ class ProductServiceTest {
 
     @Test
     void 상품_조회() {
-        given(productRepository.findByProductName(ProductName.of(PRODUCT_NAME))).willReturn(Collections.singletonList(ProductTestData.ENTITY));
+        given(productRepository.findByProductName(ProductName.of(PRODUCT_NAME))).willReturn(Optional.of(ProductTestData.ENTITY));
 
-        List<ManagedProductResponseDto> result = productService.findFromInternal(PRODUCT_NAME);
+        ManagedProductResponseDto result = productService.findFromInternal(PRODUCT_NAME);
 
-        assertThat(result.get(0)).isEqualTo(ProductTestData.MANAGED_PRODUCT_RESPONSE_DTO);
+        assertThat(result).isEqualTo(ProductTestData.MANAGED_PRODUCT_RESPONSE_DTO);
     }
 
     @Test
