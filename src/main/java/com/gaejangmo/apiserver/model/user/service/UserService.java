@@ -99,11 +99,9 @@ public class UserService {
     }
 
     public List<UserSearchDto> findRandomUserResponse() {
-        long maxId = userRepository.getMaxId();
-        return RandomUtils.getRandomLongsInRange(USER_START_IDX, maxId, RANDOM_USER_COUNT)
+        return RandomUtils.getRandomLongsInRange(USER_START_IDX, userRepository.getMaxId(), RANDOM_USER_COUNT)
                 .stream()
-                .map(id -> userRepository.findById(id)
-                        .orElseThrow(() -> new EntityNotFoundException(id + "번 user를 찾을 수 없습니다")))
+                .map(this::findById)
                 .map(this::toUserSearchDto)
                 .collect(Collectors.toList());
     }
