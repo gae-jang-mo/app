@@ -113,4 +113,18 @@ class UserServiceTest {
         assertThat(actual).isEqualTo(expected);
         verify(userRepository).findAllByUsernameContainingIgnoreCase(username);
     }
+
+    @Test
+    void 자기소개_수정() {
+        // given
+        String updatedIntroduce = "안녕 난 수정된 제이";
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(UserTestData.ENTITY));
+
+        // when
+        UserResponseDto actual = userService.updateIntroduce(USER_ID, updatedIntroduce);
+
+        // then
+        assertThat(actual.getIntroduce()).isEqualTo(updatedIntroduce);
+        verify(userRepository, times(1)).findById(anyLong());
+    }
 }
