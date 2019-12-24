@@ -127,4 +127,9 @@ public class User extends BaseTimeEntity {
         this.userImage = userImage;
         return this;
     }
+
+    public User updateIntroduce(final String introduce) {
+        this.introduce = introduce;
+        return this;
+    }
 }
