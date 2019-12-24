@@ -1,15 +1,20 @@
 package com.gaejangmo.apiserver.model.product.controller;
 
+import com.gaejangmo.apiserver.model.product.domain.vo.ProductType;
 import com.gaejangmo.apiserver.model.product.dto.ManagedProductResponseDto;
 import com.gaejangmo.apiserver.model.product.dto.NaverProductResponseDto;
 import com.gaejangmo.apiserver.model.product.dto.ProductRequestDto;
+import com.gaejangmo.apiserver.model.product.dto.ProductTypeResponseDto;
 import com.gaejangmo.apiserver.model.product.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
@@ -29,6 +34,14 @@ public class ProductApiController {
     public ResponseEntity<List<NaverProductResponseDto>> findFromExternalResource(@RequestParam String productName) {
         List<NaverProductResponseDto> products = productService.findFromExternal(productName);
         return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/types")
+    public ResponseEntity<Map<ProductType,String>> showProductTypes() {
+        Map<ProductType, String> productNamesWithValues = new HashMap<>();
+        Arrays.asList(ProductType.values())
+                .forEach(x -> productNamesWithValues.put(x, x.getName()));
+        return ResponseEntity.ok(productNamesWithValues);
     }
 
     @PostMapping
