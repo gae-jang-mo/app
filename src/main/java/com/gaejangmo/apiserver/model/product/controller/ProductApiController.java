@@ -20,9 +20,9 @@ public class ProductApiController {
     private final ProductService productService;
 
     @GetMapping("/internal")
-    public ResponseEntity<List<ManagedProductResponseDto>> findFromInternalResource(@RequestParam String productName) {
-        List<ManagedProductResponseDto> products = productService.findFromInternal(productName);
-        return ResponseEntity.ok(products);
+    public ResponseEntity<ManagedProductResponseDto> findFromInternalResource(@RequestParam String productName) {
+        ManagedProductResponseDto product = productService.findFromInternal(productName);
+        return ResponseEntity.ok(product);
     }
 
     @GetMapping("/external")

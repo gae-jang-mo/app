@@ -27,7 +27,7 @@ public class UserImageService {
     }
 
     public UserImage save(final MultipartFile multipartFile, final User user) {
-        String fileName = uploadFileNameCreator.create(multipartFile.getName());
+        String fileName = uploadFileNameCreator.create(multipartFile.getOriginalFilename());
         String directoryName = String.valueOf(user.getOauthId());
         String savedName = String.join(DIRECTORY_DELIMITER, directoryName, fileName);
         String url = s3Connector.upload(multipartFile, savedName);

@@ -7,7 +7,8 @@ import com.gaejangmo.apiserver.model.common.exception.ApiErrorResponse;
 import com.gaejangmo.apiserver.model.common.resolver.LoginUser;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import com.gaejangmo.apiserver.model.userproduct.service.UserProductService;
-import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
+import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductExternalRequestDto;
+import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductInternalRequestDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductLatestResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
 import org.springframework.data.domain.Pageable;
@@ -33,11 +34,21 @@ public class UserProductApiController {
     }
 
     @EnableLog
-    @PostMapping
-    public ResponseEntity<UserProductResponseDto> create(@RequestBody final UserProductCreateDto userProductCreateDto,
-                                                         @LoginUser final SecurityUser securityUser) {
+    @PostMapping("/internal")
+    public ResponseEntity<UserProductResponseDto> createFromInternal(@RequestBody final UserProductInternalRequestDto requestDto,
+                                                                     @LoginUser final SecurityUser securityUser) {
         Long userId = securityUser.getId();
-        UserProductResponseDto responseDto = userProductService.save(userProductCreateDto, userId);
+        UserProductResponseDto responseDto = userProductService.saveFromInternal(requestDto, userId);
+        URI uri = linkTo(UserProductApiController.class).slash(responseDto.getId()).toUri();
+        return ResponseEntity.created(uri).body(responseDto);
+    }
+
+    @EnableLog
+    @PostMapping("/external")
+    public ResponseEntity<UserProductResponseDto> createFromExternal(@RequestBody final UserProductExternalRequestDto requestDto,
+                                                                     @LoginUser final SecurityUser securityUser) {
+        Long userId = securityUser.getId();
+        UserProductResponseDto responseDto = userProductService.saveFromExternal(requestDto, userId);
         URI uri = linkTo(UserProductApiController.class).slash(responseDto.getId()).toUri();
         return ResponseEntity.created(uri).body(responseDto);
     }

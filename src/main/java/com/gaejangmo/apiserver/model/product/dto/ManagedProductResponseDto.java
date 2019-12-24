@@ -1,7 +1,6 @@
 package com.gaejangmo.apiserver.model.product.dto;
 
 import com.gaejangmo.apiserver.model.product.domain.vo.NaverProductType;
-import com.gaejangmo.apiserver.model.product.domain.vo.ProductType;
 import lombok.*;
 
 @NoArgsConstructor
@@ -20,5 +19,4 @@ public class ManagedProductResponseDto {
     private String mallName;
     private long productId;
     private NaverProductType naverProductType;
-    private ProductType productType;
 }

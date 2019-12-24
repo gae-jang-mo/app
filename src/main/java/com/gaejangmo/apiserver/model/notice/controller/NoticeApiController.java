@@ -3,10 +3,14 @@ package com.gaejangmo.apiserver.model.notice.controller;
 import com.gaejangmo.apiserver.model.notice.dto.NoticeRequestDto;
 import com.gaejangmo.apiserver.model.notice.dto.NoticeResponseDto;
 import com.gaejangmo.apiserver.model.notice.service.NoticeService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
@@ -23,6 +27,13 @@ public class NoticeApiController {
     public ResponseEntity<NoticeResponseDto> find(@PathVariable long id) {
         NoticeResponseDto responseDto = noticeService.findById(id);
         return ResponseEntity.ok(responseDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<NoticeResponseDto>> list(@PageableDefault(size = 3, sort = "createdAt",
+            direction = Sort.Direction.DESC) Pageable pageable) {
+        List<NoticeResponseDto> notices = noticeService.findAll(pageable);
+        return ResponseEntity.ok(notices);
     }
 
     @PostMapping

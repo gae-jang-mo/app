@@ -13,7 +13,10 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
+import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getDocumentRequest;
+import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getDocumentResponse;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -70,6 +73,8 @@ class ProductApiControllerTest extends MockMvcTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andDo(document("product/save",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("제품 이름"),
                                 fieldWithPath("link").type(JsonFieldType.STRING).description("제품 판매 경로"),
@@ -78,8 +83,7 @@ class ProductApiControllerTest extends MockMvcTest {
                                 fieldWithPath("highestPrice").type(JsonFieldType.NUMBER).description("제품 최고 가격"),
                                 fieldWithPath("mallName").type(JsonFieldType.STRING).description("제품 판매처"),
                                 fieldWithPath("productId").type(JsonFieldType.NUMBER).description("제품 외부 고유 번호"),
-                                fieldWithPath("naverProductType").type(JsonFieldType.STRING).description("네이버 기준 제품 종류"),
-                                fieldWithPath("productType").type(JsonFieldType.STRING).description("제품 종류")
+                                fieldWithPath("naverProductType").type(JsonFieldType.STRING).description("네이버 기준 제품 종류")
                         )));
 
         ResultActions resultActions = mockMvc.perform(get(PRODUCT_API + "/internal")
@@ -88,30 +92,30 @@ class ProductApiControllerTest extends MockMvcTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("product/findFromInternalResource",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestParameters(
                                 parameterWithName("productName").description("제품 이름")
                         ),
                         responseFields(
-                                fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("제품 고유 번호"),
-                                fieldWithPath("[].productName").type(JsonFieldType.STRING).description("제품 이름"),
-                                fieldWithPath("[].buyUrl").type(JsonFieldType.STRING).description("제품 구매 경로"),
-                                fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("제품 사진"),
-                                fieldWithPath("[].lowestPrice").type(JsonFieldType.NUMBER).description("제품 최저 가격"),
-                                fieldWithPath("[].highestPrice").type(JsonFieldType.NUMBER).description("제품 최고 가격"),
-                                fieldWithPath("[].mallName").type(JsonFieldType.STRING).description("제품 판매처"),
-                                fieldWithPath("[].productId").type(JsonFieldType.NUMBER).description("제품 외부 고유 번호"),
-                                fieldWithPath("[].naverProductType").type(JsonFieldType.STRING).description("네이버 기준 제품 종류"),
-                                fieldWithPath("[].productType").type(JsonFieldType.STRING).description("제품 종류"))
-                ));
+                                fieldWithPath("id").type(JsonFieldType.NUMBER).description("제품 고유 번호"),
+                                fieldWithPath("productName").type(JsonFieldType.STRING).description("제품 이름"),
+                                fieldWithPath("buyUrl").type(JsonFieldType.STRING).description("제품 구매 경로"),
+                                fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("제품 사진"),
+                                fieldWithPath("lowestPrice").type(JsonFieldType.NUMBER).description("제품 최저 가격"),
+                                fieldWithPath("highestPrice").type(JsonFieldType.NUMBER).description("제품 최고 가격"),
+                                fieldWithPath("mallName").type(JsonFieldType.STRING).description("제품 판매처"),
+                                fieldWithPath("productId").type(JsonFieldType.NUMBER).description("제품 외부 고유 번호"),
+                                fieldWithPath("naverProductType").type(JsonFieldType.STRING).description("네이버 기준 제품 종류")
+                        )));
 
         byte[] contentAsByteArray = resultActions.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsByteArray();
 
-        List<ProductResponseDto> managedProductResponseDtos = OBJECT_MAPPER.readValue(contentAsByteArray, new TypeReference<List<ProductResponseDto>>() {
-        });
+        ProductResponseDto managedProductResponseDto = OBJECT_MAPPER.readValue(contentAsByteArray, ProductResponseDto.class);
 
-        assertThat(managedProductResponseDtos.size()).isEqualTo(1);
+        assertNotNull(managedProductResponseDto);
     }
 
     @Ignore

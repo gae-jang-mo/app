@@ -7,13 +7,16 @@ import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.domain.UserRepository;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
+import com.gaejangmo.apiserver.model.user.dto.UserSearchDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -52,6 +55,13 @@ public class UserService {
         return toDto(user);
     }
 
+    public List<UserSearchDto> findUserSearchDtosByUserName(final String username) {
+        List<User> users = userRepository.findAllByUsernameContainingIgnoreCase(username);
+        return users.stream()
+                .map(this::toUserSearchDto)
+                .collect(Collectors.toList());
+    }
+
     public UserResponseDto updateMotto(final Long id, final Motto motto) {
         return updateTemplate(id, (user) -> toDto(user.updateMotto(motto)));
     }
@@ -73,6 +83,14 @@ public class UserService {
                 .createdAt(savedUserImage.getCreatedAt())
                 .id(savedUserImage.getId())
                 .fileFeature(savedUserImage.getFileFeature())
+                .build();
+    }
+
+    private UserSearchDto toUserSearchDto(final User user) {
+        return UserSearchDto.builder()
+                .id(user.getId())
+                .imageUrl(user.getImageUrl())
+                .username(user.getUsername())
                 .build();
     }
 

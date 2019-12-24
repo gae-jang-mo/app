@@ -1,7 +1,6 @@
 package com.gaejangmo.apiserver.model.product.dto;
 
 import com.gaejangmo.apiserver.model.product.domain.vo.NaverProductType;
-import com.gaejangmo.apiserver.model.product.domain.vo.ProductType;
 import com.gaejangmo.apiserver.model.product.dto.validator.EnumValue;
 import lombok.*;
 import org.hibernate.validator.constraints.URL;
@@ -39,7 +38,4 @@ public class ProductRequestDto {
 
     @EnumValue(enumClass = NaverProductType.class)
     private String naverProductType;
-
-    @EnumValue(enumClass = ProductType.class)
-    private String productType;
 }
