@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @EnableLog
 @RestController
 @RequestMapping("/api/v1/users")
@@ -45,5 +47,12 @@ public class UserApiController {
                                                            @LoginUser final SecurityUser securityUser) {
         FileResponseDto fileResponseDto = userService.updateUserImage(file, securityUser.getId());
         return ResponseEntity.ok(fileResponseDto);
+    }
+
+    @GetMapping("/random")
+    public ResponseEntity<List<UserResponseDto>> showRandomUsers() {
+        // TODO
+        userService.findRandomUserResponse();
+        return null;
     }
 }

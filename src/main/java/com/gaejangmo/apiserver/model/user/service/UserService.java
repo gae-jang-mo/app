@@ -76,6 +76,14 @@ public class UserService {
                 .build();
     }
 
+    public void findRandomUserResponse() {
+        long maxId = userRepository.getMaxId();
+        // TODO
+        // 랜덤으로 3명
+        //        ThreadLocalRandom.current().longs(0, maxId).distinct().limit()
+
+    }
+
     private UserResponseDto toDto(final User user) {
         return UserResponseDto.builder()
                 .id(user.getId())

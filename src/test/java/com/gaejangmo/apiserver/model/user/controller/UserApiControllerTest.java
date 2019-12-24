@@ -1,5 +1,6 @@
 package com.gaejangmo.apiserver.model.user.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.gaejangmo.apiserver.config.aws.S3Connector;
 import com.gaejangmo.apiserver.model.MockMvcTest;
 import com.gaejangmo.apiserver.model.common.support.WithMockCustomUser;
@@ -16,6 +17,8 @@ import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.util.List;
 
 import static com.gaejangmo.apiserver.model.user.testdata.UserTestData.RESPONSE_DTO;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -175,5 +178,21 @@ class UserApiControllerTest extends MockMvcTest {
         assertThat(fileFeature.getOriginalName()).isEqualTo(file.getOriginalFilename());
         assertThat(fileFeature.getUrl()).isEqualTo(expectedUrl);
         assertThat(fileFeature.getSavedName()).isNotBlank();
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 랜덤_유저_3명_pick() throws Exception {
+        byte[] contentAsByteArray = mockMvc.perform(get(USER_API + "/random")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsByteArray();
+
+        List<UserResponseDto> userResponseDtos = OBJECT_MAPPER.readValue(contentAsByteArray, new TypeReference<List<UserResponseDto>>() {
+        });// TODO jsonpath
+
+        // 랜덤하게 3명을 뽑는다.
+        assertThat(userResponseDtos.size()).isEqualTo(3);
     }
 }
