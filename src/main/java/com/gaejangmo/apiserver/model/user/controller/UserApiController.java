@@ -56,8 +56,13 @@ public class UserApiController {
         return ResponseEntity.ok(fileResponseDto);
     }
 
+    @GetMapping("/random")
+    public ResponseEntity<List<UserSearchDto>> showRandomUsers() {
+        return ResponseEntity.ok(userService.findRandomUserResponse());
+    }
+
     @GetMapping("/search")
-    public ResponseEntity<List<UserSearchDto>> search(@RequestParam final String username){
+    public ResponseEntity<List<UserSearchDto>> search(@RequestParam final String username) {
         List<UserSearchDto> userSearchDtos = userService.findUserSearchDtosByUserName(username);
         return ResponseEntity.ok(userSearchDtos);
     }

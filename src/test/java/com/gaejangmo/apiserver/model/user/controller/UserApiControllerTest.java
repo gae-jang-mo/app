@@ -27,7 +27,6 @@ import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getD
 import static com.gaejangmo.apiserver.model.user.testdata.UserTestData.RESPONSE_DTO;
 import static com.gaejangmo.apiserver.model.user.testdata.UserTestData.RESPONSE_DTO_NOT_INCLUDE_ISLIKED;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -37,7 +36,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class UserApiControllerTest extends MockMvcTest {
     private static final String USER_API = getApiUrl(UserApiController.class);
@@ -261,7 +261,32 @@ class UserApiControllerTest extends MockMvcTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString();
 
-        List<UserSearchDto> userSearchDtos = OBJECT_MAPPER.readValue(contentAsString, List.class);
+        List<UserSearchDto> userSearchDtos = OBJECT_MAPPER.readValue(contentAsString, new TypeReference<>() {
+        });
+
         assertThat(userSearchDtos).hasSize(3);
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 랜덤_유저_3명_pick() throws Exception {
+        byte[] contentAsByteArray = mockMvc.perform(get(USER_API + "/random")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(document("user/random",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        responseFields(
+                                fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("식별자"),
+                                fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("프로필 사진"),
+                                fieldWithPath("[].username").type(JsonFieldType.STRING).description("유저 이름")
+                        )))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsByteArray();
+
+        List<UserSearchDto> userResponseDtos = OBJECT_MAPPER.readValue(contentAsByteArray, new TypeReference<List<UserSearchDto>>() {
+        });
+
+        assertThat(userResponseDtos.size()).isEqualTo(3);
     }
 }

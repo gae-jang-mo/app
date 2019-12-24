@@ -46,7 +46,7 @@ public class UserProductApiController {
     @EnableLog
     @PostMapping("/external")
     public ResponseEntity<UserProductResponseDto> createFromExternal(@RequestBody final UserProductExternalRequestDto requestDto,
-                                                         @LoginUser final SecurityUser securityUser) {
+                                                                     @LoginUser final SecurityUser securityUser) {
         Long userId = securityUser.getId();
         UserProductResponseDto responseDto = userProductService.saveFromExternal(requestDto, userId);
         URI uri = linkTo(UserProductApiController.class).slash(responseDto.getId()).toUri();
