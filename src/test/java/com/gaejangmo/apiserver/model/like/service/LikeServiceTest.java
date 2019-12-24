@@ -3,7 +3,7 @@ package com.gaejangmo.apiserver.model.like.service;
 import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import com.gaejangmo.apiserver.model.like.domain.LikeRepository;
 import com.gaejangmo.apiserver.model.like.domain.Likes;
-import com.gaejangmo.apiserver.model.like.exception.ImpossibleLikeSameUserException;
+import com.gaejangmo.apiserver.model.like.exception.InvalidMySelfLikeException;
 import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.domain.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -54,7 +54,7 @@ class LikeServiceTest {
     @Test
     void 자기_자신을_좋아요_시도할_시_예외처리() {
         // when & then
-        assertThrows(ImpossibleLikeSameUserException.class, () -> likeService.save(SOURCE_ID, SOURCE_ID));
+        assertThrows(InvalidMySelfLikeException.class, () -> likeService.save(SOURCE_ID, SOURCE_ID));
     }
 
     @Test
