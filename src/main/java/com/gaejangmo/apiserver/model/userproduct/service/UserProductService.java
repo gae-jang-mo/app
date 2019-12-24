@@ -3,7 +3,6 @@ package com.gaejangmo.apiserver.model.userproduct.service;
 import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import com.gaejangmo.apiserver.model.like.service.LikeService;
 import com.gaejangmo.apiserver.model.product.domain.Product;
-import com.gaejangmo.apiserver.model.product.domain.ProductRepository;
 import com.gaejangmo.apiserver.model.product.dto.ManagedProductResponseDto;
 import com.gaejangmo.apiserver.model.product.service.ProductService;
 import com.gaejangmo.apiserver.model.user.domain.User;
@@ -29,14 +28,13 @@ public class UserProductService {
     private final ProductService productService;
     private final UserService userService;
     private final UserProductRepository userProductRepository;
-    private final ProductRepository productRepository;
     private final LikeService likeService;
 
-    public UserProductService(final ProductService productService, final UserService userService, final UserProductRepository userProductRepository, final ProductRepository productRepository, final LikeService likeServic) {
+    public UserProductService(final ProductService productService, final UserService userService,
+                              final UserProductRepository userProductRepository, final LikeService likeService) {
         this.productService = productService;
         this.userService = userService;
         this.userProductRepository = userProductRepository;
-        this.productRepository = productRepository;
         this.likeService = likeService;
     }
 
@@ -129,24 +127,6 @@ public class UserProductService {
                 .productType(userProduct.getProductType().getName())
                 .imageUrl(userProduct.getProduct().getImageUrl())
                 .productId(userProduct.getProduct().getId())
-                .build();
-    }
-
-    private UserProduct toEntityFromInternal(final UserProductInternalRequestDto requestDto, final Product product, final User user) {
-        return UserProduct.builder()
-                .user(user)
-                .product(product)
-                .productType(requestDto.getUserProductRequestDto().getProductType())
-                .comment(Comment.of(requestDto.getUserProductRequestDto().getComment()))
-                .build();
-    }
-
-    private UserProduct toEntityFromExternal(final UserProductExternalRequestDto requestDto, final Product product, final User user) {
-        return UserProduct.builder()
-                .user(user)
-                .product(product)
-                .productType(requestDto.getUserProductRequestDto().getProductType())
-                .comment(Comment.of(requestDto.getUserProductRequestDto().getComment()))
                 .build();
     }
 }
