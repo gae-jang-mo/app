@@ -61,8 +61,9 @@ public class UserProductApiController {
 
     @GetMapping("/latest")
     public ResponseEntity<List<UserProductLatestResponseDto>> latest(
-            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) final Pageable pageable) {
-        List<UserProductLatestResponseDto> responseDtos = userProductService.findAllByPageable(pageable);
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) final Pageable pageable,
+            @LoginUser SecurityUser securityUser) {
+        List<UserProductLatestResponseDto> responseDtos = userProductService.findAllByPageable(pageable, securityUser);
         return ResponseEntity.ok(responseDtos);
     }
 

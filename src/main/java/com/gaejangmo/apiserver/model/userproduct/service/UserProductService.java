@@ -1,5 +1,7 @@
 package com.gaejangmo.apiserver.model.userproduct.service;
 
+import com.gaejangmo.apiserver.config.oauth.SecurityUser;
+import com.gaejangmo.apiserver.model.like.service.LikeService;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.product.domain.ProductRepository;
 import com.gaejangmo.apiserver.model.product.dto.ManagedProductResponseDto;
@@ -28,12 +30,14 @@ public class UserProductService {
     private final UserService userService;
     private final UserProductRepository userProductRepository;
     private final ProductRepository productRepository;
+    private final LikeService likeService;
 
-    public UserProductService(final ProductService productService, final UserService userService, final UserProductRepository userProductRepository, final ProductRepository productRepository) {
+    public UserProductService(final ProductService productService, final UserService userService, final UserProductRepository userProductRepository, final ProductRepository productRepository, final LikeService likeServic) {
         this.productService = productService;
         this.userService = userService;
         this.userProductRepository = userProductRepository;
         this.productRepository = productRepository;
+        this.likeService = likeService;
     }
 
     public UserProductResponseDto saveFromInternal(final UserProductInternalRequestDto requestDto, final Long userId) {
@@ -96,12 +100,14 @@ public class UserProductService {
         throw new NotUserProductOwnerException();
     }
 
-    public List<UserProductLatestResponseDto> findAllByPageable(final Pageable pageable) {
+    public List<UserProductLatestResponseDto> findAllByPageable(final Pageable pageable, final SecurityUser loginUser) {
         return userProductRepository.findAll(pageable)
-                .map(this::toLatestDto).toList();
+                .map(userProduct -> toLatestDto(userProduct,
+                        likeService.isLiked(loginUser, userProduct.getUser().getId())))
+                .toList();
     }
 
-    private UserProductLatestResponseDto toLatestDto(final UserProduct userProduct) {
+    private UserProductLatestResponseDto toLatestDto(final UserProduct userProduct, final boolean isLiked) {
         return UserProductLatestResponseDto.builder()
                 .id(userProduct.getId())
                 .productType(userProduct.getProductType())
@@ -110,6 +116,7 @@ public class UserProductService {
                 .userImageUrl(userProduct.getUser().getImageUrl())
                 .username(userProduct.getUser().getUsername())
                 .motto(userProduct.getUser().getMotto())
+                .isLiked(isLiked)
                 .createdAt(userProduct.getCreatedAt())
                 .build();
     }
