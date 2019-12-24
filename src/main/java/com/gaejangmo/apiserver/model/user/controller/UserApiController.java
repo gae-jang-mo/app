@@ -6,6 +6,7 @@ import com.gaejangmo.apiserver.model.common.exception.ApiErrorResponse;
 import com.gaejangmo.apiserver.model.common.resolver.LoginUser;
 import com.gaejangmo.apiserver.model.image.dto.FileResponseDto;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
+import com.gaejangmo.apiserver.model.user.dto.UserIntroduceDto;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
 import com.gaejangmo.apiserver.model.user.dto.UserSearchDto;
 import com.gaejangmo.apiserver.model.user.service.UserService;
@@ -47,8 +48,15 @@ public class UserApiController {
     @PutMapping("/motto")
     public ResponseEntity<Motto> updateMotto(@RequestBody final Motto motto,
                                              @LoginUser SecurityUser user) {
-        userService.updateMotto(user.getId(), motto);
-        return ResponseEntity.ok(motto);
+        UserResponseDto response = userService.updateMotto(user.getId(), motto);
+        return ResponseEntity.ok(Motto.of(response.getMotto()));
+    }
+
+    @PutMapping("/introduce")
+    public ResponseEntity<UserIntroduceDto> updateIntroduce(@RequestBody final UserIntroduceDto introduce,
+                                                            @LoginUser SecurityUser securityUser) {
+        UserResponseDto response = userService.updateIntroduce(securityUser.getId(), introduce.getIntroduce());
+        return ResponseEntity.ok(new UserIntroduceDto(response.getIntroduce()));
     }
 
     @PostMapping("/image")

@@ -135,6 +135,21 @@ include::{snippets}/user/updateUserImage/http-response.adoc[]
 .response fields
 include::{snippets}/user/updateUserImage/response-fields.adoc[]
 
+=== updateIntroduce()
+유저 자기소개 수정
+
+.request
+include::{snippets}/user/updateIntroduce/http-request.adoc[]
+
+.request fields
+include::{snippets}/user/updateIntroduce/request-fields.adoc[]
+
+.response
+include::{snippets}/user/updateIntroduce/http-response.adoc[]
+
+.response fields
+include::{snippets}/user/updateIntroduce/response-fields.adoc[]
+
 === search()
 유저 이름으로 유저 리스트 검색
 
@@ -176,9 +191,9 @@ include::{snippets}/like/delete/path-parameters.adoc[]
 .response
 include::{snippets}/like/delete/http-response.adoc[]
 
-== UserProduct
+== UserProduct API
 
-=== createFromInternal() API
+=== createFromInternal()
 
 내부 유저 장비 생성
 
@@ -194,7 +209,7 @@ include::{snippets}/userproduct/createFromInternal/http-response.adoc[]
 .response fields
 include::{snippets}/userproduct/createFromInternal/response-fields.adoc[]
 
-=== createFromExternal() API
+=== createFromExternal()
 
 외부 유저 장비 생성
 
@@ -210,7 +225,7 @@ include::{snippets}/userproduct/createFromExternal/http-response.adoc[]
 .response fields
 include::{snippets}/userproduct/createFromExternal/response-fields.adoc[]
 
-=== list() API
+=== list()
 
 사용자별 유저 장비 리스트 조회
 
@@ -226,7 +241,7 @@ include::{snippets}/userproduct/list/http-response.adoc[]
 .response fields
 include::{snippets}/userproduct/list/response-fields.adoc[]
 
-=== latest() API
+=== latest()
 
 가장 최근에 등록된 유저 장비 조회
 
@@ -242,7 +257,7 @@ include::{snippets}/userproduct/latest/http-response.adoc[]
 .response fields
 include::{snippets}/userproduct/latest/response-fields.adoc[]
 
-=== updateComment() API
+=== updateComment()
 
 유저 장비에 대한 상품평 수정
 
@@ -261,7 +276,7 @@ include::{snippets}/userproduct/updateComment/http-response.adoc[]
 .response fields
 include::{snippets}/userproduct/updateComment/response-fields.adoc[]
 
-=== updateProductType() API
+=== updateProductType()
 
 유저 장비에 대한 장비 유형 수정
 
@@ -280,7 +295,7 @@ include::{snippets}/userproduct/updateProductType/http-response.adoc[]
 .response fields
 include::{snippets}/userproduct/updateProductType/response-fields.adoc[]
 
-=== delete() API
+=== delete()
 
 유저 장비 삭제
 

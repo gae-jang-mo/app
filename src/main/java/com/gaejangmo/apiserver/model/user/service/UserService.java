@@ -69,6 +69,10 @@ public class UserService {
         return updateTemplate(id, (user) -> toDto(user.updateMotto(motto)));
     }
 
+    public UserResponseDto updateIntroduce(final Long id, final String introduce) {
+        return updateTemplate(id, (user) -> toDto(user.updateIntroduce(introduce)));
+    }
+
     private <T> T updateTemplate(final Long id, final Function<User, T> function) {
         User user = findById(id);
         return function.apply(user);

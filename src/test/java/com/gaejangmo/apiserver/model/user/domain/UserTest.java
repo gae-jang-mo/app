@@ -80,4 +80,16 @@ class UserTest {
         // then
         assertThat(actual).isEqualTo(expected);
     }
+
+    @Test
+    void 자기소개_수정() {
+        // given
+        String updatedIntroduce = "하이염2";
+
+        // when
+        User updatedUser = user.updateIntroduce(updatedIntroduce);
+
+        // then
+        assertThat(updatedUser.getIntroduce()).isEqualTo(updatedIntroduce);
+    }
 }

@@ -7,6 +7,7 @@ import com.gaejangmo.apiserver.model.common.support.WithMockCustomUser;
 import com.gaejangmo.apiserver.model.image.domain.vo.FileFeature;
 import com.gaejangmo.apiserver.model.image.dto.FileResponseDto;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
+import com.gaejangmo.apiserver.model.user.dto.UserIntroduceDto;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
 import com.gaejangmo.apiserver.model.user.dto.UserSearchDto;
 import org.junit.jupiter.api.Test;
@@ -87,7 +88,7 @@ class UserApiControllerTest extends MockMvcTest {
 
         // when
         ResultActions resultActions = mockMvc.perform(
-                RestDocumentationRequestBuilders.get("/api/v1/users/{name}", RESPONSE_DTO.getUsername())
+                RestDocumentationRequestBuilders.get(USER_API + "/{name}", RESPONSE_DTO.getUsername())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -189,6 +190,39 @@ class UserApiControllerTest extends MockMvcTest {
 
     @Test
     @WithMockCustomUser
+    void 자기소개_수정() throws Exception {
+        // given
+        UserIntroduceDto introduce = new UserIntroduceDto("수정된 자기소개");
+
+        // when
+        ResultActions resultActions = mockMvc.perform((put(USER_API + "/introduce"))
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(OBJECT_MAPPER.writeValueAsString(introduce)))
+                .andDo(print())
+                .andDo(document("user/updateIntroduce",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("introduce").type(JsonFieldType.STRING).description("수정하려는 자기소개")
+                        ),
+                        responseFields(
+                                fieldWithPath("introduce").type(JsonFieldType.STRING).description("수정된 자기소개")
+                        )
+                ));
+
+        // then
+        byte[] contentAsByteArray = resultActions.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsByteArray();
+
+        UserIntroduceDto actual = OBJECT_MAPPER.readValue(contentAsByteArray, UserIntroduceDto.class);
+
+        assertThat(actual.getIntroduce()).isEqualTo(introduce.getIntroduce());
+    }
+
+    @Test
+    @WithMockCustomUser
     void UserImage_수정() throws Exception {
         // given
         MockMultipartFile file = new MockMultipartFile("file", "fileName.jpg", "image/jpeg", "image".getBytes());
@@ -282,7 +316,7 @@ class UserApiControllerTest extends MockMvcTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsByteArray();
 
-        List<UserSearchDto> userResponseDtos = OBJECT_MAPPER.readValue(contentAsByteArray, new TypeReference<List<UserSearchDto>>() {
+        List<UserSearchDto> userResponseDtos = OBJECT_MAPPER.readValue(contentAsByteArray, new TypeReference<>() {
         });
 
         assertThat(userResponseDtos.size()).isEqualTo(3);

@@ -1,10 +1,12 @@
 package com.gaejangmo.apiserver.model.user.service;
 
 import com.gaejangmo.apiserver.config.oauth.SecurityUser;
+import com.gaejangmo.apiserver.model.common.domain.vo.Link;
 import com.gaejangmo.apiserver.model.like.domain.Likes;
 import com.gaejangmo.apiserver.model.like.service.LikeService;
 import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.domain.UserRepository;
+import com.gaejangmo.apiserver.model.user.domain.vo.Email;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
 import com.gaejangmo.apiserver.model.user.dto.UserSearchDto;
@@ -112,5 +114,28 @@ class UserServiceTest {
         // then
         assertThat(actual).isEqualTo(expected);
         verify(userRepository).findAllByUsernameContainingIgnoreCase(username);
+    }
+
+    @Test
+    void 자기소개_수정() {
+        // given
+        String updatedIntroduce = "안녕 난 수정된 제이";
+        User entity = User.builder()
+                .oauthId(20608121L)
+                .username("JunHoPark93")
+                .email(Email.of("abc@gmail.com"))
+                .motto(Motto.of("장비충개발자"))
+                .imageUrl(Link.of("https://previews.123rf.com/images/aquir/aquir1311/aquir131100316/23569861-%EC%83%98%ED%94%8C-%EC%A7%80-%EB%B9%A8%EA%B0%84%EC%83%89-%EB%9D%BC%EC%9A%B4%EB%93%9C-%EC%8A%A4%ED%83%AC%ED%94%84.jpg"))
+                .introduce("안녕 난 제이")
+                .build();
+
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(entity));
+
+        // when
+        UserResponseDto actual = userService.updateIntroduce(USER_ID, updatedIntroduce);
+
+        // then
+        assertThat(actual.getIntroduce()).isEqualTo(updatedIntroduce);
+        verify(userRepository, times(1)).findById(anyLong());
     }
 }
