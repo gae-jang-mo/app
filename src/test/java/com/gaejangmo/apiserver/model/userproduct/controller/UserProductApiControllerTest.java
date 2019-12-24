@@ -20,7 +20,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.gaejangmo.apiserver.model.product.testdata.ProductTestData.REQUEST_DTO;
+import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getDocumentRequest;
+import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getDocumentResponse;
 import static com.gaejangmo.apiserver.model.product.testdata.ProductTestData.REQUEST_DTO2;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -50,6 +51,8 @@ class UserProductApiControllerTest extends MockMvcTest {
                 .content(OBJECT_MAPPER.writeValueAsString(userProductInternalRequestDto)))
                 .andDo(print())
                 .andDo(document("userproduct/createFromInternal",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("productId").type(JsonFieldType.NUMBER).description("Product의 식별자"),
                                 fieldWithPath("userProductRequestDto.productType").type(JsonFieldType.STRING).description("장비의 타입"),
@@ -84,7 +87,9 @@ class UserProductApiControllerTest extends MockMvcTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .content(OBJECT_MAPPER.writeValueAsString(userProductExternalRequestDto)))
                 .andDo(print())
-                .andDo(document("userproduct/create",
+                .andDo(document("userproduct/createFromExternal",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("userProductRequestDto.productType").type(JsonFieldType.STRING).description("장비의 타입"),
                                 fieldWithPath("userProductRequestDto.comment").type(JsonFieldType.STRING).description("제품에 대한 코멘트"),
@@ -150,6 +155,8 @@ class UserProductApiControllerTest extends MockMvcTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("userproduct/list",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         pathParameters(parameterWithName("userId").description("조회할 user의 식별자")),
                         responseFields(
                                 fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("UserProduct의 식별자"),
@@ -196,6 +203,8 @@ class UserProductApiControllerTest extends MockMvcTest {
                         .content(OBJECT_MAPPER.writeValueAsString(commentDto)))
                 .andDo(print())
                 .andDo(document("userproduct/updateComment",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         pathParameters(parameterWithName("id").description("상품평을 수정할 유저 장비의 식별자")),
                         requestFields(fieldWithPath("comment").type(JsonFieldType.STRING).description("수정할 유저 장비 상품평의 내용")),
                         responseFields(
@@ -278,6 +287,8 @@ class UserProductApiControllerTest extends MockMvcTest {
                         .content(OBJECT_MAPPER.writeValueAsString(productTypeDto)))
                 .andDo(print())
                 .andDo(document("userproduct/updateProductType",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         pathParameters(parameterWithName("id").description("상품평을 수정할 유저 장비의 식별자")),
                         requestFields(fieldWithPath("productType").type(JsonFieldType.STRING).description("수정할 유저 장비 상품평의 내용")),
                         responseFields(
@@ -310,6 +321,8 @@ class UserProductApiControllerTest extends MockMvcTest {
                         .content(OBJECT_MAPPER.writeValueAsString(pageable)))
                 .andDo(print())
                 .andDo(document("userproduct/latest",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("pageNumber").type(JsonFieldType.NUMBER).description("출력할 페이지 번호").optional(),
                                 fieldWithPath("pageSize").type(JsonFieldType.NUMBER).description("한 번에 출력할 페이지의 크기").optional(),

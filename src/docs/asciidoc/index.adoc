@@ -151,20 +151,42 @@ include::{snippets}/user/search/http-response.adoc[]
 include::{snippets}/user/search/response-fields.adoc[]
 
 == UserProduct
-=== create() API
+
+=== createFromInternal() API
+
+내부 유저 장비 생성
+
 .request
-include::{snippets}/userproduct/create/http-request.adoc[]
+include::{snippets}/userproduct/createFromInternal/http-request.adoc[]
 
 .request fields
-include::{snippets}/userproduct/create/request-fields.adoc[]
+include::{snippets}/userproduct/createFromInternal/request-fields.adoc[]
 
 .response
-include::{snippets}/userproduct/create/http-response.adoc[]
+include::{snippets}/userproduct/createFromInternal/http-response.adoc[]
 
 .response fields
-include::{snippets}/userproduct/create/response-fields.adoc[]
+include::{snippets}/userproduct/createFromInternal/response-fields.adoc[]
+
+=== createFromExternal() API
+
+외부 유저 장비 생성
+
+.request
+include::{snippets}/userproduct/createFromExternal/http-request.adoc[]
+
+.request fields
+include::{snippets}/userproduct/createFromExternal/request-fields.adoc[]
+
+.response
+include::{snippets}/userproduct/createFromExternal/http-response.adoc[]
+
+.response fields
+include::{snippets}/userproduct/createFromExternal/response-fields.adoc[]
 
 === list() API
+
+사용자별 유저 장비 리스트 조회
 
 .request
 include::{snippets}/userproduct/list/http-request.adoc[]
@@ -180,6 +202,8 @@ include::{snippets}/userproduct/list/response-fields.adoc[]
 
 === latest() API
 
+가장 최근에 등록된 유저 장비 조회
+
 .request
 include::{snippets}/userproduct/latest/http-request.adoc[]
 
@@ -193,6 +217,8 @@ include::{snippets}/userproduct/latest/http-response.adoc[]
 include::{snippets}/userproduct/latest/response-fields.adoc[]
 
 === updateComment() API
+
+유저 장비에 대한 상품평 수정
 
 .request
 include::{snippets}/userproduct/updateComment/http-request.adoc[]
@@ -211,6 +237,8 @@ include::{snippets}/userproduct/updateComment/response-fields.adoc[]
 
 === updateProductType() API
 
+유저 장비에 대한 장비 유형 수정
+
 .request
 include::{snippets}/userproduct/updateProductType/http-request.adoc[]
 
@@ -227,6 +255,8 @@ include::{snippets}/userproduct/updateProductType/http-response.adoc[]
 include::{snippets}/userproduct/updateProductType/response-fields.adoc[]
 
 === delete() API
+
+유저 장비 삭제
 
 .request
 include::{snippets}/userproduct/delete/http-request.adoc[]
