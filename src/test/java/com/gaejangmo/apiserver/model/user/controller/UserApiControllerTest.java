@@ -9,7 +9,6 @@ import com.gaejangmo.apiserver.model.image.dto.FileResponseDto;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
 import com.gaejangmo.apiserver.model.user.dto.UserSearchDto;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -27,7 +26,6 @@ import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getD
 import static com.gaejangmo.apiserver.model.user.testdata.UserTestData.RESPONSE_DTO;
 import static com.gaejangmo.apiserver.model.user.testdata.UserTestData.RESPONSE_DTO_NOT_INCLUDE_ISLIKED;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -37,7 +35,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class UserApiControllerTest extends MockMvcTest {
     private static final String USER_API = getApiUrl(UserApiController.class);

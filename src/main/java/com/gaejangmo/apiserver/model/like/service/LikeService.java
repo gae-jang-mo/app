@@ -29,6 +29,7 @@ public class LikeService {
         if (sourceId.equals(targetId)) {
             throw new ImpossibleLikeSameUserException("나 자신을 좋아요할 수 없습니다.");
         }
+
         User source = findById(sourceId);
         User target = findById(targetId);
 
