@@ -32,7 +32,7 @@ public abstract class MockMvcTest {
     protected void setUp(WebApplicationContext webApplicationContext,
                          RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .addFilters(new CharacterEncodingFilter("UTF-8", true))
+                .addFilter(new CharacterEncodingFilter("UTF-8", true))
                 .apply(documentationConfiguration(restDocumentation))
                 .apply(springSecurity())
                 .build();

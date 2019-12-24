@@ -9,7 +9,8 @@ import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import com.gaejangmo.apiserver.model.userproduct.dto.CommentDto;
 import com.gaejangmo.apiserver.model.userproduct.dto.ProductTypeDto;
 import com.gaejangmo.apiserver.model.userproduct.service.UserProductService;
-import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
+import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductExternalRequestDto;
+import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductInternalRequestDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductLatestResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
 import org.springframework.data.domain.Pageable;
@@ -35,11 +36,21 @@ public class UserProductApiController {
     }
 
     @EnableLog
-    @PostMapping("/products")
-    public ResponseEntity<UserProductResponseDto> create(@RequestBody final UserProductCreateDto userProductCreateDto,
+    @PostMapping("/products/internal")
+    public ResponseEntity<UserProductResponseDto> createFromInternal(@RequestBody final UserProductInternalRequestDto requestDto,
+                                                                     @LoginUser final SecurityUser securityUser) {
+        Long userId = securityUser.getId();
+        UserProductResponseDto responseDto = userProductService.saveFromInternal(requestDto, userId);
+        URI uri = linkTo(UserProductApiController.class).slash(responseDto.getId()).toUri();
+        return ResponseEntity.created(uri).body(responseDto);
+    }
+
+    @EnableLog
+    @PostMapping("/products/external")
+    public ResponseEntity<UserProductResponseDto> createFromExternal(@RequestBody final UserProductExternalRequestDto requestDto,
                                                          @LoginUser final SecurityUser securityUser) {
         Long userId = securityUser.getId();
-        UserProductResponseDto responseDto = userProductService.save(userProductCreateDto, userId);
+        UserProductResponseDto responseDto = userProductService.saveFromExternal(requestDto, userId);
         URI uri = linkTo(UserProductApiController.class).slash(responseDto.getId()).toUri();
         return ResponseEntity.created(uri).body(responseDto);
     }
@@ -52,8 +63,9 @@ public class UserProductApiController {
 
     @GetMapping("/products/latest")
     public ResponseEntity<List<UserProductLatestResponseDto>> latest(
-            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) final Pageable pageable) {
-        List<UserProductLatestResponseDto> responseDtos = userProductService.findAllByPageable(pageable);
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) final Pageable pageable,
+            @LoginUser SecurityUser securityUser) {
+        List<UserProductLatestResponseDto> responseDtos = userProductService.findAllByPageable(pageable, securityUser);
         return ResponseEntity.ok(responseDtos);
     }
 

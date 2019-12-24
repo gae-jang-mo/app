@@ -15,7 +15,6 @@ import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -33,12 +32,10 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
-    public List<ManagedProductResponseDto> findFromInternal(final String productName) {
-        List<Product> products = productRepository.findByProductName(ProductName.of(productName));
-        if (products.isEmpty()) {
-            throw new EntityNotFoundException("DB에 없는 장비입니다");
-        }
-        return products.stream().map(this::toDto).collect(Collectors.toList());
+    public ManagedProductResponseDto findFromInternal(final String productName) {
+        return productRepository.findByProductName(ProductName.of(productName))
+                .map(this::toDto)
+                .orElseThrow(() -> new EntityNotFoundException("DB에 없는 장비입니다"));
     }
 
     public List<NaverProductResponseDto> findFromExternal(final String productName) {
@@ -69,7 +66,6 @@ public class ProductService {
                 .mallName(product.getMallName())
                 .productId(product.getProductId())
                 .naverProductType(product.getNaverProductType())
-                .productType(product.getProductType())
                 .build();
     }
 

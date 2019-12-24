@@ -7,9 +7,7 @@ import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
 import com.gaejangmo.apiserver.model.userproduct.dto.CommentDto;
 import com.gaejangmo.apiserver.model.userproduct.dto.ProductTypeDto;
-import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
-import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductLatestResponseDto;
-import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
+import com.gaejangmo.apiserver.model.userproduct.service.dto.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +20,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.gaejangmo.apiserver.model.product.testdata.ProductTestData.REQUEST_DTO;
+import static com.gaejangmo.apiserver.model.product.testdata.ProductTestData.REQUEST_DTO2;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -38,21 +38,64 @@ class UserProductApiControllerTest extends MockMvcTest {
 
     @Test
     @WithMockCustomUser
-    void 장비_등록() throws Exception {
+    void 내부_장비_UserProduct_등록() throws Exception {
         // given
-        UserProductCreateDto userProductCreateDto = getUserProductCreateDto();
+        UserProductRequestDto userProductRequestDto = new UserProductRequestDto(ProductType.MOUSE, "댓글");
+        UserProductInternalRequestDto userProductInternalRequestDto = new UserProductInternalRequestDto(userProductRequestDto, PRODUCT_ID);
 
         // when
-        ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI + "/products")
+        ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI + "/products/internal")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(OBJECT_MAPPER.writeValueAsString(userProductCreateDto)))
+                .content(OBJECT_MAPPER.writeValueAsString(userProductInternalRequestDto)))
+                .andDo(print())
+                .andDo(document("userproduct/createFromInternal",
+                        requestFields(
+                                fieldWithPath("productId").type(JsonFieldType.NUMBER).description("Product의 식별자"),
+                                fieldWithPath("userProductRequestDto.productType").type(JsonFieldType.STRING).description("장비의 타입"),
+                                fieldWithPath("userProductRequestDto.comment").type(JsonFieldType.STRING).description("제품에 대한 코멘트")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").type(JsonFieldType.NUMBER).description("UserProduct의 식별자"),
+                                fieldWithPath("productId").type(JsonFieldType.NUMBER).description("Product의 식별자"),
+                                fieldWithPath("comment").type(JsonFieldType.STRING).description("장비에 대한 코멘트"),
+                                fieldWithPath("productType").type(JsonFieldType.STRING).description("장비의 타입"),
+                                fieldWithPath("createdAt").type(JsonFieldType.STRING).description("유저 장비 생성 날짜"),
+                                fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("유저 장비의 사진")
+                        )));
+
+        // then
+        resultActions.andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("id").value(7L))
+                .andExpect(jsonPath("comment").value(userProductRequestDto.getComment()));
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 외부_장비_UserProduct_등록() throws Exception {
+        // given
+        UserProductRequestDto userProductRequestDto = new UserProductRequestDto(ProductType.MOUSE, "댓글");
+        UserProductExternalRequestDto userProductExternalRequestDto = new UserProductExternalRequestDto(userProductRequestDto, REQUEST_DTO2);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI + "/products/external")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(OBJECT_MAPPER.writeValueAsString(userProductExternalRequestDto)))
                 .andDo(print())
                 .andDo(document("userproduct/create",
                         requestFields(
-                                fieldWithPath("productId").type(JsonFieldType.NUMBER).description("Product의 식별자"),
-                                fieldWithPath("productType").type(JsonFieldType.STRING).description("장비의 타입"),
-                                fieldWithPath("comment").type(JsonFieldType.STRING).description("제품에 대한 코멘트")
+                                fieldWithPath("userProductRequestDto.productType").type(JsonFieldType.STRING).description("장비의 타입"),
+                                fieldWithPath("userProductRequestDto.comment").type(JsonFieldType.STRING).description("제품에 대한 코멘트"),
+                                fieldWithPath("productRequestDto.title").type(JsonFieldType.STRING).description("제품의 이름"),
+                                fieldWithPath("productRequestDto.link").type(JsonFieldType.STRING).description("제품의 링크"),
+                                fieldWithPath("productRequestDto.image").type(JsonFieldType.STRING).description("제품의 이미지 링크"),
+                                fieldWithPath("productRequestDto.lowestPrice").type(JsonFieldType.NUMBER).description("제품의 최저값"),
+                                fieldWithPath("productRequestDto.highestPrice").type(JsonFieldType.NUMBER).description("제품의 최고값"),
+                                fieldWithPath("productRequestDto.mallName").type(JsonFieldType.STRING).description("제품 판매 상점 이름"),
+                                fieldWithPath("productRequestDto.productId").type(JsonFieldType.NUMBER).description("제품의 식별자"),
+                                fieldWithPath("productRequestDto.naverProductType").type(JsonFieldType.STRING).description("네이버에 등록된 제품 타입")
                         ),
                         responseFields(
                                 fieldWithPath("id").type(JsonFieldType.NUMBER).description("UserProduct의 식별자"),
@@ -71,34 +114,27 @@ class UserProductApiControllerTest extends MockMvcTest {
         UserProductResponseDto responseDto = OBJECT_MAPPER.readValue(content, UserProductResponseDto.class);
 
         assertThat(responseDto.getId()).isNotNull();
-        assertThat(responseDto.getProductType()).isEqualTo(userProductCreateDto.getProductType().getName());
-        assertThat(responseDto.getComment()).isEqualTo(userProductCreateDto.getComment());
-        assertThat(responseDto.getProductId()).isEqualTo(userProductCreateDto.getProductId());
+        assertThat(responseDto.getProductType()).isEqualTo(userProductExternalRequestDto.getUserProductRequestDto().getProductType().getName());
+        assertThat(responseDto.getComment()).isEqualTo(userProductExternalRequestDto.getUserProductRequestDto().getComment());
     }
+
 
     @Test
     @WithAnonymousUser
     void 비로그인_장비_등록시도_Unauthorized() throws Exception {
         // given
-        UserProductCreateDto userProductCreateDto = getUserProductCreateDto();
+        UserProductRequestDto userProductRequestDto = new UserProductRequestDto(ProductType.MOUSE, "댓글");
+        UserProductInternalRequestDto userProductInternalRequestDto = new UserProductInternalRequestDto(userProductRequestDto, PRODUCT_ID);
 
         // when
-        ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI + "/products")
+        ResultActions resultActions = mockMvc.perform(post(USER_PRODUCT_URI + "/products/internal")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(OBJECT_MAPPER.writeValueAsString(userProductCreateDto)))
+                .content(OBJECT_MAPPER.writeValueAsString(userProductInternalRequestDto)))
                 .andDo(print());
 
         // then
         resultActions.andExpect(status().isUnauthorized());
-    }
-
-    private UserProductCreateDto getUserProductCreateDto() {
-        return UserProductCreateDto.builder()
-                .productId(PRODUCT_ID)
-                .productType(ProductType.KEY_BOARD)
-                .comment("인생 마우스")
-                .build();
     }
 
     @Test
@@ -129,7 +165,7 @@ class UserProductApiControllerTest extends MockMvcTest {
         resultActions.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].comment").value("ㅎㅎ장비좋아요ㅋㅋㅋ"))
-                .andExpect(jsonPath("$[0].id").value(2));
+                .andExpect(jsonPath("$[0].id").value(3));
     }
 
     @Test
@@ -260,7 +296,7 @@ class UserProductApiControllerTest extends MockMvcTest {
     }
 
     @Test
-    @WithAnonymousUser
+    @WithMockCustomUser
     void 가장_최근에_등록된_장비_검색() throws Exception {
         // given
         Pageable pageable = PageRequest.of(0, 20);
@@ -292,6 +328,7 @@ class UserProductApiControllerTest extends MockMvcTest {
                                 fieldWithPath("[].user.imageUrl").type(JsonFieldType.STRING).description("유저의 사진 URL"),
                                 fieldWithPath("[].user.username").type(JsonFieldType.STRING).description("유저의 등록된 이름"),
                                 fieldWithPath("[].user.motto").type(JsonFieldType.STRING).description("유저의 좌우명"),
+                                fieldWithPath("[].user.isLiked").type(JsonFieldType.BOOLEAN).description("해당 유저가 장비에 대해 좋아요를 눌렀는지에 대한 여부"),
                                 fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("유저 장비 생성 날짜")
                         )));
 
@@ -304,17 +341,16 @@ class UserProductApiControllerTest extends MockMvcTest {
         });
         UserProductLatestResponseDto responseDto = responseDtos.get(0);
 
-        assertThat(responseDto)
-                .hasFieldOrProperty("id")
-                .hasFieldOrPropertyWithValue("createdAt", userProductLatestResponseDto.getCreatedAt());
+        assertThat(responseDto).hasFieldOrProperty("id");
         assertThat(responseDto.getProduct())
-                .containsEntry("type", ((ProductType) userProductLatestResponseDto.getProduct().get("type")).name())
-                .containsEntry("imageUrl", userProductLatestResponseDto.getProduct().get("imageUrl"))
-                .containsEntry("name", userProductLatestResponseDto.getProduct().get("name"));
+                .containsEntry("type", "MOUSE")
+                .containsEntry("imageUrl", "https://shopping-phinf.pstatic.net/main_2051460/20514607838.20190806111610.jpg")
+                .containsEntry("name", "애플 맥북 에어 13형 2019년형 MVFH2KH/A");
         assertThat(responseDto.getUser())
-                .containsEntry("imageUrl", userProductLatestResponseDto.getUser().get("imageUrl"))
-                .containsEntry("username", userProductLatestResponseDto.getUser().get("username"))
-                .containsEntry("motto", userProductLatestResponseDto.getUser().get("motto"));
+                .containsEntry("imageUrl", "https://previews.123rf.com/images/aquir/aquir1311/aquir131100316/23569861-%EC%83%98%ED%94%8C-%EC%A7%80-%EB%B9%A8%EA%B0%84%EC%83%89-%EB%9D%BC%EC%9A%B4%EB%93%9C-%EC%8A%A4%ED%83%AC%ED%94%84.jpg")
+                .containsEntry("username", "JunHoPark93")
+                .containsEntry("motto", "장비충개발자")
+                .containsEntry("isLiked", false);
     }
 
     private UserProductLatestResponseDto getUserProductLatestResponseDto() {
