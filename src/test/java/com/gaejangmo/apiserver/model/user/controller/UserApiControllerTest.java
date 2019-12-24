@@ -209,7 +209,7 @@ class UserApiControllerTest extends MockMvcTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString();
 
-        List<UserSearchDto> userSearchDtos = OBJECT_MAPPER.readValue(contentAsString, new TypeReference<List<UserSearchDto>>() {
+        List<UserSearchDto> userSearchDtos = OBJECT_MAPPER.readValue(contentAsString, new TypeReference<>() {
         });
 
         assertThat(userSearchDtos).hasSize(3);
