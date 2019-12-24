@@ -3,6 +3,7 @@ package com.gaejangmo.apiserver.model.like.service;
 import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import com.gaejangmo.apiserver.model.like.domain.LikeRepository;
 import com.gaejangmo.apiserver.model.like.domain.Likes;
+import com.gaejangmo.apiserver.model.like.exception.InvalidMySelfLikeException;
 import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.domain.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -45,6 +47,14 @@ class LikeServiceTest {
 
         // when & then
         assertDoesNotThrow(() -> likeService.save(SOURCE_ID, TARGET_ID));
+        verify(userRepository, times(2)).findById(anyLong());
+        verify(likeRepository, times(1)).save(any());
+    }
+
+    @Test
+    void 자기_자신을_좋아요_시도할_시_예외처리() {
+        // when & then
+        assertThrows(InvalidMySelfLikeException.class, () -> likeService.save(SOURCE_ID, SOURCE_ID));
     }
 
     @Test
@@ -89,6 +99,8 @@ class LikeServiceTest {
 
         // when & then
         assertThat(likeService.isLiked(loginUser, TARGET_ID)).isTrue();
+        verify(userRepository, times(2)).findById(anyLong());
+        verify(likeRepository, times(1)).findBySourceAndTarget(any(), any());
     }
 
     @Test
@@ -101,6 +113,8 @@ class LikeServiceTest {
 
         // when & then
         assertThat(likeService.isLiked(loginUser, TARGET_ID)).isFalse();
+        verify(userRepository, times(2)).findById(anyLong());
+        verify(likeRepository, times(1)).findBySourceAndTarget(any(), any());
     }
 
     @Test

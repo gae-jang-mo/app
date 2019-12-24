@@ -9,7 +9,6 @@ import com.gaejangmo.apiserver.model.image.dto.FileResponseDto;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
 import com.gaejangmo.apiserver.model.user.dto.UserSearchDto;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -31,7 +30,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -94,8 +92,8 @@ class UserApiControllerTest extends MockMvcTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("user/showUserByName",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         pathParameters(
                                 parameterWithName("name").description("검색하고 싶은 유저의 이름")
                         ),
@@ -121,8 +119,8 @@ class UserApiControllerTest extends MockMvcTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("user/showLikeUser",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         responseFields(
                                 fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("식별자"),
                                 fieldWithPath("[].oauthId").type(JsonFieldType.NUMBER).description("oauth의 id"),
@@ -169,8 +167,8 @@ class UserApiControllerTest extends MockMvcTest {
                 .content(OBJECT_MAPPER.writeValueAsString(motto)))
                 .andDo(print())
                 .andDo(document("user/updateMotto",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("value").type(JsonFieldType.STRING).description("수정하려는 좌우명")
                         ),
@@ -204,8 +202,8 @@ class UserApiControllerTest extends MockMvcTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("user/updateUserImage",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestParts(
                                 partWithName("file").description("수정하려는 이미지 파일")
                         ),

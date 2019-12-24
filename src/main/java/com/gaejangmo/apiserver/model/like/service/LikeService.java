@@ -3,6 +3,7 @@ package com.gaejangmo.apiserver.model.like.service;
 import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import com.gaejangmo.apiserver.model.like.domain.LikeRepository;
 import com.gaejangmo.apiserver.model.like.domain.Likes;
+import com.gaejangmo.apiserver.model.like.exception.InvalidMySelfLikeException;
 import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.domain.UserRepository;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,9 @@ public class LikeService {
         this.userRepository = userRepository;
     }
 
-    // TODO: 2019-12-22 자기 자신을 좋아요 누를 수 없도록 제어
     public void save(final Long sourceId, final Long targetId) {
+        checkMySelf(sourceId, targetId);
+
         User source = findById(sourceId);
         User target = findById(targetId);
 
@@ -35,6 +37,12 @@ public class LikeService {
                 .build();
 
         likeRepository.save(like);
+    }
+
+    private void checkMySelf(final Long sourceId, final Long targetId) {
+        if (sourceId.equals(targetId)) {
+            throw new InvalidMySelfLikeException("나 자신을 좋아요할 수 없습니다.");
+        }
     }
 
     @Transactional(readOnly = true)
