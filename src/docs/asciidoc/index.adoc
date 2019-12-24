@@ -149,3 +149,29 @@ include::{snippets}/user/search/http-response.adoc[]
 
 .response fields
 include::{snippets}/user/search/response-fields.adoc[]
+
+== Like API
+
+=== save()
+좋아요 저장
+
+.request
+include::{snippets}/like/save/http-request.adoc[]
+
+.path parameters
+include::{snippets}/like/save/path-parameters.adoc[]
+
+.response
+include::{snippets}/like/save/http-response.adoc[]
+
+=== delete()
+좋아요 취소
+
+.request
+include::{snippets}/like/delete/http-request.adoc[]
+
+.path parameters
+include::{snippets}/like/delete/path-parameters.adoc[]
+
+.response
+include::{snippets}/like/delete/http-response.adoc[]
