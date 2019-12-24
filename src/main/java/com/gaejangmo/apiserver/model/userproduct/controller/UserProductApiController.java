@@ -6,6 +6,8 @@ import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import com.gaejangmo.apiserver.model.common.exception.ApiErrorResponse;
 import com.gaejangmo.apiserver.model.common.resolver.LoginUser;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
+import com.gaejangmo.apiserver.model.userproduct.dto.CommentDto;
+import com.gaejangmo.apiserver.model.userproduct.dto.ProductTypeDto;
 import com.gaejangmo.apiserver.model.userproduct.service.UserProductService;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductCreateDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductLatestResponseDto;
@@ -57,19 +59,19 @@ public class UserProductApiController {
 
     @PutMapping("/products/{id}/comment")
     public ResponseEntity<UserProductResponseDto> updateComment(@PathVariable final Long id,
-                                                                @RequestBody final String comment,
+                                                                @RequestBody final CommentDto commentDto,
                                                                 @LoginUser final SecurityUser securityUser) {
         Long userId = securityUser.getId();
-        UserProductResponseDto responseDto = userProductService.updateComment(id, userId, comment);
+        UserProductResponseDto responseDto = userProductService.updateComment(id, userId, commentDto);
         return ResponseEntity.ok(responseDto);
     }
 
     @PutMapping("/products/{id}/product-type")
     public ResponseEntity<UserProductResponseDto> updateProductType(@PathVariable final Long id,
-                                                                    @RequestBody final String productType,
+                                                                    @RequestBody final ProductTypeDto productTypeDto,
                                                                     @LoginUser final SecurityUser securityUser) {
         Long userId = securityUser.getId();
-        UserProductResponseDto responseDto = userProductService.updateProductType(id, userId, ProductType.ofName(productType));
+        UserProductResponseDto responseDto = userProductService.updateProductType(id, userId, ProductType.ofName(productTypeDto.getProductType()));
         return ResponseEntity.ok(responseDto);
     }
 
