@@ -58,7 +58,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-config:2.2.0.RELEASE'
     implementation 'org.springframework.cloud:spring-cloud-starter-aws'
     implementation 'org.projectlombok:lombok'
-    implementation 'com.gaejangmo:gae-jang-mo-utils:0.0.1'
+    implementation 'com.gaejangmo:gae-jang-mo-utils:0.0.3'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 

@@ -11,6 +11,7 @@ import com.gaejangmo.apiserver.model.userproduct.domain.UserProduct;
 import com.gaejangmo.apiserver.model.userproduct.domain.UserProductRepository;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
+import com.gaejangmo.apiserver.model.userproduct.dto.CommentDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.*;
 import com.gaejangmo.apiserver.model.userproduct.service.exception.NotUserProductOwnerException;
 import org.springframework.data.domain.Pageable;
@@ -78,8 +79,8 @@ public class UserProductService {
                 .collect(Collectors.toList());
     }
 
-    public UserProductResponseDto updateComment(final Long id, final Long userId, final String comment) {
-        return updateTemplate(id, userId, (userProduct) -> toDto(userProduct.changeComment(Comment.of(comment))));
+    public UserProductResponseDto updateComment(final Long id, final Long userId, final CommentDto commentDto) {
+        return updateTemplate(id, userId, (userProduct) -> toDto(userProduct.changeComment(Comment.of(commentDto.getComment()))));
     }
 
     public UserProductResponseDto updateProductType(final Long id, final Long userId, final ProductType productType) {

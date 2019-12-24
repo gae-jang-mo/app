@@ -11,6 +11,7 @@ import com.gaejangmo.apiserver.model.user.domain.UserRepository;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
 import com.gaejangmo.apiserver.model.user.dto.UserSearchDto;
+import com.gaejangmo.utils.RandomUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,7 +25,10 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class UserService {
+    private static final int RANDOM_USER_COUNT = 3;
+    private static final int USER_START_IDX = 1;
     private static final String USER_NOT_FOUND_MESSAGE = "해당하는 유저가 없습니다.";
+
     private final UserRepository userRepository;
     private final UserImageService userImageService;
     private final LikeService likeService;
@@ -99,6 +103,14 @@ public class UserService {
                 .imageUrl(user.getImageUrl())
                 .username(user.getUsername())
                 .build();
+    }
+
+    public List<UserSearchDto> findRandomUserResponse() {
+        return RandomUtils.getRandomLongsInRange(USER_START_IDX, userRepository.getMaxId(), RANDOM_USER_COUNT)
+                .stream()
+                .map(this::findById)
+                .map(this::toUserSearchDto)
+                .collect(Collectors.toList());
     }
 
     private UserResponseDto toDto(final User user) {

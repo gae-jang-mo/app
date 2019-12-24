@@ -103,7 +103,7 @@ class UserServiceTest {
         // given
         String username = "username";
         List<User> users = List.of(UserTestData.ENTITY);
-        List<UserSearchDto> expected = List.of(new UserSearchDto( UserTestData.ENTITY.getId(), UserTestData.ENTITY.getImageUrl(), UserTestData.ENTITY.getUsername()));
+        List<UserSearchDto> expected = List.of(new UserSearchDto(UserTestData.ENTITY.getId(), UserTestData.ENTITY.getImageUrl(), UserTestData.ENTITY.getUsername()));
         when(userRepository.findAllByUsernameContainingIgnoreCase(username)).thenReturn(users);
 
         // when

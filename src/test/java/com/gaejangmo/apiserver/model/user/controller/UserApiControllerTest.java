@@ -259,7 +259,32 @@ class UserApiControllerTest extends MockMvcTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString();
 
-        List<UserSearchDto> userSearchDtos = OBJECT_MAPPER.readValue(contentAsString, List.class);
+        List<UserSearchDto> userSearchDtos = OBJECT_MAPPER.readValue(contentAsString, new TypeReference<>() {
+        });
+
         assertThat(userSearchDtos).hasSize(3);
+    }
+
+    @Test
+    @WithMockCustomUser
+    void 랜덤_유저_3명_pick() throws Exception {
+        byte[] contentAsByteArray = mockMvc.perform(get(USER_API + "/random")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(document("user/random",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        responseFields(
+                                fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("식별자"),
+                                fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("프로필 사진"),
+                                fieldWithPath("[].username").type(JsonFieldType.STRING).description("유저 이름")
+                        )))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsByteArray();
+
+        List<UserSearchDto> userResponseDtos = OBJECT_MAPPER.readValue(contentAsByteArray, new TypeReference<List<UserSearchDto>>() {
+        });
+
+        assertThat(userResponseDtos.size()).isEqualTo(3);
     }
 }
