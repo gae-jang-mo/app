@@ -26,9 +26,7 @@ public class LikeService {
     }
 
     public void save(final Long sourceId, final Long targetId) {
-        if (sourceId.equals(targetId)) {
-            throw new InvalidMySelfLikeException("나 자신을 좋아요할 수 없습니다.");
-        }
+        checkMySelf(sourceId, targetId);
 
         User source = findById(sourceId);
         User target = findById(targetId);
@@ -39,6 +37,12 @@ public class LikeService {
                 .build();
 
         likeRepository.save(like);
+    }
+
+    private void checkMySelf(final Long sourceId, final Long targetId) {
+        if (sourceId.equals(targetId)) {
+            throw new InvalidMySelfLikeException("나 자신을 좋아요할 수 없습니다.");
+        }
     }
 
     @Transactional(readOnly = true)
