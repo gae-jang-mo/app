@@ -136,6 +136,7 @@ public class UserProductService {
                 .productType(userProduct.getProductType().getName())
                 .imageUrl(userProduct.getProduct().getImageUrl())
                 .productId(userProduct.getProduct().getId())
+                .productName(userProduct.getProduct().getProductName())
                 .build();
     }
 }
