@@ -5,6 +5,7 @@ import com.gaejangmo.apiserver.model.common.exception.ApiErrorResponse;
 import com.gaejangmo.apiserver.model.product.dto.ManagedProductResponseDto;
 import com.gaejangmo.apiserver.model.product.dto.NaverProductResponseDto;
 import com.gaejangmo.apiserver.model.product.dto.ProductRequestDto;
+import com.gaejangmo.apiserver.model.product.dto.ProductTypeResponseDto;
 import com.gaejangmo.apiserver.model.product.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
