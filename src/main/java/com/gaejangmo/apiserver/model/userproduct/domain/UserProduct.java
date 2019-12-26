@@ -1,6 +1,5 @@
 package com.gaejangmo.apiserver.model.userproduct.domain;
 
-
 import com.gaejangmo.apiserver.model.common.domain.BaseTimeEntity;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.user.domain.User;
@@ -22,7 +21,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
 @Entity
-@Where(clause = "deleted = 0")
+@Where(clause = "status = 1")
 public class UserProduct extends BaseTimeEntity {
 
     @Id
@@ -34,13 +33,10 @@ public class UserProduct extends BaseTimeEntity {
             column = @Column(name = "comment", nullable = false))
     private Comment comment;
 
-    @Column(nullable = false, columnDefinition = "boolean default false")
-    private boolean deleted;
-
     @Convert(converter = ProductTypeAttributeConverter.class)
     private ProductType productType;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "integer default 1")
     @Convert(converter = StatusAttributeConverter.class)
     private Status status;
 
@@ -76,10 +72,10 @@ public class UserProduct extends BaseTimeEntity {
     }
 
     public boolean delete() {
-        if (deleted) {
+        if (status.isDeleted()) {
             throw new AlreadyDeleteException(this.id);
         }
-        return deleted = true;
+        return (status = Status.DELETED).isDeleted();
     }
 
     public String getComment() {

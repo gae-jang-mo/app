@@ -5,7 +5,6 @@ import com.gaejangmo.apiserver.model.common.domain.vo.Link;
 import com.gaejangmo.apiserver.model.like.service.LikeService;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.product.domain.vo.ProductName;
-import com.gaejangmo.apiserver.model.product.service.ProductService;
 import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
 import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.service.UserService;
@@ -82,6 +81,7 @@ class UserProductServiceTest {
                 .productType(ProductType.MAIN_DEVICE)
                 .product(product)
                 .user(user)
+                .status(Status.ON_USE)
                 .build();
 
         mockUserProduct = mock(UserProduct.class);

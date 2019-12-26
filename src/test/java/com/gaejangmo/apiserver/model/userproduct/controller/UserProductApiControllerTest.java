@@ -152,7 +152,7 @@ class UserProductApiControllerTest extends MockMvcTest {
     void 유저_이름로_소유장비_리스트_조회() throws Exception {
         // when
         ResultActions resultActions = mockMvc.perform(
-                RestDocumentationRequestBuilders.get(USER_PRODUCT_URI + "/{username}/products", "kmdngyu")
+                RestDocumentationRequestBuilders.get(USER_PRODUCT_URI + "/{username}/products", "JunHoPark93")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -165,7 +165,7 @@ class UserProductApiControllerTest extends MockMvcTest {
                                 fieldWithPath("[].productId").type(JsonFieldType.NUMBER).description("Product의 식별자"),
                                 fieldWithPath("[].productType").type(JsonFieldType.STRING).description("장비에 대한 코멘트"),
                                 fieldWithPath("[].status").type(JsonFieldType.STRING).description("장비의 상태"),
-                                fieldWithPath("[].comment").type(JsonFieldType.STRING).description("장비의 타입"),
+                                fieldWithPath("[].comment").type(JsonFieldType.STRING).description("유저 장비에 대한 코멘트"),
                                 fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("유저 장비 생성 날짜"),
                                 fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("유저 장비의 사진"),
                                 fieldWithPath("[].productName").type(JsonFieldType.STRING).description("유저 장비의 이름"))
@@ -175,10 +175,10 @@ class UserProductApiControllerTest extends MockMvcTest {
         // then
         resultActions.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].comment").value("ㅎㅎ장비좋아요ㅋㅋㅋㅋ"))
-                .andExpect(jsonPath("$[0].id").value(4))
+                .andExpect(jsonPath("$[0].comment").value("ㅎㅎ장비좋아요ㅋㅋ"))
+                .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].productId").value(1))
-                .andExpect(jsonPath("$[0].productType").value("마우스"))
+                .andExpect(jsonPath("$[0].productType").value("컴퓨터"))
                 .andExpect(jsonPath("$[0].productName").value("애플 맥북 에어 13형 2019년형 MVFH2KH/A"));
     }
 

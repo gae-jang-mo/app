@@ -6,6 +6,7 @@ import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.userproduct.domain.exception.AlreadyDeleteException;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
+import com.gaejangmo.apiserver.model.userproduct.domain.vo.Status;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -29,6 +30,7 @@ class UserProductTest {
                 .product(mockProduct)
                 .comment(Comment.of("comment"))
                 .productType(ProductType.ETC)
+                .status(Status.ON_USE)
                 .build();
 
         ReflectionTestUtils.setField(ProductTestData.ENTITY, "id", 1L);
