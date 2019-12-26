@@ -60,7 +60,7 @@ insert into user_product(comment, product_type, product_id, user_id, created_at,
 values ('ㅎㅎ장비좋아요ㅋㅋㅋㅋ', '2', '1', '3', '2014-04-01 00:00:00', '2');
 
 insert into user_product(comment, product_type, product_id, user_id, created_at, status)
-values ('ㅎㅎ장비좋아요ㅋㅋㅋㅋ', '1', '2', '1', '2014-04-01 00:00:00', '3');
+values ('ㅎㅎ장비좋아요ㅋㅋㅋㅋ', '1', '2', '1', '2014-04-01 00:00:00', '2');
 
 insert into user_product(comment, product_type, product_id, user_id, created_at, status)
 values ('ㅎㅎ장비좋아요ㅋㅋㅋㅋ', '1', '2', '1', '2014-04-01 00:00:00', '3');

@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.stream.Stream;
 
-//@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @RequiredArgsConstructor
 public enum Status {

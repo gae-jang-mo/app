@@ -11,6 +11,7 @@ import com.gaejangmo.apiserver.model.userproduct.domain.UserProduct;
 import com.gaejangmo.apiserver.model.userproduct.domain.UserProductRepository;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
+import com.gaejangmo.apiserver.model.userproduct.domain.vo.Status;
 import com.gaejangmo.apiserver.model.userproduct.dto.CommentDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.*;
 import com.gaejangmo.apiserver.model.userproduct.service.exception.NotUserProductOwnerException;
@@ -102,9 +103,18 @@ public class UserProductService {
 
     public List<UserProductLatestResponseDto> findAllByPageable(final Pageable pageable, final SecurityUser loginUser) {
         return userProductRepository.findAll(pageable)
-                .map(userProduct -> toLatestDto(userProduct,
-                        likeService.isLiked(loginUser, userProduct.getUser().getId())))
+                .map(userProduct -> toLatestDto(userProduct, isLiked(loginUser, userProduct)))
                 .toList();
+    }
+
+    public List<UserProductLatestResponseDto> findHistoryByPageable(final Pageable pageable, final SecurityUser loginUser) {
+        return userProductRepository.findAllByStatusNotAndUser_Id(Status.DELETED, loginUser.getId(), pageable)
+                .map(userProduct -> toLatestDto(userProduct, isLiked(loginUser, userProduct)))
+                .toList();
+    }
+
+    private boolean isLiked(final SecurityUser loginUser, final UserProduct userProduct) {
+        return likeService.isLiked(loginUser, userProduct.getUser().getId());
     }
 
     private UserProductLatestResponseDto toLatestDto(final UserProduct userProduct, final boolean isLiked) {
