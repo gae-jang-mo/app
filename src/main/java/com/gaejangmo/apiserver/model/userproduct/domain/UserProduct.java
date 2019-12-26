@@ -5,9 +5,11 @@ import com.gaejangmo.apiserver.model.common.domain.BaseTimeEntity;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.userproduct.domain.converter.ProductTypeAttributeConverter;
+import com.gaejangmo.apiserver.model.userproduct.domain.converter.StatusAttributeConverter;
 import com.gaejangmo.apiserver.model.userproduct.domain.exception.AlreadyDeleteException;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
+import com.gaejangmo.apiserver.model.userproduct.domain.vo.Status;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -38,6 +40,10 @@ public class UserProduct extends BaseTimeEntity {
     @Convert(converter = ProductTypeAttributeConverter.class)
     private ProductType productType;
 
+    @Column(nullable = false)
+    @Convert(converter = StatusAttributeConverter.class)
+    private Status status;
+
     @ManyToOne
     @JoinColumn(name = "product_id", foreignKey = @ForeignKey(name = "fk_product_to_user_product"), updatable = false)
     private Product product;
@@ -47,9 +53,10 @@ public class UserProduct extends BaseTimeEntity {
     private User user;
 
     @Builder
-    public UserProduct(final Comment comment, final ProductType productType, final Product product, final User user) {
+    public UserProduct(final Comment comment, final ProductType productType, final Status status, final Product product, final User user) {
         this.comment = comment;
         this.productType = productType;
+        this.status = status;
         this.product = product;
         this.user = user;
     }

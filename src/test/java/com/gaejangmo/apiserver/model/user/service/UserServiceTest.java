@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -137,6 +138,21 @@ class UserServiceTest {
         // then
         assertThat(actual).isEqualTo(expected);
         verify(userRepository).findAllByUsernameContainingIgnoreCase(username);
+    }
+
+    @Test
+    void username으로_list_검색_empty면_emptyList() {
+        // given
+        String username = "";
+        List<UserSearchDto> expected = Collections.emptyList();
+        when(userRepository.findAllByUsernameContainingIgnoreCase(username)).thenReturn(Collections.emptyList());
+
+        // when
+        List<UserSearchDto> actual = userService.findUserSearchDtosByUserName(username);
+
+        // then
+        assertThat(actual).isEqualTo(expected);
+        verify(userRepository, never()).findAllByUsernameContainingIgnoreCase(username);
     }
 
     @Test
