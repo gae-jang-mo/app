@@ -1,6 +1,5 @@
 package com.gaejangmo.apiserver.model.like.service;
 
-import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import com.gaejangmo.apiserver.model.like.domain.LikeRepository;
 import com.gaejangmo.apiserver.model.like.domain.Likes;
 import com.gaejangmo.apiserver.model.like.exception.InvalidMySelfLikeException;
@@ -15,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static com.gaejangmo.apiserver.model.common.resolver.SecurityUserArgumentResolver.NOT_EXISTED_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -36,8 +36,6 @@ class LikeServiceTest {
 
     @Mock
     private UserRepository userRepository;
-
-    private SecurityUser loginUser = null;
 
     @Test
     void 좋아요_저장() {
@@ -92,13 +90,11 @@ class LikeServiceTest {
     @Test
     void 좋아요_눌렀을_때_true_반환_확인() {
         // given
-        loginUser = SecurityUser.builder().id(SOURCE_ID).build();
-
         given(userRepository.findById(anyLong())).willReturn(Optional.of(mock(User.class)));
         given(likeRepository.findBySourceAndTarget(any(), any())).willReturn(Optional.of(mock(Likes.class)));
 
         // when & then
-        assertThat(likeService.isLiked(loginUser, TARGET_ID)).isTrue();
+        assertThat(likeService.isLiked(SOURCE_ID, TARGET_ID)).isTrue();
         verify(userRepository, times(2)).findById(anyLong());
         verify(likeRepository, times(1)).findBySourceAndTarget(any(), any());
     }
@@ -106,13 +102,11 @@ class LikeServiceTest {
     @Test
     void 좋아요_눌르지_않았을_때_false_반환_확인() {
         // given
-        loginUser = SecurityUser.builder().id(SOURCE_ID).build();
-
         given(userRepository.findById(anyLong())).willReturn(Optional.of(mock(User.class)));
         given(likeRepository.findBySourceAndTarget(any(), any())).willReturn(Optional.empty());
 
         // when & then
-        assertThat(likeService.isLiked(loginUser, TARGET_ID)).isFalse();
+        assertThat(likeService.isLiked(SOURCE_ID, TARGET_ID)).isFalse();
         verify(userRepository, times(2)).findById(anyLong());
         verify(likeRepository, times(1)).findBySourceAndTarget(any(), any());
     }
@@ -120,6 +114,6 @@ class LikeServiceTest {
     @Test
     void 로그인되지_않은_상태에서_좋아요가_false_반환하는지_확인() {
         // when & then
-        assertThat(likeService.isLiked(loginUser, TARGET_ID)).isFalse();
+        assertThat(likeService.isLiked(NOT_EXISTED_ID, TARGET_ID)).isFalse();
     }
 }

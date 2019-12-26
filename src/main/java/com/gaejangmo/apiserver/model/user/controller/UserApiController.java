@@ -42,7 +42,7 @@ public class UserApiController {
 
     @GetMapping("/{name}")
     public ResponseEntity<UserResponseDto> showUserByName(@PathVariable final String name, @LoginUser SecurityUser securityUser) {
-        UserResponseDto response = userService.findUserResponseDtoByName(name, securityUser);
+        UserResponseDto response = userService.findUserResponseDtoByName(name, securityUser.getId());
         return ResponseEntity.ok(response);
     }
 

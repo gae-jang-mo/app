@@ -61,12 +61,11 @@ public class UserProductApiController {
         return ResponseEntity.ok(responseDtos);
     }
 
-
     @GetMapping("/products/latest")
     public ResponseEntity<List<UserProductLatestResponseDto>> latest(
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC) final Pageable pageable,
             @LoginUser SecurityUser securityUser) {
-        List<UserProductLatestResponseDto> responseDtos = userProductService.findAllByPageable(pageable, securityUser);
+        List<UserProductLatestResponseDto> responseDtos = userProductService.findAllByPageable(pageable, securityUser.getId());
         return ResponseEntity.ok(responseDtos);
     }
 
@@ -74,7 +73,7 @@ public class UserProductApiController {
     public ResponseEntity<List<UserProductLatestResponseDto>> history(
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC) final Pageable pageable,
             @LoginUser SecurityUser securityUser) {
-        List<UserProductLatestResponseDto> responseDtos = userProductService.findHistoryByPageable(pageable, securityUser);
+        List<UserProductLatestResponseDto> responseDtos = userProductService.findHistoryByPageable(pageable, securityUser.getId());
         return ResponseEntity.ok(responseDtos);
     }
 

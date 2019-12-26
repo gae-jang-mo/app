@@ -14,6 +14,23 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ImageTypeValidatorTest {
 
+    static Stream<MultipartFile> validMultipartFiles() {
+        return Stream.of(
+                new MockMultipartFile("photo", "filename.jpg", "image/png", new byte[10]),
+                new MockMultipartFile("test_image", "test_image", "image/bmp", new byte[10]),
+                new MockMultipartFile("test_image", "test_image", "image/gif", new byte[10]),
+                new MockMultipartFile("test_image", "test_image", "image/jpeg", new byte[10])
+        );
+    }
+
+    static Stream<MultipartFile> inValidMultipartFiles() {
+        return Stream.of(
+                new MockMultipartFile("data", "filename.txt", "text/plain", "some xml".getBytes()),
+                new MockMultipartFile("data", "other-file-name.data", "text/plain", "some other type".getBytes()),
+                new MockMultipartFile("json", "", "application/json", "{\"json\": \"someValue\"}".getBytes())
+        );
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {"jpeg", "jpg", "png", "bmp", "gif", "JPG", "JPEG", "PNG", "BMP", "image/png", "image/jpeg", "image/gif", "image/bmp"})
     void 유효한_이미지타입_확인(final String fileType) {
@@ -33,28 +50,11 @@ class ImageTypeValidatorTest {
         assertDoesNotThrow(() -> ImageTypeValidator.validateImage(multipartFile));
     }
 
-    static Stream<MultipartFile> validMultipartFiles() {
-        return Stream.of(
-                new MockMultipartFile("photo", "filename.jpg", "image/png", new byte[10]),
-                new MockMultipartFile("test_image", "test_image", "image/bmp", new byte[10]),
-                new MockMultipartFile("test_image", "test_image", "image/gif", new byte[10]),
-                new MockMultipartFile("test_image", "test_image", "image/jpeg", new byte[10])
-        );
-    }
-
     @ParameterizedTest
     @MethodSource("inValidMultipartFiles")
     void 유효하지_않은_MultipartFile_확인(final MultipartFile multipartFile) {
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ImageTypeValidator.validateImage(multipartFile));
         assertThat(e.getMessage()).isEqualTo(ImageTypeValidator.NOT_MATCH_CONTENT_TYPES_MESSAGE);
-    }
-
-    static Stream<MultipartFile> inValidMultipartFiles() {
-        return Stream.of(
-                new MockMultipartFile("data", "filename.txt", "text/plain", "some xml".getBytes()),
-                new MockMultipartFile("data", "other-file-name.data", "text/plain", "some other type".getBytes()),
-                new MockMultipartFile("json", "", "application/json", "{\"json\": \"someValue\"}".getBytes())
-        );
     }
 
 

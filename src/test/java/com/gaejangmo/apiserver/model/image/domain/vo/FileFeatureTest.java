@@ -10,6 +10,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FileFeatureTest {
 
+    static Stream<Arguments> provide() {
+        return Stream.of(
+                Arguments.of("url", "originalNmae", "savedName", -1),
+                Arguments.of("url", "originalNmae", "savedName", FileFeature.MIN_SIZE - 1),
+                Arguments.of("url", "originalNmae", "savedName", FileFeature.MAX_SIZE + 1),
+                Arguments.of("", "originalNmae", "savedName", 1),
+                Arguments.of("url", "", "savedName", 1),
+                Arguments.of("url", "originalName", "", 1)
+        );
+    }
+
     @ParameterizedTest
     @MethodSource("provide")
     void name(final String url, final String originalName, final String savedName, final int size) {
@@ -21,16 +32,5 @@ class FileFeatureTest {
                         .url(url)
                         .size(size)
                         .build());
-    }
-
-    static Stream<Arguments> provide() {
-        return Stream.of(
-                Arguments.of("url", "originalNmae", "savedName", -1),
-                Arguments.of("url", "originalNmae", "savedName", FileFeature.MIN_SIZE - 1),
-                Arguments.of("url", "originalNmae", "savedName", FileFeature.MAX_SIZE + 1),
-                Arguments.of("", "originalNmae", "savedName", 1),
-                Arguments.of("url", "", "savedName", 1),
-                Arguments.of("url", "originalName", "", 1)
-        );
     }
 }

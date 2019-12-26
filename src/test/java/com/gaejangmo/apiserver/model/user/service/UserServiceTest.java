@@ -1,6 +1,5 @@
 package com.gaejangmo.apiserver.model.user.service;
 
-import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
 import com.gaejangmo.apiserver.model.like.domain.Likes;
 import com.gaejangmo.apiserver.model.like.service.LikeService;
@@ -52,13 +51,15 @@ class UserServiceTest {
 
     @Test
     void username_유저_조회() {
-        SecurityUser loginUser = SecurityUser.builder().id(2L).build();
+        // given
         given(userRepository.findByUsername(anyString())).willReturn(Optional.of(UserTestData.ENTITY_GENERAL));
-        given(likeService.isLiked(any(), anyLong())).willReturn(false);
-
+        given(likeService.isLiked(anyLong(), anyLong())).willReturn(false);
         User user = UserTestData.ENTITY_GENERAL;
-        UserResponseDto result = userService.findUserResponseDtoByName(user.getUsername(), loginUser);
 
+        // when
+        UserResponseDto result = userService.findUserResponseDtoByName(user.getUsername(), 2L);
+
+        // then
         assertThat(result).isEqualTo(UserTestData.RESPONSE_DTO);
     }
 
@@ -80,7 +81,7 @@ class UserServiceTest {
         given(userRepository.findByUsername(anyString())).willReturn(Optional.empty());
 
         // when & then
-        assertThrows(EntityNotFoundException.class, ()-> userService.findByUsername(UserTestData.ENTITY_GENERAL.getUsername()));
+        assertThrows(EntityNotFoundException.class, () -> userService.findByUsername(UserTestData.ENTITY_GENERAL.getUsername()));
     }
 
     @Test

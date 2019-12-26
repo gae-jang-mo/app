@@ -1,6 +1,5 @@
 package com.gaejangmo.apiserver.model.user.service;
 
-import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import com.gaejangmo.apiserver.model.image.domain.user.service.UserImageService;
 import com.gaejangmo.apiserver.model.image.dto.FileResponseDto;
 import com.gaejangmo.apiserver.model.image.user.domain.UserImage;
@@ -53,10 +52,10 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
     }
 
-    public UserResponseDto findUserResponseDtoByName(final String username, final SecurityUser loginUser) {
+    public UserResponseDto findUserResponseDtoByName(final String username, final Long sourceId) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
-        return toDto(user, likeService.isLiked(loginUser, user.getId()));
+        return toDto(user, likeService.isLiked(sourceId, user.getId()));
     }
 
     @Transactional(readOnly = true)

@@ -19,15 +19,15 @@ public class Comment {
         this.value = validate(value);
     }
 
+    public static Comment of(final String value) {
+        return new Comment(value);
+    }
+
     private String validate(final String value) {
         if (StringUtils.isNull(value)) {
             return EMPTY_VALUE;
         }
         return value;
-    }
-
-    public static Comment of(final String value) {
-        return new Comment(value);
     }
 
     public String value() {

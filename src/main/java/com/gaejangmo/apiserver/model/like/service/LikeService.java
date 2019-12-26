@@ -1,6 +1,5 @@
 package com.gaejangmo.apiserver.model.like.service;
 
-import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import com.gaejangmo.apiserver.model.like.domain.LikeRepository;
 import com.gaejangmo.apiserver.model.like.domain.Likes;
 import com.gaejangmo.apiserver.model.like.exception.InvalidMySelfLikeException;
@@ -11,8 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+
+import static com.gaejangmo.apiserver.model.common.resolver.SecurityUserArgumentResolver.NOT_EXISTED_ID;
 
 @Service
 @Transactional
@@ -60,14 +60,13 @@ public class LikeService {
     }
 
     @Transactional(readOnly = true)
-    public boolean isLiked(final SecurityUser loginUser, final Long targetId) {
-        if (Objects.isNull(loginUser)) {
+    public boolean isLiked(final Long sourceId, final Long targetId) {
+        if (NOT_EXISTED_ID.equals(sourceId) || NOT_EXISTED_ID.equals(targetId)) {
             return false;
         }
 
-        User source = findById(loginUser.getId());
+        User source = findById(sourceId);
         User target = findById(targetId);
-
         Optional<Likes> like = likeRepository.findBySourceAndTarget(source, target);
 
         return like.isPresent();

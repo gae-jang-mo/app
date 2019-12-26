@@ -18,7 +18,6 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getDocumentRequest;
@@ -238,17 +237,6 @@ class UserProductApiControllerTest extends MockMvcTest {
         assertThat(responseDto)
                 .hasFieldOrProperty("id")
                 .hasFieldOrPropertyWithValue("comment", commentDto.getComment());
-    }
-
-    private UserProductResponseDto getUserProductResponseDto() {
-        return UserProductResponseDto.builder()
-                .id(1L)
-                .productId(1L)
-                .productType(ProductType.MOUSE.name())
-                .comment("ㅎㅎ장비좋아요ㅋㅋ")
-                .createdAt(LocalDateTime.of(2014, 4, 1, 0, 0, 0, 0))
-                .imageUrl("https://shopping-phinf.pstatic.net/main_2051460/20514607838.20190806111610.jpg")
-                .build();
     }
 
     @Test

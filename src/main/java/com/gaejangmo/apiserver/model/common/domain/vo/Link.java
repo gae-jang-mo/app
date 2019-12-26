@@ -21,16 +21,16 @@ public class Link {
         this.value = validate(value);
     }
 
+    public static Link of(final String value) {
+        return new Link(value);
+    }
+
     private String validate(final String value) {
         Matcher matcher = URL_REGEX.matcher(value);
         if (matcher.matches()) {
             return value;
         }
         throw new UrlFormatException("유효한 url이 아닙니다");
-    }
-
-    public static Link of(final String value) {
-        return new Link(value);
     }
 
     public String value() {

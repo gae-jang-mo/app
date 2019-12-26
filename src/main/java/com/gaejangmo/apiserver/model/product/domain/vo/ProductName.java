@@ -18,15 +18,15 @@ public class ProductName {
         this.value = validate(value);
     }
 
+    public static ProductName of(final String name) {
+        return new ProductName(name);
+    }
+
     private String validate(final String value) {
         if (StringUtils.isBlank(value)) {
             throw new EmptyValueException("상품 이름이 없습니다");
         }
         return value;
-    }
-
-    public static ProductName of(final String name) {
-        return new ProductName(name);
     }
 
     public String value() {
