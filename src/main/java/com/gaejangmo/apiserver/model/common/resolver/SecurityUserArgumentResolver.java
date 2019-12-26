@@ -12,6 +12,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 public class SecurityUserArgumentResolver implements HandlerMethodArgumentResolver {
     public static final Long NOT_EXISTED_ID = -1L;
+    private static final SecurityUser EMPTY_SECURITY_USER = SecurityUser.builder().id(NOT_EXISTED_ID).build();
     private static final String ANONYMOUS_USER = "anonymousUser";
 
     @Override
@@ -27,7 +28,7 @@ public class SecurityUserArgumentResolver implements HandlerMethodArgumentResolv
         Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (ANONYMOUS_USER.equals(user)) {
-            return SecurityUser.builder().id(NOT_EXISTED_ID).build();
+            return EMPTY_SECURITY_USER;
         }
 
         return (SecurityUser) user;
