@@ -156,7 +156,7 @@ class UserProductApiControllerTest extends MockMvcTest {
                 .andDo(document("userproduct/list",
                         getDocumentRequest(),
                         getDocumentResponse(),
-                        pathParameters(parameterWithName("username").description("조회할 사용자 이")),
+                        pathParameters(parameterWithName("username").description("조회할 사용자 이름")),
                         responseFields(
                                 fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("UserProduct의 식별자"),
                                 fieldWithPath("[].productId").type(JsonFieldType.NUMBER).description("Product의 식별자"),
