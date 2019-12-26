@@ -211,7 +211,7 @@ class UserProductServiceTest {
                 .contains(
                         new UserProductLatestResponseDto((long) size,
                                 ProductType.MOUSE, ProductTestData.ENTITY.getImageUrl(), ProductTestData.ENTITY.getProductName(),
-                                UserTestData.ENTITY.getImageUrl(), UserTestData.ENTITY.getUsername(), UserTestData.ENTITY.getMotto(),
+                                UserTestData.ENTITY_GENERAL.getImageUrl(), UserTestData.ENTITY_GENERAL.getUsername(), UserTestData.ENTITY_GENERAL.getMotto(),
                                 true, null));
         verify(likeService, times(size)).isLiked(any(), anyLong());
     }
@@ -219,7 +219,7 @@ class UserProductServiceTest {
     private UserProduct createUserProduct(final long id) {
         UserProduct userProduct = UserProduct.builder()
                 .product(ProductTestData.ENTITY)
-                .user(UserTestData.ENTITY)
+                .user(UserTestData.ENTITY_GENERAL)
                 .comment(Comment.of(String.valueOf(id)))
                 .productType(ProductType.MOUSE)
                 .build();

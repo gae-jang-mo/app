@@ -51,6 +51,7 @@ class UserApiControllerTest extends MockMvcTest {
             fieldWithPath("email").type(JsonFieldType.STRING).description("사용자 이메일"),
             fieldWithPath("motto").type(JsonFieldType.STRING).description("좌우명"),
             fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("프로필 사진"),
+            fieldWithPath("isCelebrity").type(JsonFieldType.BOOLEAN).description("셀럽 여부"),
             fieldWithPath("introduce").type(JsonFieldType.STRING).description("소개")
     );
 
@@ -85,6 +86,7 @@ class UserApiControllerTest extends MockMvcTest {
         // given
         List<FieldDescriptor> userAndLikedResponseDtoDescriptors = new ArrayList<>(userResponseDtoDescriptors);
         userAndLikedResponseDtoDescriptors.add(fieldWithPath("isLiked").type(JsonFieldType.BOOLEAN).description("좋아요 여부"));
+        userAndLikedResponseDtoDescriptors.add(fieldWithPath("isCelebrity").type(JsonFieldType.BOOLEAN).description("셀럽 여부"));
 
         // when
         ResultActions resultActions = mockMvc.perform(
@@ -130,7 +132,8 @@ class UserApiControllerTest extends MockMvcTest {
                                 fieldWithPath("[].motto").type(JsonFieldType.STRING).description("좌우명"),
                                 fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("프로필 사진"),
                                 fieldWithPath("[].introduce").type(JsonFieldType.STRING).description("소개"),
-                                fieldWithPath("[].isLiked").type(JsonFieldType.BOOLEAN).description("좋아요 여부")
+                                fieldWithPath("[].isLiked").type(JsonFieldType.BOOLEAN).description("좋아요 여부"),
+                                fieldWithPath("[].isCelebrity").type(JsonFieldType.BOOLEAN).description("셀럽 여부")
                         )
                 ));
 
@@ -152,6 +155,7 @@ class UserApiControllerTest extends MockMvcTest {
                         .imageUrl("https://previews.123rf.com/images/aquir/aquir1311/aquir131100316/23569861-%EC%83%98%ED%94%8C-%EC%A7%80-%EB%B9%A8%EA%B0%84%EC%83%89-%EB%9D%BC%EC%9A%B4%EB%93%9C-%EC%8A%A4%ED%83%AC%ED%94%84.jpg")
                         .introduce("안녕 난 규동")
                         .isLiked(true)
+                        .isCelebrity(false)
                         .build()));
     }
 
@@ -284,7 +288,8 @@ class UserApiControllerTest extends MockMvcTest {
                         responseFields(
                                 fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("식별자"),
                                 fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("프로필 사진"),
-                                fieldWithPath("[].username").type(JsonFieldType.STRING).description("유저 이름")
+                                fieldWithPath("[].username").type(JsonFieldType.STRING).description("유저 이름"),
+                                fieldWithPath("[].isCelebrity").type(JsonFieldType.BOOLEAN).description("셀럽 여부")
                         )
                 ));
 
@@ -310,7 +315,8 @@ class UserApiControllerTest extends MockMvcTest {
                         responseFields(
                                 fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("식별자"),
                                 fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("프로필 사진"),
-                                fieldWithPath("[].username").type(JsonFieldType.STRING).description("유저 이름")
+                                fieldWithPath("[].username").type(JsonFieldType.STRING).description("유저 이름"),
+                                fieldWithPath("[].isCelebrity").type(JsonFieldType.BOOLEAN).description("셀럽 여부")
                         )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))

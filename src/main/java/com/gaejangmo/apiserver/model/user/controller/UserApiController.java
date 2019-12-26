@@ -27,6 +27,13 @@ public class UserApiController {
         this.userService = userService;
     }
 
+    @PostMapping("/image")
+    public ResponseEntity<FileResponseDto> updateUserImage(@RequestParam final MultipartFile file,
+                                                           @LoginUser final SecurityUser securityUser) {
+        FileResponseDto fileResponseDto = userService.updateUserImage(file, securityUser.getId());
+        return ResponseEntity.ok(fileResponseDto);
+    }
+
     @GetMapping("/logined")
     public ResponseEntity<UserResponseDto> showUser(@LoginUser SecurityUser user) {
         UserResponseDto response = userService.findUserResponseDtoByOauthId(user.getOauthId());
@@ -45,6 +52,17 @@ public class UserApiController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/random")
+    public ResponseEntity<List<UserSearchDto>> showRandomUsers() {
+        return ResponseEntity.ok(userService.findRandomUserResponse());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<UserSearchDto>> search(@RequestParam final String username) {
+        List<UserSearchDto> userSearchDtos = userService.findUserSearchDtosByUserName(username);
+        return ResponseEntity.ok(userSearchDtos);
+    }
+
     @PutMapping("/motto")
     public ResponseEntity<Motto> updateMotto(@RequestBody final Motto motto,
                                              @LoginUser SecurityUser user) {
@@ -57,24 +75,6 @@ public class UserApiController {
                                                             @LoginUser SecurityUser securityUser) {
         UserResponseDto response = userService.updateIntroduce(securityUser.getId(), introduce.getIntroduce());
         return ResponseEntity.ok(new UserIntroduceDto(response.getIntroduce()));
-    }
-
-    @PostMapping("/image")
-    public ResponseEntity<FileResponseDto> updateUserImage(@RequestParam final MultipartFile file,
-                                                           @LoginUser final SecurityUser securityUser) {
-        FileResponseDto fileResponseDto = userService.updateUserImage(file, securityUser.getId());
-        return ResponseEntity.ok(fileResponseDto);
-    }
-
-    @GetMapping("/random")
-    public ResponseEntity<List<UserSearchDto>> showRandomUsers() {
-        return ResponseEntity.ok(userService.findRandomUserResponse());
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<List<UserSearchDto>> search(@RequestParam final String username) {
-        List<UserSearchDto> userSearchDtos = userService.findUserSearchDtosByUserName(username);
-        return ResponseEntity.ok(userSearchDtos);
     }
 
     @ExceptionHandler({RuntimeException.class})

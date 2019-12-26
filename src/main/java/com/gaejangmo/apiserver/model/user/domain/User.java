@@ -132,4 +132,8 @@ public class User extends BaseTimeEntity {
         this.introduce = introduce;
         return this;
     }
+
+    public boolean isCelebrity() {
+        return this.grade.isCelebrity();
+    }
 }

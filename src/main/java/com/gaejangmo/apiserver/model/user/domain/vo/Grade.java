@@ -24,4 +24,8 @@ public enum Grade {
                 .findAny()
                 .orElseThrow(() -> new NotFoundGradeException("없는 사용자 등급입니다."));
     }
+
+    public boolean isCelebrity() {
+        return (this == CELEBRITY);
+    }
 }
