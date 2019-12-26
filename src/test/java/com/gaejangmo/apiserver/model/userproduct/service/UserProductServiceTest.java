@@ -4,6 +4,7 @@ import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
 import com.gaejangmo.apiserver.model.like.service.LikeService;
 import com.gaejangmo.apiserver.model.product.domain.Product;
+import com.gaejangmo.apiserver.model.product.domain.vo.ProductName;
 import com.gaejangmo.apiserver.model.product.service.ProductService;
 import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
 import com.gaejangmo.apiserver.model.user.domain.User;
@@ -13,6 +14,7 @@ import com.gaejangmo.apiserver.model.userproduct.domain.UserProduct;
 import com.gaejangmo.apiserver.model.userproduct.domain.UserProductRepository;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
+import com.gaejangmo.apiserver.model.userproduct.domain.vo.Status;
 import com.gaejangmo.apiserver.model.userproduct.dto.CommentDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductLatestResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
@@ -52,8 +54,6 @@ class UserProductServiceTest {
     @InjectMocks
     private UserProductService userProductService;
     @Mock
-    private ProductService productService;
-    @Mock
     private UserProductRepository userProductRepository;
     @Mock
     private UserService userService;
@@ -74,6 +74,7 @@ class UserProductServiceTest {
 
         product = Product.builder()
                 .imageUrl(Link.of("https://search.shopping.naver.com"))
+                .productName(ProductName.of("애플 맥북 에어 13형 2019년형 MVFH2KH/A"))
                 .build();
 
         userProduct = UserProduct.builder()
@@ -210,10 +211,32 @@ class UserProductServiceTest {
                 .hasSizeLessThanOrEqualTo(size)
                 .contains(
                         new UserProductLatestResponseDto((long) size,
-                                ProductType.MOUSE, ProductTestData.ENTITY.getImageUrl(), ProductTestData.ENTITY.getProductName(),
-                                UserTestData.ENTITY_GENERAL.getImageUrl(), UserTestData.ENTITY_GENERAL.getUsername(), UserTestData.ENTITY_GENERAL.getMotto(),
+                                ProductType.MOUSE, Status.ON_USE, ProductTestData.ENTITY_GENERAL.getImageUrl(), ProductTestData.ENTITY_GENERAL.getProductName(),
+                                UserTestData.ENTITY_GENERAL.getImageUrl(), UserTestData.ENTITY_GENERAL.getImageUrl(), UserTestData.ENTITY_GENERAL.getUsername(), UserTestData.ENTITY.getMotto(),
                                 true, null));
         verify(likeService, times(size)).isLiked(any(), anyLong());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {5, 6, 7})
+    void 장비_히스토리_검색(final int size) {
+        // given
+        SecurityUser user = SecurityUser.builder().id(1L).build();
+        Pageable pageable = PageRequest.of(DEFAULT_PAGE_NUM, size);
+        Page<UserProduct> pagedUserProducts = new PageImpl<>(LongStream.rangeClosed(1, size)
+                .mapToObj(this::createUserProduct)
+                .collect(Collectors.toList()));
+
+        when(userProductRepository.findAllByStatusNotAndUser_Id(Status.DELETED, user.getId(), pageable)).thenReturn(pagedUserProducts);
+
+        // when
+        List<UserProductLatestResponseDto> results = userProductService.findHistoryByPageable(pageable, user);
+
+        // then
+        assertThat(results)
+                .hasSizeLessThanOrEqualTo(size)
+                .allMatch(responseDto -> responseDto.getProduct().get("status") != Status.DELETED);
+        verify(userProductRepository, times(1)).findAllByStatusNotAndUser_Id(Status.DELETED, user.getId(), pageable);
     }
 
     private UserProduct createUserProduct(final long id) {
@@ -222,6 +245,7 @@ class UserProductServiceTest {
                 .user(UserTestData.ENTITY_GENERAL)
                 .comment(Comment.of(String.valueOf(id)))
                 .productType(ProductType.MOUSE)
+                .status(Status.ON_USE)
                 .build();
         ReflectionTestUtils.setField(userProduct, "id", id);
         return userProduct;

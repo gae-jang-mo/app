@@ -257,6 +257,22 @@ include::{snippets}/userproduct/latest/http-response.adoc[]
 .response fields
 include::{snippets}/userproduct/latest/response-fields.adoc[]
 
+=== history()
+
+유저 장비 히스토리 조회
+
+.request
+include::{snippets}/userproduct/history/http-request.adoc[]
+
+.request fields
+include::{snippets}/userproduct/history/request-fields.adoc[]
+
+.response
+include::{snippets}/userproduct/history/http-response.adoc[]
+
+.response fields
+include::{snippets}/userproduct/history/response-fields.adoc[]
+
 === updateComment()
 
 유저 장비에 대한 상품평 수정

@@ -47,6 +47,12 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
     }
 
+    @Transactional(readOnly = true)
+    public User findByUsername(final String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
+    }
+
     public UserResponseDto findUserResponseDtoByName(final String username, final SecurityUser loginUser) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
