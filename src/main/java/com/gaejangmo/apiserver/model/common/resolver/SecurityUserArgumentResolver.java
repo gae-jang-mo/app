@@ -11,6 +11,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
 public class SecurityUserArgumentResolver implements HandlerMethodArgumentResolver {
+    public static final Long NOT_EXISTED_ID = -1L;
+    private static final String ANONYMOUS_USER = "anonymousUser";
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -22,6 +24,12 @@ public class SecurityUserArgumentResolver implements HandlerMethodArgumentResolv
     @Override
     public SecurityUser resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                         NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        return (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ANONYMOUS_USER.equals(user)) {
+            return SecurityUser.builder().id(NOT_EXISTED_ID).build();
+        }
+
+        return (SecurityUser) user;
     }
 }
