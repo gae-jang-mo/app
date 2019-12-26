@@ -2,6 +2,7 @@ package com.gaejangmo.apiserver.model.product.domain;
 
 import com.gaejangmo.apiserver.model.common.domain.BaseTimeEntity;
 import com.gaejangmo.apiserver.model.common.domain.vo.Link;
+import com.gaejangmo.apiserver.model.product.converter.NaverProductTypeConverter;
 import com.gaejangmo.apiserver.model.product.domain.vo.*;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -55,9 +56,8 @@ public class Product extends BaseTimeEntity {
             column = @Column(name = "productId", nullable = false))
     private ProductId productId;
 
-    @AttributeOverride(
-            name = "value",
-            column = @Column(name = "naverProductType", nullable = false))
+    @Column(nullable = false)
+    @Convert(converter = NaverProductTypeConverter.class)
     private NaverProductType naverProductType;
 
     @AttributeOverride(
