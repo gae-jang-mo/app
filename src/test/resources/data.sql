@@ -49,6 +49,7 @@ values (30608121, 'ParkJunHo', 2, 1, 'abce@gmail.com', '장비충개발자', 'ht
 
 insert into user_product(comment, product_type, product_id, user_id, created_at)
 values ('ㅎㅎ장비좋아요ㅋㅋ', '1', '1', '1', '2014-04-01 00:00:00');
+
 insert into user_product(comment, product_type, product_id, user_id, created_at)
 values ('ㅎㅎ장비좋아요ㅋㅋ', '1', '1', '1', '2014-04-01 00:00:00');
 

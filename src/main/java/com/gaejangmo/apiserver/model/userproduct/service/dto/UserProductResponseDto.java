@@ -10,12 +10,12 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 public class UserProductResponseDto {
     private Long id;
-    private String productName;
     private Long productId;
     private String productType;
     private String comment;
     private LocalDateTime createdAt;
     private String imageUrl;
+    private String productName;
 
 
     @Builder
