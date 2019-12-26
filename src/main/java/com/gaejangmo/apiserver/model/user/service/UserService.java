@@ -144,8 +144,9 @@ public class UserService {
                 .build();
     }
 
+    /* 사용자한테 전달될 때 null로 넣으면 serialize할 때 제외되기 때문에 null로 지정 */
     private UserResponseDto toDto(final User user) {
-        return toDto(user, false);
+        return toDto(user, null);
     }
 
     private UserResponseDto toDto(final User user, final Boolean isLiked) {

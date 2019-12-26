@@ -52,7 +52,6 @@ class UserApiControllerTest extends MockMvcTest {
             fieldWithPath("motto").type(JsonFieldType.STRING).description("좌우명"),
             fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("프로필 사진"),
             fieldWithPath("isCelebrity").type(JsonFieldType.BOOLEAN).description("셀럽 여부"),
-            fieldWithPath("isLiked").type(JsonFieldType.BOOLEAN).ignored(),
             fieldWithPath("introduce").type(JsonFieldType.STRING).description("소개")
     );
 
@@ -86,7 +85,7 @@ class UserApiControllerTest extends MockMvcTest {
         // given
         List<FieldDescriptor> userAndLikedResponseDtoDescriptors = new ArrayList<>(userResponseDtoDescriptors);
         userAndLikedResponseDtoDescriptors.add(fieldWithPath("isLiked").type(JsonFieldType.BOOLEAN).description("좋아요 여부"));
-        userAndLikedResponseDtoDescriptors.add(fieldWithPath("isCelebrity").type(JsonFieldType.BOOLEAN).description("셀럽 여부"));
+        //userAndLikedResponseDtoDescriptors.add(fieldWithPath("isCelebrity").type(JsonFieldType.BOOLEAN).description("셀럽 여부"));
 
         // when
         ResultActions resultActions = mockMvc.perform(
