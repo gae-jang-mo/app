@@ -7,6 +7,7 @@ import com.gaejangmo.apiserver.model.product.domain.vo.*;
 import com.gaejangmo.apiserver.model.product.dto.ManagedProductResponseDto;
 import com.gaejangmo.apiserver.model.product.dto.NaverProductResponseDto;
 import com.gaejangmo.apiserver.model.product.dto.ProductRequestDto;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -15,6 +16,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -32,10 +34,11 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
-    public ManagedProductResponseDto findFromInternal(final String productName) {
-        return productRepository.findByProductName(ProductName.of(productName))
+    public List<ManagedProductResponseDto> findFromInternal(final String productName, final Pageable pageable) {
+        return productRepository.findProductsByProductName(productName, pageable)
+                .stream()
                 .map(this::toDto)
-                .orElseThrow(() -> new EntityNotFoundException("DB에 없는 장비입니다"));
+                .collect(Collectors.toList());
     }
 
     public List<NaverProductResponseDto> findFromExternal(final String productName) {
