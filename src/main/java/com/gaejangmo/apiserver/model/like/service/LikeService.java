@@ -59,31 +59,8 @@ public class LikeService {
         likeRepository.deleteBySourceAndTarget(source, target);
     }
 
-//    @Transactional(readOnly = true)
-//    public boolean isLiked(final SecurityUser loginUser, final Long targetId) {
-//        if (Objects.isNull(loginUser)) {
-//            return false;
-//        }
-//
-//        User source = findById(loginUser.getId());
-//        User target = findById(targetId);
-//
-//        Optional<Likes> like = likeRepository.findBySourceAndTarget(source, target);
-//
-//        return like.isPresent();
-//    }
-
     @Transactional(readOnly = true)
     public boolean isLiked(final Long sourceId, final Long targetId) {
-//        try {
-//            User source = findById(sourceId);
-//            User target = findById(targetId);
-//            Optional<Likes> like = likeRepository.findBySourceAndTarget(source, target);
-//
-//            return like.isPresent();
-//        } catch (Exception e) {
-//            return false;
-//        }
         if (NOT_EXISTED_ID.equals(sourceId) || NOT_EXISTED_ID.equals(targetId)) {
             return false;
         }
