@@ -78,3 +78,18 @@ values ('1', '3번공지사항', '폭풍규동');
 
 insert into notice(notice_type, header, contents)
 values ('1', '4번공지사항', '목장인에헴');
+
+insert into likes(user_source_id, user_target_id)
+values (2, 3);
+
+insert into likes(user_source_id, user_target_id)
+values (4, 3);
+
+insert into likes(user_source_id, user_target_id)
+values (2, 1);
+
+insert into likes(user_source_id, user_target_id)
+values (3, 1);
+
+insert into likes(user_source_id, user_target_id)
+values (1, 4);

@@ -144,8 +144,8 @@ class UserApiControllerTest extends MockMvcTest {
         List<UserResponseDto> userResponseDto = OBJECT_MAPPER.readValue(contentAsByteArray, new TypeReference<>() {
         });
 
-        assertThat(userResponseDto).isEqualTo(
-                List.of(UserResponseDto.builder()
+        assertThat(userResponseDto).contains(
+                UserResponseDto.builder()
                         .id(3L)
                         .oauthId(47378236L)
                         .username("kmdngyu")
@@ -155,7 +155,7 @@ class UserApiControllerTest extends MockMvcTest {
                         .introduce("안녕 난 규동")
                         .isLiked(true)
                         .isCelebrity(false)
-                        .build()));
+                        .build());
     }
 
     @Test
