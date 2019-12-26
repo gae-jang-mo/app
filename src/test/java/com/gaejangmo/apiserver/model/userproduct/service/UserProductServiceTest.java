@@ -81,6 +81,7 @@ class UserProductServiceTest {
                 .productType(ProductType.MAIN_DEVICE)
                 .product(product)
                 .user(user)
+                .status(Status.ON_USE)
                 .build();
 
         mockUserProduct = mock(UserProduct.class);

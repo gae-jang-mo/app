@@ -98,8 +98,7 @@ public class UserProductApiController {
     @DeleteMapping("/products/{id}")
     public ResponseEntity delete(@PathVariable final Long id,
                                  @LoginUser final SecurityUser securityUser) {
-        Long userId = securityUser.getId();
-        userProductService.delete(id, userId);
+        userProductService.delete(id, securityUser.getId());
         return ResponseEntity.noContent().build();
     }
 
