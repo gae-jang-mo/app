@@ -53,8 +53,8 @@ public class UserApiController {
     }
 
     @GetMapping("/random")
-    public ResponseEntity<List<UserSearchDto>> showRandomUsers() {
-        return ResponseEntity.ok(userService.findRandomUserResponse());
+    public ResponseEntity<List<UserSearchDto>> showRandomUsers(@LoginUser final SecurityUser securityUser) {
+        return ResponseEntity.ok(userService.findRandomUserResponse(securityUser.getId()));
     }
 
     @GetMapping("/search")

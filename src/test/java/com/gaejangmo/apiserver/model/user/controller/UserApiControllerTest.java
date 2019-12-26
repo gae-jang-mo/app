@@ -52,6 +52,7 @@ class UserApiControllerTest extends MockMvcTest {
             fieldWithPath("motto").type(JsonFieldType.STRING).description("좌우명"),
             fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("프로필 사진"),
             fieldWithPath("isCelebrity").type(JsonFieldType.BOOLEAN).description("셀럽 여부"),
+            fieldWithPath("isLiked").type(JsonFieldType.BOOLEAN).ignored(),
             fieldWithPath("introduce").type(JsonFieldType.STRING).description("소개")
     );
 
@@ -288,7 +289,9 @@ class UserApiControllerTest extends MockMvcTest {
                                 fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("식별자"),
                                 fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("프로필 사진"),
                                 fieldWithPath("[].username").type(JsonFieldType.STRING).description("유저 이름"),
-                                fieldWithPath("[].isCelebrity").type(JsonFieldType.BOOLEAN).description("셀럽 여부")
+                                fieldWithPath("[].isCelebrity").type(JsonFieldType.BOOLEAN).description("셀럽 여부"),
+                                fieldWithPath("[].isLiked").type(JsonFieldType.BOOLEAN).description("좋아요 여부"),
+                                fieldWithPath("[].motto").type(JsonFieldType.STRING).description("좌우명 여부")
                         )
                 ));
 
@@ -315,7 +318,9 @@ class UserApiControllerTest extends MockMvcTest {
                                 fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("식별자"),
                                 fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("프로필 사진"),
                                 fieldWithPath("[].username").type(JsonFieldType.STRING).description("유저 이름"),
-                                fieldWithPath("[].isCelebrity").type(JsonFieldType.BOOLEAN).description("셀럽 여부")
+                                fieldWithPath("[].isCelebrity").type(JsonFieldType.BOOLEAN).description("셀럽 여부"),
+                                fieldWithPath("[].isLiked").type(JsonFieldType.BOOLEAN).description("좋아요 여부"),
+                                fieldWithPath("[].motto").type(JsonFieldType.STRING).description("좌우명 여부")
                         )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
