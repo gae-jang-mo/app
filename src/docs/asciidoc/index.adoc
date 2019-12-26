@@ -11,10 +11,10 @@ gaejangmo.com
 
 개발자 장비 모음 Spring Rest Docs API
 
-
 == Product API
 
 === save()
+
 장비 저장
 
 .request
@@ -27,6 +27,7 @@ include::{snippets}/product/save/request-fields.adoc[]
 include::{snippets}/product/save/http-response.adoc[]
 
 === findFromInternalResource()
+
 DB에 저장된 장비 조회
 
 .request
@@ -44,6 +45,7 @@ include::{snippets}/product/findFromInternalResource/response-fields.adoc[]
 == Notice API
 
 === save()
+
 공지 저장
 
 .request
@@ -56,6 +58,7 @@ include::{snippets}/notice/save/request-fields.adoc[]
 include::{snippets}/notice/save/http-response.adoc[]
 
 === find()
+
 공지 조회
 
 .request
@@ -73,6 +76,7 @@ include::{snippets}/notice/response-fields.adoc[]
 == User API
 
 === checkLogin()
+
 로그인 되어 있는지 확인
 
 .request
@@ -82,6 +86,7 @@ include::{snippets}/sign/checkLogin/http-request.adoc[]
 include::{snippets}/sign/checkLogin/http-response.adoc[]
 
 === showUser()
+
 로그인 되어 있는 유저 정보 반환
 
 .request
@@ -94,6 +99,7 @@ include::{snippets}/user/showUser/http-response.adoc[]
 include::{snippets}/user/showUser/response-fields.adoc[]
 
 === showUserByName()
+
 username으로 유저 정보 검색
 
 .request
@@ -106,6 +112,7 @@ include::{snippets}/user/showUserByName/http-response.adoc[]
 include::{snippets}/user/showUserByName/response-fields.adoc[]
 
 === updateMotto()
+
 유저 Motto(좌우명) 수정
 
 .request
@@ -121,6 +128,7 @@ include::{snippets}/user/updateMotto/http-response.adoc[]
 include::{snippets}/user/updateMotto/response-fields.adoc[]
 
 === updateUserImage()
+
 유저 프로필 사진 수정
 
 .request
@@ -136,6 +144,7 @@ include::{snippets}/user/updateUserImage/http-response.adoc[]
 include::{snippets}/user/updateUserImage/response-fields.adoc[]
 
 === updateIntroduce()
+
 유저 자기소개 수정
 
 .request
@@ -151,6 +160,7 @@ include::{snippets}/user/updateIntroduce/http-response.adoc[]
 include::{snippets}/user/updateIntroduce/response-fields.adoc[]
 
 === search()
+
 유저 이름으로 유저 리스트 검색
 
 .request
@@ -168,6 +178,7 @@ include::{snippets}/user/search/response-fields.adoc[]
 == Like API
 
 === save()
+
 좋아요 저장
 
 .request
@@ -180,6 +191,7 @@ include::{snippets}/like/save/path-parameters.adoc[]
 include::{snippets}/like/save/http-response.adoc[]
 
 === delete()
+
 좋아요 취소
 
 .request
@@ -190,6 +202,19 @@ include::{snippets}/like/delete/path-parameters.adoc[]
 
 .response
 include::{snippets}/like/delete/http-response.adoc[]
+
+=== ranking()
+
+좋아요 랭킹
+
+.request
+include::{snippets}/like/ranking/http-request.adoc[]
+
+.response
+include::{snippets}/like/ranking/http-response.adoc[]
+
+.response fields
+include::{snippets}/like/ranking/response-fields.adoc[]
 
 == UserProduct API
 

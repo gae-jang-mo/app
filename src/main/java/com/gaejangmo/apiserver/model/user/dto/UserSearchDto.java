@@ -1,11 +1,13 @@
 package com.gaejangmo.apiserver.model.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 @Getter
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserSearchDto {
     private Long id;
     private String imageUrl;
