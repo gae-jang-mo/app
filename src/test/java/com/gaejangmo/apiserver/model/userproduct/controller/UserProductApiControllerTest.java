@@ -319,7 +319,6 @@ class UserProductApiControllerTest extends MockMvcTest {
     void 가장_최근에_등록된_장비_검색() throws Exception {
         // given
         Pageable pageable = PageRequest.of(0, 20);
-        UserProductLatestResponseDto userProductLatestResponseDto = getUserProductLatestResponseDto();
 
         // when
         ResultActions resultActions = mockMvc.perform(
@@ -375,16 +374,55 @@ class UserProductApiControllerTest extends MockMvcTest {
                 .containsEntry("isLiked", false);
     }
 
-    private UserProductLatestResponseDto getUserProductLatestResponseDto() {
-        return UserProductLatestResponseDto.builder()
-                .id(1L)
-                .productType(ProductType.MAIN_DEVICE)
-                .productName("애플 맥북 프로 13형 2019년형 MUHN2KH/A")
-                .productImageUrl("https://shopping-phinf.pstatic.net/main_2048607/20486074380.20191210164911.jpg")
-                .username("JunHoPark93")
-                .userImageUrl("https://previews.123rf.com/images/aquir/aquir1311/aquir131100316/23569861-%EC%83%98%ED%94%8C-%EC%A7%80-%EB%B9%A8%EA%B0%84%EC%83%89-%EB%9D%BC%EC%9A%B4%EB%93%9C-%EC%8A%A4%ED%83%AC%ED%94%84.jpg")
-                .motto("장비충개발자")
-                .createdAt(LocalDateTime.of(2014, 4, 1, 0, 0, 0))
-                .build();
+    @Test
+    @WithMockCustomUser
+    void 유저_장비_히스토리_조회() throws Exception {
+        // given
+        Pageable pageable = PageRequest.of(0, 1);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(
+                RestDocumentationRequestBuilders.get(USER_PRODUCT_URI + "/products/history")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(OBJECT_MAPPER.writeValueAsString(pageable)))
+                .andDo(print())
+                .andDo(document("userproduct/history",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("pageNumber").type(JsonFieldType.NUMBER).description("출력할 페이지 번호").optional(),
+                                fieldWithPath("pageSize").type(JsonFieldType.NUMBER).description("한 번에 출력할 페이지의 크기").optional(),
+                                fieldWithPath("offset").type(JsonFieldType.NUMBER).ignored(),
+                                fieldWithPath("paged").type(JsonFieldType.BOOLEAN).ignored(),
+                                fieldWithPath("unpaged").type(JsonFieldType.BOOLEAN).ignored(),
+                                fieldWithPath("sort.unsorted").type(JsonFieldType.BOOLEAN).ignored(),
+                                fieldWithPath("sort.sorted").type(JsonFieldType.BOOLEAN).ignored(),
+                                fieldWithPath("sort.empty").type(JsonFieldType.BOOLEAN).ignored()
+                        ),
+                        responseFields(
+                                fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("UserProduct의 식별자"),
+                                fieldWithPath("[].product.type").type(JsonFieldType.STRING).description("장비의 타입"),
+                                fieldWithPath("[].product.status").type(JsonFieldType.STRING).description("장비의 상태"),
+                                fieldWithPath("[].product.imageUrl").type(JsonFieldType.STRING).description("장비의 사진 URL"),
+                                fieldWithPath("[].product.name").type(JsonFieldType.STRING).description("장비의 이름"),
+                                fieldWithPath("[].user.imageUrl").type(JsonFieldType.STRING).description("유저의 사진 URL"),
+                                fieldWithPath("[].user.username").type(JsonFieldType.STRING).description("유저의 등록된 이름"),
+                                fieldWithPath("[].user.motto").type(JsonFieldType.STRING).description("유저의 좌우명"),
+                                fieldWithPath("[].user.isLiked").type(JsonFieldType.BOOLEAN).description("해당 유저가 장비에 대해 좋아요를 눌렀는지에 대한 여부"),
+                                fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("유저 장비 생성 날짜")
+                        )));
+
+        // then
+        String content = resultActions.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsString();
+
+        List<UserProductLatestResponseDto> responseDtos = OBJECT_MAPPER.readValue(content, new TypeReference<>() {
+        });
+
+        assertThat(responseDtos)
+                .allMatch(responseDto ->
+                        Status.valueOf((String) responseDto.getProduct().get("status")) != Status.DELETED);
     }
 }
