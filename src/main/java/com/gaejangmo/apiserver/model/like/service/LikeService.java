@@ -6,6 +6,8 @@ import com.gaejangmo.apiserver.model.like.domain.Likes;
 import com.gaejangmo.apiserver.model.like.exception.InvalidMySelfLikeException;
 import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.domain.UserRepository;
+import com.gaejangmo.apiserver.model.user.dto.UserSearchDto;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -75,5 +78,22 @@ public class LikeService {
 
     private User findById(final Long id) {
         return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당하는 유저가 없습니다."));
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserSearchDto> findRanking(final Pageable pageable) {
+        List<User> userRanking = likeRepository.findUserRanking(pageable);
+        return userRanking.stream()
+                .map(this::toUserSearchDto)
+                .collect(Collectors.toList());
+    }
+
+    private UserSearchDto toUserSearchDto(final User user) {
+        return UserSearchDto.builder()
+                .id(user.getId())
+                .imageUrl(user.getImageUrl())
+                .username(user.getUsername())
+                .isCelebrity(user.isCelebrity())
+                .build();
     }
 }
