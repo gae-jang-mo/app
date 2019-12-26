@@ -62,7 +62,7 @@ public class Product extends BaseTimeEntity {
 
     @AttributeOverride(
             name = "value",
-            column = @Column(name = "productType", nullable = false))
+            column = @Column(name = "productType"))
     private ProductType productType;
 
     @Builder
