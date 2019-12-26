@@ -3,7 +3,6 @@ package com.gaejangmo.apiserver.model.user.dto;
 import lombok.*;
 
 @Getter
-@Setter
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
