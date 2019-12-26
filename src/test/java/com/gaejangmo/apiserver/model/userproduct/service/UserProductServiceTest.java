@@ -210,10 +210,22 @@ class UserProductServiceTest {
         assertThat(results)
                 .hasSizeLessThanOrEqualTo(size)
                 .contains(
-                        new UserProductLatestResponseDto((long) size,
-                                ProductType.MOUSE, Status.ON_USE, ProductTestData.ENTITY_GENERAL.getImageUrl(), ProductTestData.ENTITY_GENERAL.getProductName(),
-                                UserTestData.ENTITY_GENERAL.getImageUrl(), UserTestData.ENTITY_GENERAL.getImageUrl(), UserTestData.ENTITY_GENERAL.getUsername(), UserTestData.ENTITY.getMotto(),
-                                true, null));
+                        UserProductLatestResponseDto.builder()
+                                .id((long) size)
+                                .productType(ProductType.MOUSE)
+                                .status(Status.ON_USE)
+                                .productImageUrl(ProductTestData.ENTITY.getImageUrl())
+                                .productName(ProductTestData.ENTITY.getProductName())
+                                .userImageUrl(UserTestData.ENTITY_GENERAL.getImageUrl())
+                                .username(UserTestData.ENTITY_GENERAL.getUsername())
+                                .motto(UserTestData.ENTITY_GENERAL.getMotto())
+                                .isLiked(true)
+                                .createdAt(null)
+                                .build());
+//                        new UserProductLatestResponseDto((long) size,
+//                                ProductType.MOUSE, Status.ON_USE, ProductTestData.ENTITY.getImageUrl(), ProductTestData.ENTITY.getProductName(),
+//                                UserTestData.ENTITY_GENERAL.getImageUrl(), UserTestData.ENTITY_GENERAL.getUsername(), UserTestData.ENTITY_GENERAL.getMotto(),
+//                                true, null));
         verify(likeService, times(size)).isLiked(any(), anyLong());
     }
 

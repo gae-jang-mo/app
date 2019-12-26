@@ -65,13 +65,13 @@ class UserServiceTest {
     @Test
     void username_유저_엔티티_조회() {
         // given
-        given(userRepository.findByUsername(anyString())).willReturn(Optional.of(UserTestData.ENTITY));
+        given(userRepository.findByUsername(anyString())).willReturn(Optional.of(UserTestData.ENTITY_GENERAL));
 
         // when
-        User result = userService.findByUsername(UserTestData.ENTITY.getUsername());
+        User result = userService.findByUsername(UserTestData.ENTITY_GENERAL.getUsername());
 
         // then
-        assertThat(result).isEqualTo(UserTestData.ENTITY);
+        assertThat(result).isEqualTo(UserTestData.ENTITY_GENERAL);
     }
 
     @Test
@@ -80,7 +80,7 @@ class UserServiceTest {
         given(userRepository.findByUsername(anyString())).willReturn(Optional.empty());
 
         // when & then
-        assertThrows(EntityNotFoundException.class, ()-> userService.findByUsername(UserTestData.ENTITY.getUsername()));
+        assertThrows(EntityNotFoundException.class, ()-> userService.findByUsername(UserTestData.ENTITY_GENERAL.getUsername()));
     }
 
     @Test
