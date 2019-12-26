@@ -311,7 +311,6 @@ class UserProductApiControllerTest extends MockMvcTest {
     void 가장_최근에_등록된_장비_검색() throws Exception {
         // given
         Pageable pageable = PageRequest.of(0, 20);
-        UserProductLatestResponseDto userProductLatestResponseDto = getUserProductLatestResponseDto();
 
         // when
         ResultActions resultActions = mockMvc.perform(
@@ -364,18 +363,5 @@ class UserProductApiControllerTest extends MockMvcTest {
                 .containsEntry("username", "JunHoPark93")
                 .containsEntry("motto", "장비충개발자")
                 .containsEntry("isLiked", false);
-    }
-
-    private UserProductLatestResponseDto getUserProductLatestResponseDto() {
-        return UserProductLatestResponseDto.builder()
-                .id(1L)
-                .productType(ProductType.MAIN_DEVICE)
-                .productName("애플 맥북 프로 13형 2019년형 MUHN2KH/A")
-                .productImageUrl("https://shopping-phinf.pstatic.net/main_2048607/20486074380.20191210164911.jpg")
-                .username("JunHoPark93")
-                .userImageUrl("https://previews.123rf.com/images/aquir/aquir1311/aquir131100316/23569861-%EC%83%98%ED%94%8C-%EC%A7%80-%EB%B9%A8%EA%B0%84%EC%83%89-%EB%9D%BC%EC%9A%B4%EB%93%9C-%EC%8A%A4%ED%83%AC%ED%94%84.jpg")
-                .motto("장비충개발자")
-                .createdAt(LocalDateTime.of(2014, 4, 1, 0, 0, 0))
-                .build();
     }
 }
