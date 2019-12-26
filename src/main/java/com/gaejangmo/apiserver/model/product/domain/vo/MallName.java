@@ -18,15 +18,15 @@ public class MallName {
         this.value = validate(value);
     }
 
+    public static MallName of(final String mallName) {
+        return new MallName(mallName);
+    }
+
     private String validate(final String value) {
         if (StringUtils.isBlank(value)) {
             throw new EmptyValueException("판매자 이름이 없습니다");
         }
         return value;
-    }
-
-    public static MallName of(final String mallName) {
-        return new MallName(mallName);
     }
 
     public String value() {
