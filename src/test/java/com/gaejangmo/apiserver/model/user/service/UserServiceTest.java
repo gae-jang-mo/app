@@ -133,8 +133,14 @@ class UserServiceTest {
         String username = "username";
         List<User> users = List.of(UserTestData.ENTITY_GENERAL);
         List<UserSearchDto> expected = List.of(
-                new UserSearchDto(UserTestData.ENTITY_GENERAL.getId(), UserTestData.ENTITY_GENERAL.getImageUrl(),
-                        UserTestData.ENTITY_GENERAL.getUsername(), UserTestData.ENTITY_GENERAL.isCelebrity()));
+                UserSearchDto.builder()
+                        .id(UserTestData.ENTITY_GENERAL.getId())
+                        .imageUrl(UserTestData.ENTITY_GENERAL.getImageUrl())
+                        .username(UserTestData.ENTITY_GENERAL.getUsername())
+                        .motto(UserTestData.ENTITY_GENERAL.getMotto())
+                        .isCelebrity(UserTestData.ENTITY_GENERAL.isCelebrity())
+                        .isLiked(false)
+                        .build());
         when(userRepository.findAllByUsernameContainingIgnoreCase(username)).thenReturn(users);
 
         // when

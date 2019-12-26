@@ -59,7 +59,6 @@ public class UserTestData {
             .motto("폭풍개발자")
             .imageUrl("https://previews.123rf.com/images/aquir/aquir1311/aquir131100316/23569861-%EC%83%98%ED%94%8C-%EC%A7%80-%EB%B9%A8%EA%B0%84%EC%83%89-%EB%9D%BC%EC%9A%B4%EB%93%9C-%EC%8A%A4%ED%83%AC%ED%94%84.jpg")
             .introduce("안녕 난 규동")
-            .isLiked(null)
             .isCelebrity(false)
             .build();
 

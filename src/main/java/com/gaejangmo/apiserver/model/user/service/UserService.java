@@ -112,23 +112,39 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public List<UserSearchDto> findRandomUserResponse(final Long sourceId) {
+        return RandomUtils.getRandomLongsInRange(USER_START_IDX, userRepository.getMaxId(), RANDOM_USER_COUNT).stream()
+                .map(this::findById)
+                .map(target -> toUserSearchDto(sourceId, target))
+                .collect(Collectors.toList());
+    }
+
     private UserSearchDto toUserSearchDto(final User user) {
         return UserSearchDto.builder()
                 .id(user.getId())
                 .imageUrl(user.getImageUrl())
                 .username(user.getUsername())
+                .motto(user.getMotto())
                 .isCelebrity(user.isCelebrity())
+                .isLiked(false)
                 .build();
     }
 
-    public List<UserSearchDto> findRandomUserResponse() {
-        return RandomUtils.getRandomLongsInRange(USER_START_IDX, userRepository.getMaxId(), RANDOM_USER_COUNT)
-                .stream()
-                .map(this::findById)
-                .map(this::toUserSearchDto)
-                .collect(Collectors.toList());
+    private UserSearchDto toUserSearchDto(final Long sourceId, final User user) {
+        Long targetId = user.getId();
+        boolean isLiked = likeService.isLiked(sourceId, targetId);
+
+        return UserSearchDto.builder()
+                .id(user.getId())
+                .imageUrl(user.getImageUrl())
+                .username(user.getUsername())
+                .motto(user.getMotto())
+                .isCelebrity(user.isCelebrity())
+                .isLiked(isLiked)
+                .build();
     }
 
+    /* 사용자한테 전달될 때 null로 넣으면 serialize할 때 제외되기 때문에 null로 지정 */
     private UserResponseDto toDto(final User user) {
         return toDto(user, null);
     }
