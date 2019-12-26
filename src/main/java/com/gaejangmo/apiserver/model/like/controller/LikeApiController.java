@@ -15,10 +15,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/likes")
-public class LikeController {
+public class LikeApiController {
     private final LikeService likeService;
 
-    public LikeController(final LikeService likeService) {
+    public LikeApiController(final LikeService likeService) {
         this.likeService = likeService;
     }
 

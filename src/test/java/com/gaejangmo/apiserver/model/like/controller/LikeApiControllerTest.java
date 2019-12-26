@@ -24,8 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class LikeControllerTest extends MockMvcTest {
-    private static final String LIKE_API = getApiUrl(LikeController.class);
+class LikeApiControllerTest extends MockMvcTest {
+    private static final String LIKE_API = getApiUrl(LikeApiController.class);
     private static final long TARGET_ID = 2L;
 
     @Test
