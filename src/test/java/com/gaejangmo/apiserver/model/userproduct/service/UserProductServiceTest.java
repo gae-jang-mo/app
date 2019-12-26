@@ -5,7 +5,6 @@ import com.gaejangmo.apiserver.model.common.domain.vo.Link;
 import com.gaejangmo.apiserver.model.like.service.LikeService;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.product.domain.vo.ProductName;
-import com.gaejangmo.apiserver.model.product.service.ProductService;
 import com.gaejangmo.apiserver.model.product.testdata.ProductTestData;
 import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.service.UserService;
@@ -194,17 +193,16 @@ class UserProductServiceTest {
     void 가장_최근에_등록된_장비_검색(final int size) {
         // given
         Pageable pageable = PageRequest.of(DEFAULT_PAGE_NUM, size);
-
         Page<UserProduct> pagedUserProducts = new PageImpl<>(LongStream.rangeClosed(1, size)
                 .mapToObj(this::createUserProduct)
                 .collect(Collectors.toList()));
 
         when(userProductRepository.findAll(pageable)).thenReturn(pagedUserProducts);
-        when(likeService.isLiked(any(), anyLong())).thenReturn(true);
+        when(likeService.isLiked(anyLong(), anyLong())).thenReturn(true);
 
         // when
         List<UserProductLatestResponseDto> results =
-                userProductService.findAllByPageable(pageable, SecurityUser.builder().id(1L).build());
+                userProductService.findAllByPageable(pageable, 1L);
 
         // then
         assertThat(results)
@@ -222,10 +220,6 @@ class UserProductServiceTest {
                                 .isLiked(true)
                                 .createdAt(null)
                                 .build());
-//                        new UserProductLatestResponseDto((long) size,
-//                                ProductType.MOUSE, Status.ON_USE, ProductTestData.ENTITY.getImageUrl(), ProductTestData.ENTITY.getProductName(),
-//                                UserTestData.ENTITY_GENERAL.getImageUrl(), UserTestData.ENTITY_GENERAL.getUsername(), UserTestData.ENTITY_GENERAL.getMotto(),
-//                                true, null));
         verify(likeService, times(size)).isLiked(any(), anyLong());
     }
 
@@ -242,7 +236,7 @@ class UserProductServiceTest {
         when(userProductRepository.findAllByStatusNotAndUser_Id(Status.DELETED, user.getId(), pageable)).thenReturn(pagedUserProducts);
 
         // when
-        List<UserProductLatestResponseDto> results = userProductService.findHistoryByPageable(pageable, user);
+        List<UserProductLatestResponseDto> results = userProductService.findHistoryByPageable(pageable, 1L);
 
         // then
         assertThat(results)

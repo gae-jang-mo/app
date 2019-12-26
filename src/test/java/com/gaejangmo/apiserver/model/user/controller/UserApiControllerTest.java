@@ -55,7 +55,6 @@ class UserApiControllerTest extends MockMvcTest {
             fieldWithPath("introduce").type(JsonFieldType.STRING).description("소개")
     );
 
-
     @Test
     @WithMockCustomUser(id = "3", oauthId = "47378236", username = "kmdngyu", email = "abc2@gmail.com")
     void 사용자_로그인_시_정보_반환() throws Exception {
@@ -81,7 +80,7 @@ class UserApiControllerTest extends MockMvcTest {
     }
 
     @Test
-    @WithMockCustomUser
+//    @WithMockCustomUser
     void username으로_유저_정보_받기() throws Exception {
         // given
         List<FieldDescriptor> userAndLikedResponseDtoDescriptors = new ArrayList<>(userResponseDtoDescriptors);

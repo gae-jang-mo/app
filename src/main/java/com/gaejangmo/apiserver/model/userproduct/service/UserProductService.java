@@ -1,6 +1,5 @@
 package com.gaejangmo.apiserver.model.userproduct.service;
 
-import com.gaejangmo.apiserver.config.oauth.SecurityUser;
 import com.gaejangmo.apiserver.model.like.service.LikeService;
 import com.gaejangmo.apiserver.model.product.domain.Product;
 import com.gaejangmo.apiserver.model.product.dto.ManagedProductResponseDto;
@@ -109,20 +108,20 @@ public class UserProductService {
         throw new NotUserProductOwnerException();
     }
 
-    public List<UserProductLatestResponseDto> findAllByPageable(final Pageable pageable, final SecurityUser loginUser) {
+    public List<UserProductLatestResponseDto> findAllByPageable(final Pageable pageable, final Long sourceId) {
         return userProductRepository.findAll(pageable)
-                .map(userProduct -> toLatestDto(userProduct, isLiked(loginUser, userProduct)))
+                .map(userProduct -> toLatestDto(userProduct, isLiked(sourceId, userProduct)))
                 .toList();
     }
 
-    public List<UserProductLatestResponseDto> findHistoryByPageable(final Pageable pageable, final SecurityUser loginUser) {
-        return userProductRepository.findAllByStatusNotAndUser_Id(Status.DELETED, loginUser.getId(), pageable)
-                .map(userProduct -> toLatestDto(userProduct, isLiked(loginUser, userProduct)))
+    public List<UserProductLatestResponseDto> findHistoryByPageable(final Pageable pageable, final Long sourceId) {
+        return userProductRepository.findAllByStatusNotAndUser_Id(Status.DELETED, sourceId, pageable)
+                .map(userProduct -> toLatestDto(userProduct, isLiked(sourceId, userProduct)))
                 .toList();
     }
 
-    private boolean isLiked(final SecurityUser loginUser, final UserProduct userProduct) {
-        return likeService.isLiked(loginUser, userProduct.getUser().getId());
+    private boolean isLiked(final Long sourceId, final UserProduct userProduct) {
+        return likeService.isLiked(sourceId, userProduct.getUser().getId());
     }
 
     private UserProductLatestResponseDto toLatestDto(final UserProduct userProduct, final boolean isLiked) {
