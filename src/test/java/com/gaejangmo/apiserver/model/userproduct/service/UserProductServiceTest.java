@@ -13,6 +13,7 @@ import com.gaejangmo.apiserver.model.userproduct.domain.UserProduct;
 import com.gaejangmo.apiserver.model.userproduct.domain.UserProductRepository;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.Comment;
 import com.gaejangmo.apiserver.model.userproduct.domain.vo.ProductType;
+import com.gaejangmo.apiserver.model.userproduct.domain.vo.Status;
 import com.gaejangmo.apiserver.model.userproduct.dto.CommentDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductLatestResponseDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.UserProductResponseDto;
@@ -210,7 +211,7 @@ class UserProductServiceTest {
                 .hasSizeLessThanOrEqualTo(size)
                 .contains(
                         new UserProductLatestResponseDto((long) size,
-                                ProductType.MOUSE, ProductTestData.ENTITY.getImageUrl(), ProductTestData.ENTITY.getProductName(),
+                                ProductType.MOUSE, Status.ON_USE, ProductTestData.ENTITY.getImageUrl(), ProductTestData.ENTITY.getProductName(),
                                 UserTestData.ENTITY.getImageUrl(), UserTestData.ENTITY.getUsername(), UserTestData.ENTITY.getMotto(),
                                 true, null));
         verify(likeService, times(size)).isLiked(any(), anyLong());
@@ -222,6 +223,7 @@ class UserProductServiceTest {
                 .user(UserTestData.ENTITY)
                 .comment(Comment.of(String.valueOf(id)))
                 .productType(ProductType.MOUSE)
+                .status(Status.ON_USE)
                 .build();
         ReflectionTestUtils.setField(userProduct, "id", id);
         return userProduct;

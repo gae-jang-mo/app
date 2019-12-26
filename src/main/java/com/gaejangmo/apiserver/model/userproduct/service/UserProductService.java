@@ -61,6 +61,7 @@ public class UserProductService {
         return UserProduct.builder()
                 .product(product)
                 .user(user)
+                .status(requestDto.getStatus())
                 .comment(Comment.of(requestDto.getComment()))
                 .productType(requestDto.getProductType())
                 .build();
@@ -110,6 +111,7 @@ public class UserProductService {
         return UserProductLatestResponseDto.builder()
                 .id(userProduct.getId())
                 .productType(userProduct.getProductType())
+                .status(userProduct.getStatus())
                 .productImageUrl(userProduct.getProduct().getImageUrl())
                 .productName(userProduct.getProduct().getProductName())
                 .userImageUrl(userProduct.getUser().getImageUrl())
@@ -126,6 +128,7 @@ public class UserProductService {
                 .comment(userProduct.getComment())
                 .createdAt(userProduct.getCreatedAt())
                 .productType(userProduct.getProductType().getName())
+                .status(userProduct.getStatus())
                 .imageUrl(userProduct.getProduct().getImageUrl())
                 .productId(userProduct.getProduct().getId())
                 .build();
