@@ -81,8 +81,7 @@ public class ProductService {
                 .highestPrice(Price.of(dto.getHighestPrice()))
                 .mallName(MallName.of(dto.getMallName()))
                 .productId(ProductId.of(dto.getProductId()))
-                .naverProductType(NaverProductType.find(1))
-                .productType(ProductType.find(1))
+                .naverProductType(NaverProductType.valueOf(dto.getNaverProductType()))
                 .build();
     }
 }
