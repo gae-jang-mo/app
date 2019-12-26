@@ -24,4 +24,6 @@ public interface LikeRepository extends JpaRepository<Likes, Long> {
                     "    likes.target " +
                     "ORDER BY cnt DESC ")
     List<User> findUserRanking(final Pageable pageable);
+
+    int countLikesByTarget(final User user);
 }
