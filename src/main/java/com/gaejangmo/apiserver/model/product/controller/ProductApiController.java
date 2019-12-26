@@ -46,7 +46,7 @@ public class ProductApiController {
     public ResponseEntity<Map<ProductType, String>> showProductTypes() {
         Map<ProductType, String> productNamesWithValues = new EnumMap<>(ProductType.class);
         Arrays.asList(ProductType.values())
-                .forEach(x -> productNamesWithValues.put(x, x.getName()));
+                .forEach(type -> productNamesWithValues.put(type, type.getName()));
         return ResponseEntity.ok(productNamesWithValues);
     }
 
