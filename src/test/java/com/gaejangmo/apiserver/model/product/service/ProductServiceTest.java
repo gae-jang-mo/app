@@ -8,11 +8,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -30,9 +34,10 @@ class ProductServiceTest {
     void 상품_조회() {
         given(productRepository.findByProductName(ProductName.of(PRODUCT_NAME))).willReturn(Optional.of(ProductTestData.ENTITY));
 
-        ManagedProductResponseDto result = productService.findFromInternal(PRODUCT_NAME);
+        Pageable pageable = PageRequest.of(0, 10);
+        List<ManagedProductResponseDto> fromInternal = productService.findFromInternal(PRODUCT_NAME, pageable);
 
-        assertThat(result).isEqualTo(ProductTestData.MANAGED_PRODUCT_RESPONSE_DTO);
+        assertNotNull(fromInternal);
     }
 
     @Test
