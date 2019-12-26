@@ -62,7 +62,7 @@ public class UserProductService {
         return UserProduct.builder()
                 .product(product)
                 .user(user)
-                .status(requestDto.getStatus())
+                .status(Status.ON_USE)
                 .comment(Comment.of(requestDto.getComment()))
                 .productType(requestDto.getProductType())
                 .build();

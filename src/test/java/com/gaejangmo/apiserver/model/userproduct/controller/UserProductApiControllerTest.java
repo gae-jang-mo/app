@@ -42,7 +42,7 @@ class UserProductApiControllerTest extends MockMvcTest {
     @WithMockCustomUser
     void 내부_장비_UserProduct_등록() throws Exception {
         // given
-        UserProductRequestDto userProductRequestDto = new UserProductRequestDto(ProductType.MOUSE, Status.ON_USE, "댓글");
+        UserProductRequestDto userProductRequestDto = new UserProductRequestDto(ProductType.MOUSE, "댓글");
         UserProductInternalRequestDto userProductInternalRequestDto = new UserProductInternalRequestDto(userProductRequestDto, PRODUCT_ID);
 
         // when
@@ -56,7 +56,6 @@ class UserProductApiControllerTest extends MockMvcTest {
                         getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("productId").type(JsonFieldType.NUMBER).description("Product의 식별자"),
-                                fieldWithPath("userProductRequestDto.status").type(JsonFieldType.STRING).description("장비의 상태"),
                                 fieldWithPath("userProductRequestDto.productType").type(JsonFieldType.STRING).description("장비의 타입"),
                                 fieldWithPath("userProductRequestDto.comment").type(JsonFieldType.STRING).description("제품에 대한 코멘트")
                         ),
@@ -82,7 +81,7 @@ class UserProductApiControllerTest extends MockMvcTest {
     @WithMockCustomUser
     void 외부_장비_UserProduct_등록() throws Exception {
         // given
-        UserProductRequestDto userProductRequestDto = new UserProductRequestDto(ProductType.MOUSE, Status.ON_USE, "댓글");
+        UserProductRequestDto userProductRequestDto = new UserProductRequestDto(ProductType.MOUSE, "댓글");
         UserProductExternalRequestDto userProductExternalRequestDto = new UserProductExternalRequestDto(userProductRequestDto, REQUEST_DTO2);
 
         // when
@@ -96,7 +95,6 @@ class UserProductApiControllerTest extends MockMvcTest {
                         getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("userProductRequestDto.productType").type(JsonFieldType.STRING).description("장비의 타입"),
-                                fieldWithPath("userProductRequestDto.status").type(JsonFieldType.STRING).description("장비의 상태"),
                                 fieldWithPath("userProductRequestDto.comment").type(JsonFieldType.STRING).description("제품에 대한 코멘트"),
                                 fieldWithPath("productRequestDto.title").type(JsonFieldType.STRING).description("제품의 이름"),
                                 fieldWithPath("productRequestDto.link").type(JsonFieldType.STRING).description("제품의 링크"),
@@ -135,7 +133,7 @@ class UserProductApiControllerTest extends MockMvcTest {
     @WithAnonymousUser
     void 비로그인_장비_등록시도_Unauthorized() throws Exception {
         // given
-        UserProductRequestDto userProductRequestDto = new UserProductRequestDto(ProductType.MOUSE, Status.ON_USE, "댓글");
+        UserProductRequestDto userProductRequestDto = new UserProductRequestDto(ProductType.MOUSE, "댓글");
         UserProductInternalRequestDto userProductInternalRequestDto = new UserProductInternalRequestDto(userProductRequestDto, PRODUCT_ID);
 
         // when
