@@ -118,6 +118,7 @@ public class UserService {
                 .id(user.getId())
                 .imageUrl(user.getImageUrl())
                 .username(user.getUsername())
+                .isCelebrity(user.isCelebrity())
                 .build();
     }
 
@@ -142,6 +143,7 @@ public class UserService {
                 .imageUrl(user.getImageUrl())
                 .introduce(user.getIntroduce())
                 .motto(user.getMotto())
+                .isCelebrity(user.isCelebrity())
                 .isLiked(isLiked)
                 .build();
     }

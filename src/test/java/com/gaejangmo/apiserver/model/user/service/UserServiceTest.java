@@ -7,6 +7,7 @@ import com.gaejangmo.apiserver.model.like.service.LikeService;
 import com.gaejangmo.apiserver.model.user.domain.User;
 import com.gaejangmo.apiserver.model.user.domain.UserRepository;
 import com.gaejangmo.apiserver.model.user.domain.vo.Email;
+import com.gaejangmo.apiserver.model.user.domain.vo.Grade;
 import com.gaejangmo.apiserver.model.user.domain.vo.Motto;
 import com.gaejangmo.apiserver.model.user.dto.UserResponseDto;
 import com.gaejangmo.apiserver.model.user.dto.UserSearchDto;
@@ -52,10 +53,10 @@ class UserServiceTest {
     @Test
     void username_유저_조회() {
         SecurityUser loginUser = SecurityUser.builder().id(2L).build();
-        given(userRepository.findByUsername(anyString())).willReturn(Optional.of(UserTestData.ENTITY));
+        given(userRepository.findByUsername(anyString())).willReturn(Optional.of(UserTestData.ENTITY_GENERAL));
         given(likeService.isLiked(any(), anyLong())).willReturn(false);
 
-        User user = UserTestData.ENTITY;
+        User user = UserTestData.ENTITY_GENERAL;
         UserResponseDto result = userService.findUserResponseDtoByName(user.getUsername(), loginUser);
 
         assertThat(result).isEqualTo(UserTestData.RESPONSE_DTO);
@@ -86,7 +87,7 @@ class UserServiceTest {
     void 모토_업데이트() {
         //given
         Motto updatedMotto = Motto.of("updated");
-        given(userRepository.findById(USER_ID)).willReturn(Optional.of(UserTestData.ENTITY));
+        given(userRepository.findById(USER_ID)).willReturn(Optional.of(UserTestData.ENTITY_GENERAL));
 
         //when
         UserResponseDto actual = userService.updateMotto(USER_ID, updatedMotto);
@@ -101,7 +102,7 @@ class UserServiceTest {
         // given
         Likes like = Likes.builder()
                 .source(mock(User.class))
-                .target(UserTestData.ENTITY)
+                .target(UserTestData.ENTITY_GENERAL)
                 .build();
 
         given(likeService.findAllBySource(anyLong())).willReturn(List.of(like));
@@ -120,6 +121,7 @@ class UserServiceTest {
                         .imageUrl("https://previews.123rf.com/images/aquir/aquir1311/aquir131100316/23569861-%EC%83%98%ED%94%8C-%EC%A7%80-%EB%B9%A8%EA%B0%84%EC%83%89-%EB%9D%BC%EC%9A%B4%EB%93%9C-%EC%8A%A4%ED%83%AC%ED%94%84.jpg")
                         .introduce("안녕 난 제이")
                         .isLiked(true)
+                        .isCelebrity(false)
                         .build()));
         verify(likeService, times(1)).findAllBySource(1L);
     }
@@ -128,8 +130,10 @@ class UserServiceTest {
     void username으로_list_검색() {
         // given
         String username = "username";
-        List<User> users = List.of(UserTestData.ENTITY);
-        List<UserSearchDto> expected = List.of(new UserSearchDto(UserTestData.ENTITY.getId(), UserTestData.ENTITY.getImageUrl(), UserTestData.ENTITY.getUsername()));
+        List<User> users = List.of(UserTestData.ENTITY_GENERAL);
+        List<UserSearchDto> expected = List.of(
+                new UserSearchDto(UserTestData.ENTITY_GENERAL.getId(), UserTestData.ENTITY_GENERAL.getImageUrl(),
+                        UserTestData.ENTITY_GENERAL.getUsername(), UserTestData.ENTITY_GENERAL.isCelebrity()));
         when(userRepository.findAllByUsernameContainingIgnoreCase(username)).thenReturn(users);
 
         // when
@@ -166,6 +170,7 @@ class UserServiceTest {
                 .motto(Motto.of("장비충개발자"))
                 .imageUrl(Link.of("https://previews.123rf.com/images/aquir/aquir1311/aquir131100316/23569861-%EC%83%98%ED%94%8C-%EC%A7%80-%EB%B9%A8%EA%B0%84%EC%83%89-%EB%9D%BC%EC%9A%B4%EB%93%9C-%EC%8A%A4%ED%83%AC%ED%94%84.jpg"))
                 .introduce("안녕 난 제이")
+                .grade(Grade.GENERAL)
                 .build();
 
         given(userRepository.findById(anyLong())).willReturn(Optional.of(entity));
