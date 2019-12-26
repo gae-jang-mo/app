@@ -17,10 +17,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -56,6 +58,27 @@ class UserServiceTest {
         UserResponseDto result = userService.findUserResponseDtoByName(user.getUsername(), loginUser);
 
         assertThat(result).isEqualTo(UserTestData.RESPONSE_DTO);
+    }
+
+    @Test
+    void username_유저_엔티티_조회() {
+        // given
+        given(userRepository.findByUsername(anyString())).willReturn(Optional.of(UserTestData.ENTITY));
+
+        // when
+        User result = userService.findByUsername(UserTestData.ENTITY.getUsername());
+
+        // then
+        assertThat(result).isEqualTo(UserTestData.ENTITY);
+    }
+
+    @Test
+    void username_유저_엔티티_조회_시_예외처리() {
+        // given
+        given(userRepository.findByUsername(anyString())).willReturn(Optional.empty());
+
+        // when & then
+        assertThrows(EntityNotFoundException.class, ()-> userService.findByUsername(UserTestData.ENTITY.getUsername()));
     }
 
     @Test
