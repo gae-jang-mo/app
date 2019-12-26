@@ -82,8 +82,7 @@ public class LikeService {
 
     @Transactional(readOnly = true)
     public List<UserSearchDto> findRanking(final Pageable pageable) {
-        List<User> userRanking = likeRepository.findUserRanking(pageable);
-        return userRanking.stream()
+        return likeRepository.findUserRanking(pageable).stream()
                 .map(this::toUserSearchDto)
                 .collect(Collectors.toList());
     }
