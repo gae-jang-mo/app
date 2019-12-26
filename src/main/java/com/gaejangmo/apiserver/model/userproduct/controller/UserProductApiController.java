@@ -55,13 +55,6 @@ public class UserProductApiController {
         return ResponseEntity.created(uri).body(responseDto);
     }
 
-//    @GetMapping("/{userId}/products")
-//    public ResponseEntity<List<UserProductResponseDto>> list(@PathVariable final Long userId) {
-//        List<UserProductResponseDto> responseDtos = userProductService.findByUserId(userId);
-//        return ResponseEntity.ok(responseDtos);
-//    }
-
-    // TODO: 2019-12-25 테스트 작성
     @GetMapping("/{username}/products")
     public ResponseEntity<List<UserProductResponseDto>> list(@PathVariable final String username) {
         List<UserProductResponseDto> responseDtos = userProductService.findByUsername(username);
