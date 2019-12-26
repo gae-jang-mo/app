@@ -69,6 +69,14 @@ public class UserProductApiController {
         return ResponseEntity.ok(responseDtos);
     }
 
+    @GetMapping("/products/history")
+    public ResponseEntity<List<UserProductLatestResponseDto>> history(
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) final Pageable pageable,
+            @LoginUser SecurityUser securityUser) {
+        List<UserProductLatestResponseDto> responseDtos = userProductService.findHistoryByPageable(pageable, securityUser);
+        return ResponseEntity.ok(responseDtos);
+    }
+
     @PutMapping("/products/{id}/comment")
     public ResponseEntity<UserProductResponseDto> updateComment(@PathVariable final Long id,
                                                                 @RequestBody final CommentDto commentDto,
