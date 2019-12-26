@@ -81,6 +81,14 @@ public class UserProductService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public List<UserProductResponseDto> findByUsername(final String username) {
+        User user = userService.findByUsername(username);
+        return userProductRepository.findByUser(user).stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+
     public UserProductResponseDto updateComment(final Long id, final Long userId, final CommentDto commentDto) {
         return updateTemplate(id, userId, (userProduct) -> toDto(userProduct.changeComment(Comment.of(commentDto.getComment()))));
     }
@@ -141,6 +149,7 @@ public class UserProductService {
                 .status(userProduct.getStatus())
                 .imageUrl(userProduct.getProduct().getImageUrl())
                 .productId(userProduct.getProduct().getId())
+                .productName(userProduct.getProduct().getProductName())
                 .build();
     }
 }

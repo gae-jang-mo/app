@@ -67,7 +67,8 @@ class UserProductApiControllerTest extends MockMvcTest {
                                 fieldWithPath("productType").type(JsonFieldType.STRING).description("장비의 타입"),
                                 fieldWithPath("status").type(JsonFieldType.STRING).description("유저 장비의 상태"),
                                 fieldWithPath("createdAt").type(JsonFieldType.STRING).description("유저 장비 생성 날짜"),
-                                fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("유저 장비의 사진")
+                                fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("유저 장비의 사진"),
+                                fieldWithPath("productName").type(JsonFieldType.STRING).description("유저 장비의 이름")
                         )));
 
         // then
@@ -113,8 +114,9 @@ class UserProductApiControllerTest extends MockMvcTest {
                                 fieldWithPath("productType").type(JsonFieldType.STRING).description("장비의 타입"),
                                 fieldWithPath("status").type(JsonFieldType.STRING).description("유저 장비의 상태"),
                                 fieldWithPath("createdAt").type(JsonFieldType.STRING).description("유저 장비 생성 날짜"),
-                                fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("유저 장비의 사진")
-                        )));
+                                fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("유저 장비의 사진"),
+                                fieldWithPath("productName").type(JsonFieldType.STRING).description("유저 장비의 이름"))
+                ));
 
         // then
         String content = resultActions.andExpect(status().isCreated())
@@ -149,20 +151,17 @@ class UserProductApiControllerTest extends MockMvcTest {
 
     @Test
     @WithMockCustomUser
-    void 유저_ID로_소유장비_리스트_조회() throws Exception {
-        // given
-        UserProductResponseDto userProductResponseDto = getUserProductResponseDto();
-
+    void 유저_이름로_소유장비_리스트_조회() throws Exception {
         // when
         ResultActions resultActions = mockMvc.perform(
-                RestDocumentationRequestBuilders.get(USER_PRODUCT_URI + "/{userId}/products", 2L)
+                RestDocumentationRequestBuilders.get(USER_PRODUCT_URI + "/{username}/products", "kmdngyu")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("userproduct/list",
                         getDocumentRequest(),
                         getDocumentResponse(),
-                        pathParameters(parameterWithName("userId").description("조회할 user의 식별자")),
+                        pathParameters(parameterWithName("username").description("조회할 사용자 이름")),
                         responseFields(
                                 fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("UserProduct의 식별자"),
                                 fieldWithPath("[].productId").type(JsonFieldType.NUMBER).description("Product의 식별자"),
@@ -170,15 +169,19 @@ class UserProductApiControllerTest extends MockMvcTest {
                                 fieldWithPath("[].status").type(JsonFieldType.STRING).description("장비의 상태"),
                                 fieldWithPath("[].comment").type(JsonFieldType.STRING).description("장비의 타입"),
                                 fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("유저 장비 생성 날짜"),
-                                fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("유저 장비의 사진"))
+                                fieldWithPath("[].imageUrl").type(JsonFieldType.STRING).description("유저 장비의 사진"),
+                                fieldWithPath("[].productName").type(JsonFieldType.STRING).description("유저 장비의 이름"))
                         )
                 );
 
         // then
         resultActions.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].comment").value("ㅎㅎ장비좋아요ㅋㅋㅋ"))
-                .andExpect(jsonPath("$[0].id").value(3));
+                .andExpect(jsonPath("$[0].comment").value("ㅎㅎ장비좋아요ㅋㅋㅋㅋ"))
+                .andExpect(jsonPath("$[0].id").value(4))
+                .andExpect(jsonPath("$[0].productId").value(1))
+                .andExpect(jsonPath("$[0].productType").value("마우스"))
+                .andExpect(jsonPath("$[0].productName").value("애플 맥북 에어 13형 2019년형 MVFH2KH/A"));
     }
 
     @Test
@@ -190,6 +193,8 @@ class UserProductApiControllerTest extends MockMvcTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("userproduct/delete",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         pathParameters(parameterWithName("id").description("삭제할 유저 장비의 식별자")))
                 )
                 .andExpect(status().isNoContent());
@@ -220,7 +225,8 @@ class UserProductApiControllerTest extends MockMvcTest {
                                 fieldWithPath("status").type(JsonFieldType.STRING).description("장비의 상태"),
                                 fieldWithPath("comment").type(JsonFieldType.STRING).description("장비의 타입"),
                                 fieldWithPath("createdAt").type(JsonFieldType.STRING).description("유저 장비 생성 날짜"),
-                                fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("유저 장비의 사진"))
+                                fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("유저 장비의 사진"),
+                                fieldWithPath("productName").type(JsonFieldType.STRING).description("유저 장비의 이름"))
                         )
                 );
 
@@ -305,7 +311,8 @@ class UserProductApiControllerTest extends MockMvcTest {
                                 fieldWithPath("productType").type(JsonFieldType.STRING).description("장비의 타입"),
                                 fieldWithPath("status").type(JsonFieldType.STRING).description("장비의 상태"),
                                 fieldWithPath("createdAt").type(JsonFieldType.STRING).description("유저 장비 생성 날짜"),
-                                fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("유저 장비의 사진"))
+                                fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("유저 장비의 사진"),
+                                fieldWithPath("productName").type(JsonFieldType.STRING).description("유저 장비의 이름"))
                         )
                 );
 

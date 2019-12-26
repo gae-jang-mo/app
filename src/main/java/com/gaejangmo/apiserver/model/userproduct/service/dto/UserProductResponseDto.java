@@ -17,11 +17,12 @@ public class UserProductResponseDto {
     private String comment;
     private LocalDateTime createdAt;
     private String imageUrl;
+    private String productName;
 
 
     @Builder
     public UserProductResponseDto(final Long id, final Long productId, final String productType, final Status status,
-                                  final String comment, final LocalDateTime createdAt, final String imageUrl) {
+                                  final String comment, final LocalDateTime createdAt, final String imageUrl, final String productName) {
         this.id = id;
         this.productId = productId;
         this.productType = productType;
@@ -29,5 +30,6 @@ public class UserProductResponseDto {
         this.comment = comment;
         this.createdAt = createdAt;
         this.imageUrl = imageUrl;
+        this.productName = productName;
     }
 }
