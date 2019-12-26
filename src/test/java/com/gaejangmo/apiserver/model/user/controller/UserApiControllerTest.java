@@ -80,7 +80,7 @@ class UserApiControllerTest extends MockMvcTest {
     }
 
     @Test
-//    @WithMockCustomUser
+    @WithMockCustomUser
     void username으로_유저_정보_받기() throws Exception {
         // given
         List<FieldDescriptor> userAndLikedResponseDtoDescriptors = new ArrayList<>(userResponseDtoDescriptors);
