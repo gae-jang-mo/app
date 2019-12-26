@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 public class UserProductResponseDto {
     private Long id;
+    private String productName;
     private Long productId;
     private String productType;
     private String comment;
@@ -18,12 +19,13 @@ public class UserProductResponseDto {
 
 
     @Builder
-    public UserProductResponseDto(final Long id, final Long productId, final String productType, final String comment, final LocalDateTime createdAt, final String imageUrl) {
+    public UserProductResponseDto(final Long id, final Long productId, final String productType, final String comment, final LocalDateTime createdAt, final String imageUrl, final String productName) {
         this.id = id;
         this.productId = productId;
         this.productType = productType;
         this.comment = comment;
         this.createdAt = createdAt;
         this.imageUrl = imageUrl;
+        this.productName = productName;
     }
 }
