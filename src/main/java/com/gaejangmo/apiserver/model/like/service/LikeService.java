@@ -86,6 +86,10 @@ public class LikeService {
                 .collect(Collectors.toList());
     }
 
+    public int countLikeByTarget(final User user) {
+        return likeRepository.countLikesByTarget(user);
+    }
+
     private UserSearchDto toUserSearchDto(final User user) {
         return UserSearchDto.builder()
                 .id(user.getId())

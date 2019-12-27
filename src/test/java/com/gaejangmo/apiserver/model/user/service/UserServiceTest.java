@@ -54,13 +54,14 @@ class UserServiceTest {
         // given
         given(userRepository.findByUsername(anyString())).willReturn(Optional.of(UserTestData.ENTITY_GENERAL));
         given(likeService.isLiked(anyLong(), anyLong())).willReturn(false);
+        given(likeService.countLikeByTarget(any())).willReturn(UserTestData.RESPONSE_DTO_WITH_TOTAL_LIKE.getTotalLike());
         User user = UserTestData.ENTITY_GENERAL;
 
         // when
         UserResponseDto result = userService.findUserResponseDtoByName(user.getUsername(), 2L);
 
         // then
-        assertThat(result).isEqualTo(UserTestData.RESPONSE_DTO);
+        assertThat(result).isEqualTo(UserTestData.RESPONSE_DTO_WITH_TOTAL_LIKE);
     }
 
     @Test

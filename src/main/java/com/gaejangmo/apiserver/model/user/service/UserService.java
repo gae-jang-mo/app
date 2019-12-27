@@ -55,7 +55,9 @@ public class UserService {
     public UserResponseDto findUserResponseDtoByName(final String username, final Long sourceId) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
-        return toDto(user, likeService.isLiked(sourceId, user.getId()));
+        boolean liked = likeService.isLiked(sourceId, user.getId());
+        int totalLie = likeService.countLikeByTarget(user);
+        return toDto(user, liked, totalLie);
     }
 
     @Transactional(readOnly = true)
@@ -146,10 +148,14 @@ public class UserService {
 
     /* 사용자한테 전달될 때 null로 넣으면 serialize할 때 제외되기 때문에 null로 지정 */
     private UserResponseDto toDto(final User user) {
-        return toDto(user, null);
+        return toDto(user, null, null);
     }
 
     private UserResponseDto toDto(final User user, final Boolean isLiked) {
+        return toDto(user, isLiked, null);
+    }
+
+    private UserResponseDto toDto(final User user, final Boolean isLiked, final Integer totalLike) {
         return UserResponseDto.builder()
                 .id(user.getId())
                 .oauthId(user.getOauthId())
@@ -160,6 +166,7 @@ public class UserService {
                 .motto(user.getMotto())
                 .isCelebrity(user.isCelebrity())
                 .isLiked(isLiked)
+                .totalLike(totalLike)
                 .build();
     }
 }

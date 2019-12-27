@@ -24,8 +24,7 @@ import java.util.List;
 
 import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getDocumentRequest;
 import static com.gaejangmo.apiserver.model.common.support.ApiDocumentUtils.getDocumentResponse;
-import static com.gaejangmo.apiserver.model.user.testdata.UserTestData.RESPONSE_DTO;
-import static com.gaejangmo.apiserver.model.user.testdata.UserTestData.RESPONSE_DTO_NOT_INCLUDE_ISLIKED;
+import static com.gaejangmo.apiserver.model.user.testdata.UserTestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -85,9 +84,10 @@ class UserApiControllerTest extends MockMvcTest {
         // given
         List<FieldDescriptor> userAndLikedResponseDtoDescriptors = new ArrayList<>(userResponseDtoDescriptors);
         userAndLikedResponseDtoDescriptors.add(fieldWithPath("isLiked").type(JsonFieldType.BOOLEAN).description("좋아요 여부"));
-        //userAndLikedResponseDtoDescriptors.add(fieldWithPath("isCelebrity").type(JsonFieldType.BOOLEAN).description("셀럽 여부"));
+        userAndLikedResponseDtoDescriptors.add(fieldWithPath("totalLike").type(JsonFieldType.NUMBER).description("좋아요 받은 총 개수"));
 
         // when
+
         ResultActions resultActions = mockMvc.perform(
                 RestDocumentationRequestBuilders.get(USER_API + "/{name}", RESPONSE_DTO.getUsername())
                         .accept(MediaType.APPLICATION_JSON)
@@ -99,7 +99,9 @@ class UserApiControllerTest extends MockMvcTest {
                         pathParameters(
                                 parameterWithName("name").description("검색하고 싶은 유저의 이름")
                         ),
-                        responseFields(userAndLikedResponseDtoDescriptors)
+                        responseFields(
+                                userAndLikedResponseDtoDescriptors
+                        )
                 ));
 
         // then
@@ -109,7 +111,7 @@ class UserApiControllerTest extends MockMvcTest {
 
         UserResponseDto userResponseDto = OBJECT_MAPPER.readValue(contentAsByteArray, UserResponseDto.class);
 
-        assertThat(userResponseDto).isEqualTo(RESPONSE_DTO);
+        assertThat(userResponseDto).isEqualTo(RESPONSE_DTO_WITH_TOTAL_LIKE);
     }
 
     @Test

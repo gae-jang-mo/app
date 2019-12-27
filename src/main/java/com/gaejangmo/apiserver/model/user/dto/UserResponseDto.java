@@ -18,10 +18,11 @@ public class UserResponseDto {
     private String introduce;
     private Boolean isLiked;
     private Boolean isCelebrity;
+    private Integer totalLike;
 
     @Builder
     public UserResponseDto(final Long id, final Long oauthId, final String username, final String email, final String motto,
-                           final String imageUrl, final String introduce, final Boolean isLiked, final Boolean isCelebrity) {
+                           final String imageUrl, final String introduce, final Boolean isLiked, final Boolean isCelebrity, final Integer totalLike) {
         this.id = id;
         this.oauthId = oauthId;
         this.username = username;
@@ -31,6 +32,7 @@ public class UserResponseDto {
         this.introduce = introduce;
         this.isLiked = isLiked;
         this.isCelebrity = isCelebrity;
+        this.totalLike = totalLike;
     }
 }
 

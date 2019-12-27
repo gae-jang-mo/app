@@ -116,4 +116,18 @@ class LikeServiceTest {
         // when & then
         assertThat(likeService.isLiked(NOT_EXISTED_ID, TARGET_ID)).isFalse();
     }
+
+    @Test
+    void 좋아요_총개수_Source로_구하기() {
+        // given
+        int expected = 1;
+        given(likeRepository.countLikesByTarget(any())).willReturn(expected);
+
+        // when
+        int actual = likeService.countLikeByTarget(mock(User.class));
+
+        // then
+        assertThat(actual).isEqualTo(expected);
+        verify(likeRepository).countLikesByTarget(any());
+    }
 }
