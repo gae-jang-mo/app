@@ -127,7 +127,6 @@ class UserProductApiControllerTest extends MockMvcTest {
         assertThat(responseDto.getComment()).isEqualTo(userProductExternalRequestDto.getUserProductRequestDto().getComment());
     }
 
-
     @Test
     @WithAnonymousUser
     void 비로그인_장비_등록시도_Unauthorized() throws Exception {
