@@ -4,7 +4,7 @@
 
 페이스북 페이지: [fb.me/gaejangmo](http://fb.me/gaejangmo)
 
-## 프로젝트 소개
+# 프로젝트 소개
 
 다른 개발자들은 무슨 장비를 사용할까?
 
@@ -12,11 +12,10 @@
 
 ![gaejangmo](https://user-images.githubusercontent.com/43020390/71501642-fbac1200-28ae-11ea-8531-d27ffb3fedad.gif)
 
-![gaejangmo-ff](https://user-images.githubusercontent.com/43020390/71504971-cc9d9c80-28be-11ea-8a70-9fec5c55afb0.gif)
 
-## 기술 스택
+# 기술 스택
 
-### **Server-side**
+## **Server-side**
 
 - Spring Boot 2.2.1
 - Spring Data JPA
@@ -27,19 +26,19 @@
 - Nginx
 - Jenkins
 
-### **Client-side**
+## **Client-side**
 
 - Vue.js
-- webpack3
+- webpack
 - sass
 
-## 멤버
-- [박준호(제이)](https://github.com/JunHoPark93)
-- [김성훈(이바)](https://github.com/seonghun127)
-- [김동규(동규)](https://github.com/kmdngyu)
-- [박효진(에헴)](https://github.com/dasistHYOJIN)
-- [배대준(베디)](https://github.com/dpudpu)
+# 멤버
+- [박준호(제이)](https://github.com/JunHoPark93) : (주)JayTech 사장 개발자 
+- [김성훈(이바)](https://github.com/seonghun127) : 보안 & 경비 개발자
+- [김동규(동규)](https://github.com/kmdngyu) : ALL ROUND 개발자
+- [박효진(에헴)](https://github.com/dasistHYOJIN) : 사무직이 편한 개발자
+- [배대준(베디)](https://github.com/dpudpu) : 이제는 코틀린 개발자
 
-## 문서화
+# 문서화
 - [위키](https://github.com/gae-jang-mo/app/wiki)
 - [백로그 목록](https://docs.google.com/spreadsheets/d/1KDEKHIAin6WSrdNwa5PJygZp8RDuVn13-rkP_qWHSKg/edit?folder=0AOL71m5ijy3UUk9PVA#gid=0)
