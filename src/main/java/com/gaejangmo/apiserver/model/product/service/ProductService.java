@@ -55,9 +55,10 @@ public class ProductService {
 
     public ManagedProductResponseDto save(final ProductRequestDto dto) {
         // db에 이름으로 먼저 검색해서 있으면 엔티티 반환
-        return productRepository.findByProductName(ProductName.of(dto.getTitle()))
-                .map(this::toManagedProductResponseDto)
-                .orElseGet(() -> toManagedProductResponseDto(productRepository.save(toEntity(dto))));
+        Product product = productRepository.findByProductName(ProductName.of(dto.getTitle()))
+                .orElseGet(() -> productRepository.save(toEntity(dto)));
+
+        return toManagedProductResponseDto(product);
     }
 
     private ManagedProductResponseDto toManagedProductResponseDto(final Product product) {
