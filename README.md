@@ -6,9 +6,9 @@
 
 # 프로젝트 소개
 
-다른 개발자들은 무슨 장비를 사용할까?
+**다른 개발자들은 무슨 장비를 사용할까?**
 
-내 개발 아이템을 소개, 공유 해보자
+**내 개발 아이템을 소개, 공유 해보자**
 
 ![gaejangmo](https://user-images.githubusercontent.com/43020390/71501642-fbac1200-28ae-11ea-8531-d27ffb3fedad.gif)
 
