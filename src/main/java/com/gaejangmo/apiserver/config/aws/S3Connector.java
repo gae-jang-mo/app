@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 @Component
 public class S3Connector {
@@ -25,10 +26,12 @@ public class S3Connector {
     }
 
     private String putS3(final MultipartFile uploadFile, final String filePath) {
-        try {
+        try (InputStream fileContent = uploadFile.getInputStream()) {
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentType(uploadFile.getContentType());
-            amazonS3Client.putObject(new PutObjectRequest(bucket, filePath, uploadFile.getInputStream(), objectMetadata)
+            objectMetadata.setContentLength(uploadFile.getSize());
+
+            amazonS3Client.putObject(new PutObjectRequest(bucket, filePath, fileContent, objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
 
             return amazonS3Client.getUrl(bucket, filePath).toString();
