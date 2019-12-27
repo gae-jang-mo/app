@@ -12,6 +12,8 @@
 
 ![gaejangmo](https://user-images.githubusercontent.com/43020390/71501642-fbac1200-28ae-11ea-8531-d27ffb3fedad.gif)
 
+![gaejangmo-ff](https://user-images.githubusercontent.com/43020390/71504971-cc9d9c80-28be-11ea-8a70-9fec5c55afb0.gif)
+
 ## 기술 스택
 
 ### **Server-side**
