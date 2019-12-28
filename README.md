@@ -15,7 +15,7 @@
 # 기술 스택
 
 ## **Server-side**
-
+- JAVA 11
 - Spring Boot 2.2.1
 - Spring Data JPA
 - Spring Sequrity & OAuth2
