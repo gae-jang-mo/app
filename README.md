@@ -5,8 +5,9 @@
 페이스북 페이지: [fb.me/gaejangmo](http://fb.me/gaejangmo)
 
 # 프로젝트 소개
-유명인의 장비를 알 수 있는 궁금증 타파 서비스
-개발자들이 서로 장비 정보를 공유할 수 있는 커뮤니티
+유명인의 장비를 알 수 있는 궁금증 타파 서비스.
+
+개발자들이 서로 장비 정보를 공유할 수 있는 커뮤니티.
 
 ![gaejangmo](https://user-images.githubusercontent.com/43020390/71501642-fbac1200-28ae-11ea-8531-d27ffb3fedad.gif)
 
