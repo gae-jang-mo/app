@@ -5,10 +5,8 @@
 페이스북 페이지: [fb.me/gaejangmo](http://fb.me/gaejangmo)
 
 # 프로젝트 소개
-
-**다른 개발자들은 무슨 장비를 사용할까?**
-
-**내 개발 아이템을 소개, 공유 해보자**
+유명인의 장비를 알 수 있는 궁금증 타파 서비스
+개발자들이 서로 장비 정보를 공유할 수 있는 커뮤니티
 
 ![gaejangmo](https://user-images.githubusercontent.com/43020390/71501642-fbac1200-28ae-11ea-8531-d27ffb3fedad.gif)
 
@@ -19,8 +17,9 @@
 
 - Spring Boot 2.2.1
 - Spring Data JPA
-- Spring Sequrity
+- Spring Sequrity & OAuth2
 - Spring Rest Docs
+- Spring Cloud Config
 - MySQL 5.7
 - JUnit 5
 - Nginx
@@ -31,6 +30,10 @@
 - Vue.js
 - webpack
 - sass
+
+## etc
+- AWS S3, Route 53, RDS, ELB
+- 네이버 검색 API
 
 # 멤버
 - [박준호(제이)](https://github.com/JunHoPark93) : (주)JayTech 사장 개발자 
