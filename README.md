@@ -25,6 +25,7 @@
 - JUnit 5
 - Nginx
 - Jenkins
+- OAuth2
 
 ## **Client-side**
 
