@@ -18,7 +18,7 @@
 - JAVA 11
 - Spring Boot 2.2.1
 - Spring Data JPA
-- Spring Sequrity & OAuth2
+- Spring Security
 - Spring Rest Docs
 - Spring Cloud Config
 - MySQL 5.7
