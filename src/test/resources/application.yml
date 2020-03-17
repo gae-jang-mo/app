@@ -1,0 +1,36 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+      open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: none
+            clientSecret: none
+
+cloud:
+  aws:
+    stack:
+      auto: false
+    s3:
+      bucket: none
+    region:
+      static: ap-northeast-2
+    credentials:
+      accessKey: none
+      secretKey: none
