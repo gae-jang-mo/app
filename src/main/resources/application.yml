@@ -2,7 +2,7 @@ spring:
   profiles:
     active: local
 ---
-spring.profiles: local, test
+spring.profiles: local
 spring.profiles.include: oauth, aws, console-logging
 
 spring:
