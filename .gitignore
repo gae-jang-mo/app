@@ -36,3 +36,6 @@ application-oauth.yml
 
 ### aws secret ###
 application-aws.yml
+
+.envrc
+.cache
