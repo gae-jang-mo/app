@@ -34,8 +34,3 @@ cloud:
     credentials:
       accessKey: none
       secretKey: none
-
-
-aws:
-  paramstore:
-    enabled: false
