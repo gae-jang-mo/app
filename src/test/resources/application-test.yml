@@ -1,0 +1,20 @@
+spring.profiles.include: oauth, aws, console-logging
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    data: classpath*:data.sql
+    hikari:
+      driverClassName: org.h2.Driver
+      pool-name: HikariCP4aurora
+      jdbcUrl: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+      username: sa
+      password:
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        hbm2ddl:
+          auto: create
+    open-in-view: false
