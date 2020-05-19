@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+root_dir="$(git rev-parse --show-toplevel)"
+
+mkdir -p $root_dir/.cache
+cd $root_dir/.cache
+
+if [ ! -f google-java-format-1.8-all-deps.jar ]; then
+  echo "google-java-format 을 다운로드합니다."
+  curl -LJO "https://github.com/google/google-java-format/releases/download/google-java-format-1.8/google-java-format-1.8-all-deps.jar"
+  chmod 755 google-java-format-1.7-all-deps.jar
+fi
+
+cd ..
+changed_java_files=$(git diff --cached --name-only --diff-filter=ACMR | grep ".*java$")
+
+if [  $changed_java_files ]; then
+    echo $changed_java_files
+    java -jar .cache/google-java-format-1.8-all-deps.jar --aosp --replace $changed_java_files
+
+## 변경 후 다시 stage
+    for file in $(git diff --name-only --cached --relative); do
+        git add "${file}"
+    done
+fi
+

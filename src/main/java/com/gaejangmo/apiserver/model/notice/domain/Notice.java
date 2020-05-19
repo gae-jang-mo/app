@@ -2,6 +2,7 @@ package com.gaejangmo.apiserver.model.notice.domain;
 
 import com.gaejangmo.apiserver.model.common.domain.BaseTimeEntity;
 import com.gaejangmo.apiserver.model.notice.domain.converter.NoticeTypeConverter;
+
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
