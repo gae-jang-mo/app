@@ -37,5 +37,9 @@ application-oauth.yml
 ### aws secret ###
 application-aws.yml
 
+### formatting ###
 .envrc
 .cache
+
+### dummy ###
+/dump/init.sql
