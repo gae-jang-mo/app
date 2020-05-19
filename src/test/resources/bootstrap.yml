@@ -1,0 +1,4 @@
+
+aws:
+  paramstore:
+    enabled: false
