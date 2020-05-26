@@ -7,6 +7,14 @@ aws:
     enabled: true
     name: config
 
+---
+spring:
+  profiles: local
+aws:
+  paramstore:
+    enabled: false
+
+
 ## 기본적으로 local로 실행하고 배포시에는 해당 서버에 해당하는 profiles를 넣어서 배포한다.
 ## spring cloud는 기본적으로 application-name에 해당하는 설정을 찾기 때문에 이름을 지정한다.
 #spring:

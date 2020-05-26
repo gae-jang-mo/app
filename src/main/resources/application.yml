@@ -3,7 +3,7 @@ spring:
     active: local
 ---
 spring.profiles: local
-spring.profiles.include: oauth, aws, console-logging
+spring.profiles.include: aws, oauth, console-logging
 
 spring:
   servlet:
@@ -18,27 +18,8 @@ spring:
       jdbc-url: jdbc:mysql://localhost:3306/gaejangmo?autoReconnect=true&useSSL=false&serverTimezone=Asia/Seoul
       username: root
       password: password
-  security:
-    oauth2:
-      client:
-        registration:
-          github:
-            clientId: ${oauth/clientId}
-            clientSecret: ${oauth/clientSecret}
 
 debug: true
-
-cloud:
-  aws:
-    stack:
-      auto: false
-    s3:
-      bucket: ${s3/bucket}
-    region:
-      static: ap-northeast-2
-    credentials:
-      accessKey: ${s3/accessKey}
-      secretKey: ${s3/secretKey}
 
 ---
 spring.profiles: dev
@@ -47,3 +28,24 @@ spring.profiles.include: file-info-logging, file-error-logging
 logging:
   file:
     path: /home/ec2-user
+
+cloud:
+  aws:
+    stack:
+      auto: false
+    s3:
+      bucket: ${s3.bucket}
+    region:
+      static: ap-northeast-2
+    credentials:
+      accessKey: ${s3.accessKey}
+      secretKey: ${s3.secretKey}
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId:  ${oauth.clientId}
+            clientSecret: ${oauth.clientSecret}
