@@ -1,12 +1,8 @@
 #!/bin/bash
 
-REPOSITORY=/home/ec2-user/app-server
-PROJECT_NAME=api-server
+REPOSITORY=/home/ec2-user/app-server/deploy/zip
 
-cd $REPOSITORY/$PROJECT_NAME/
-
-echo "> build 파일 복사"
-cp $REPOSITORY/$PROJECT_NAME/zip/*.jar $REPOSITORY/$PROJECT_NAME
+cd $REPOSITORY/
 
 echo "> 현재 구동중인 애플리케이션 pid 확인"
 CURRENT_PID=$(ps -ef | grep java | grep api-server* | awk '{print $2}')
@@ -27,4 +23,4 @@ echo ">$JAR_NAME 에 실행권한 추가"
 chmod +x $JAR_NAME
 
 echo "> 개장모 메인 서버 배포 합니다 !!"
-nohup java -jar -Dspring.profiles.active=dev /home/ec2-user/app-server/deploy/api-server-0.0.1-SNAPSHOT.jar >> /home/ec2-user/app-server/logs/api-server.log &
+nohup java -jar -Dspring.profiles.active=dev /home/ec2-user/app-server/deploy/zip/api-server-0.0.1-SNAPSHOT.jar >> /home/ec2-user/app-server/logs/api-server.log &
