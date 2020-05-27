@@ -23,6 +23,8 @@ jobs:
     - name: Zip for deploy
       run: |
         mkdir -p before-deploy/
+        cp appspec/scripts/*sh before-deploy/
+        cp appspec/appspec.yml before-deploy/
         cp build/libs/* before-deploy/
         cd before-deploy && zip -r gae-jang-mo.zip *
         cd ../ && mkdir -p deploy
@@ -37,3 +39,11 @@ jobs:
 
     - name: Upload to S3
       run: aws s3 cp --region ap-northeast-2 deploy/gae-jang-mo.zip s3://gae-jang-mo-deploy/gae-jang-mo.zip
+
+    - name: Code Deploy
+      run: |
+        aws deploy create-deployment \
+        --application-name gae-jang-mo \
+        --deployment-config-name CodeDeployDefault.OneAtATime \
+        --deployment-group-name deploy \
+        --s3-location bucket=gae-jang-mo-deploy,bundleType=zip,key=gae-jang-mo.zip
