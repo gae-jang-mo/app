@@ -3,7 +3,7 @@ name: deploy
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, feature/s3-upload ]
 
 jobs:
   deploy:
@@ -17,4 +17,23 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew build 
+      run: ./gradlew build
+
+
+    - name: Zip for deploy
+      run: |
+        mkdir -p before-deploy/
+        cp build/libs/* before-deploy/
+        cd before-deploy && zip -r aws.zip *
+        cd ../ && mkdir -p deploy
+        mv before-deploy/gae-jang-mo.zip deploy/gae-jang-mo.zip
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        AWS-ACCESS-KEY-ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS-SECRET-ACCESS-KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS-REGION: ap-northeast-2
+
+    - name: Upload to S3
+      run: aws s3 cp --region ap-northeast-2 deploy/gae-jang-mo.zip s3://gae-jang-mo-deploy/gae-jang-mo.zip
