@@ -3,7 +3,7 @@ os: linux
 files: # source to destination
   - source: /
     destination: /home/ec2-user/app-server/deploy/
-    overwite: yes
+    overwrite: yes
 
 permissions:
   - object: /
