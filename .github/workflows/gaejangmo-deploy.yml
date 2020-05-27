@@ -24,7 +24,7 @@ jobs:
       run: |
         mkdir -p before-deploy/
         cp build/libs/* before-deploy/
-        cd before-deploy && zip -r aws.zip *
+        cd before-deploy && zip -r gae-jang-mo.zip *
         cd ../ && mkdir -p deploy
         mv before-deploy/gae-jang-mo.zip deploy/gae-jang-mo.zip
 
