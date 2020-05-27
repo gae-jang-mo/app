@@ -7,7 +7,7 @@ cd $root_dir/.cache
 if [ ! -f google-java-format-1.8-all-deps.jar ]; then
   echo "google-java-format 을 다운로드합니다."
   curl -LJO "https://github.com/google/google-java-format/releases/download/google-java-format-1.8/google-java-format-1.8-all-deps.jar"
-  chmod 755 google-java-format-1.7-all-deps.jar
+  chmod 755 google-java-format-1.8-all-deps.jar
 fi
 
 cd ..

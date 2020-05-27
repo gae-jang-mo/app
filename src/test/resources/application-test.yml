@@ -1,4 +1,3 @@
-spring.profiles.include: oauth, aws, console-logging
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
