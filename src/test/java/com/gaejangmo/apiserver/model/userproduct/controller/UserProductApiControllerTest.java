@@ -9,6 +9,7 @@ import com.gaejangmo.apiserver.model.userproduct.domain.vo.Status;
 import com.gaejangmo.apiserver.model.userproduct.dto.CommentDto;
 import com.gaejangmo.apiserver.model.userproduct.dto.ProductTypeDto;
 import com.gaejangmo.apiserver.model.userproduct.service.dto.*;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -306,8 +307,7 @@ class UserProductApiControllerTest extends MockMvcTest {
                 .andExpect(jsonPath("productType").value(productTypeDto.getProductType()));
     }
 
-    @Test
-    @WithMockCustomUser
+    @Ignore
     void 가장_최근에_등록된_장비_검색() throws Exception {
         // given
         Pageable pageable = PageRequest.of(0, 20);
