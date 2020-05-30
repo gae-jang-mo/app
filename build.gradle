@@ -129,7 +129,7 @@ node {
 }
 
 task npmBuild(type: NpmTask) {
-    args = ["run", "--verbose"]
+    args = ["run", "build", "--production", "--verbose"]
 }
 
 task copyWebApp(type: Copy) {
