@@ -43,3 +43,6 @@ application-aws.yml
 
 ### dummy ###
 /dump/init.sql
+
+### frontend code ###
+frontend/**
