@@ -62,5 +62,3 @@ spring:
           github:
             clientId:  ${oauth.clientId}
             clientSecret: ${oauth.clientSecret}
-
-debug: true

@@ -18,7 +18,7 @@ jacoco {
 
 jacocoTestReport {
     reports {
-        xml.enabled false
+        xml.enabled true
         csv.enabled false
         html.enabled true
     }
@@ -107,8 +107,6 @@ dependencyManagement {
 
 
 import org.ajoberstar.grgit.*
-
-import java.nio.file.Files
 
 def frontDir = "${project.projectDir}/frontend"
 
