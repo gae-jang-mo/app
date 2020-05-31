@@ -1,3 +1,5 @@
+![deploy](https://github.com/gae-jang-mo/app/workflows/deploy/badge.svg) ![CI](https://github.com/gae-jang-mo/app/workflows/CI/badge.svg) [![codecov](https://codecov.io/gh/gae-jang-mo/app/branch/develop/graph/badge.svg)](https://codecov.io/gh/gae-jang-mo/app)
+
 # **개장모 (개발자 장비 모임)**
 
 오픈카톡방: [https://open.kakao.com/o/gxg1AzQb](https://open.kakao.com/o/gxg1AzQb)
