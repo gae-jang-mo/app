@@ -17,4 +17,33 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew build 
+      run: ./gradlew build
+
+
+    - name: Zip for deploy
+      run: |
+        mkdir -p before-deploy/
+        cp appspec/scripts/*sh before-deploy/
+        cp appspec/appspec.yml before-deploy/
+        cp build/libs/* before-deploy/
+        cd before-deploy && zip -r gae-jang-mo.zip *
+        cd ../ && mkdir -p deploy
+        mv before-deploy/gae-jang-mo.zip deploy/gae-jang-mo.zip
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        AWS-ACCESS-KEY-ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS-SECRET-ACCESS-KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS-REGION: ap-northeast-2
+
+    - name: Upload to S3
+      run: aws s3 cp --region ap-northeast-2 deploy/gae-jang-mo.zip s3://gae-jang-mo-deploy/gae-jang-mo.zip
+
+    - name: Code Deploy
+      run: |
+        aws deploy create-deployment \
+        --application-name gae-jang-mo \
+        --deployment-config-name CodeDeployDefault.OneAtATime \
+        --deployment-group-name deploy \
+        --s3-location bucket=gae-jang-mo-deploy,bundleType=zip,key=gae-jang-mo.zip
