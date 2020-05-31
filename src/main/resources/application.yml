@@ -41,7 +41,20 @@ cloud:
       accessKey: ${s3.accessKey}
       secretKey: ${s3.secretKey}
 
+
 spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  datasource:
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: ${db.endpoint}
+      username: ${db.username}
+      password: ${db.password}
   security:
     oauth2:
       client:
@@ -49,3 +62,5 @@ spring:
           github:
             clientId:  ${oauth.clientId}
             clientSecret: ${oauth.clientSecret}
+
+debug: true
