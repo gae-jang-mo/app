@@ -108,8 +108,6 @@ dependencyManagement {
 
 import org.ajoberstar.grgit.*
 
-import java.nio.file.Files
-
 def frontDir = "${project.projectDir}/frontend"
 
 task pullFrontEnd {
@@ -121,12 +119,7 @@ task pullFrontEnd {
     }
 }
 
-node {
-    version = '12.6.0'
-    download=true
-    nodeModulesDir = file("${frontDir}")
-    npmWorkDir = file("${frontDir}")
-}
+s
 
 task npmBuild(type: NpmTask) {
     args = ["run", "build", "--production", "--verbose"]

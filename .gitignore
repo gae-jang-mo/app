@@ -46,3 +46,6 @@ application-aws.yml
 
 ### frontend code ###
 frontend/**
+frontend/package-lock.json
+src/main/resources/static/**
+
