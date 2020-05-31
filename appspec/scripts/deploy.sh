@@ -20,7 +20,7 @@ else
   sleep 5
 fi
 
-JAR_NAME=$(ls -tr $REPOSITORY/ |grep *.jar | tail -n 1)
+JAR_NAME=$(ls -tr $REPOSITORY/ | grep $PROJECT_NAME.jar | tail -n 1)
 echo ">Jar Name: $JAR_NAME"
 
 echo ">$JAR_NAME 에 실행권한 추가"
